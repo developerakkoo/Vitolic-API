@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%=pageTitle%></title>
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+    <div class="w3-bar w3-border w3-light-grey">
+        <a href="/edit-product" class="w3-bar-item w3-button"><%= pageTitle %></a>
+            <form action="/logout" method="POST">
+                <button class="w3-btn w3-right w3-red" type="submit">Logout</button>
+            </form>
+    
+      </div>
+
+      <form class="w3-container" action="/edit-product/<%= product._id %> " method="POST">
+        <p>
+        <label>Title</label>
+        <input value="<%= product.title %> " class="w3-input" type="text" name="title" id="title" required></p>
+        <p>
+        <label>Price</label>
+        <input value="<%= product.price %> " class="w3-input" type="text" name="price" id="price" required></p>
+        <p>
+        <label>Discounted Price</label>
+        <input value="<%= product.discountedPrice %> " class="w3-input" type="text" name="discountedPrice" id="discountedPrice" required></p>
+        <p>
+            <label>Image Url</label>
+            <input value="<%= product.imageUrl %> " class="w3-input" type="text" name="imageUrl" id="imageUrl" required></p>
+
+            <input class="w3-radio w3-teal" type="radio" name="inStock" value="true" <%= product.inStock === 'true' ? 'checked' : '' %> required>
+            <label>Available</label>
+            
+            <input class="w3-radio w3-teal" type="radio" name="inStock" value="false" <%= product.inStock === 'false' ? 'checked' : '' %> required>
+            <label>Not Available</label>
+<br>
+                <button type="submit" class="w3-btn w3-teal w3-right">SAVE</button>
+      </form>
+
+
+
+</body>
+</html>

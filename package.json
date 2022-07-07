@@ -1,0 +1,47 @@
+{
+  "name": "farmsellapi",
+  "version": "1.0.0",
+  "description": "A API for a Online Vegetable Selling Site",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "Akshay Jadhav",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "connect-flash": "^0.1.1",
+    "connect-mongodb-session": "^2.0.3",
+    "csurf": "^1.9.0",
+    "dotenv": "^9.0.2",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.0.0",
+    "express-session": "^1.15.6",
+    "express-validator": "^6.11.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.1.6",
+    "mongoose": "^5.12.9",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "nanoid": "^3.2.0",
+    "nodemon": "^2.0.7",
+    "order-id": "^2.1.2",
+    "razorpay": "^2.8.0",
+    "shortid": "^2.2.16",
+    "socket.io": "^4.2.0",
+    "twilio": "^3.63.1",
+    "twilio-phone-verification": "^1.0.11",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/developerakkoo/Farm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/developerakkoo/Farm/issues"
+  },
+  "homepage": "https://github.com/developerakkoo/Farm#readme"
+}

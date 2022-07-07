@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <div class="w3-bar w3-border w3-light-grey">
+        <a href="/products" class="w3-bar-item w3-button"><%= pageTitle %></a>
+            <a href="/add-product" class="w3-bar-item w3-button">Add Product</a>
+            <form action="/logout" method="POST">
+                <button class="w3-btn w3-right w3-red" type="submit">Logout</button>
+            </form>
+    
+      </div>
+
+
+      <% if (prods.length > 0) { %>
+        
+        <div class="flex-container w3-padding">
+        <% for( let product of prods) { %>
+
+                <div class="w3-card-4" style="width:auto; height:auto;">
+                    <header class="w3-container <%= product.inStock === 'true' ? 'w3-teal' : 'w3-grey' %> ">
+                        <h5> <%= product.title %>  </h5>
+                      </header>
+                    <img class="w3-image w3-border w3-padding " style="width:200px; height:140px;" src="<%= product.imageUrl %> " alt="" srcset="">
+                
+                
+                      
+                      <div class="w3-container">
+                        <p>Price: <span class="w3-tag"><%= product.price %></span></p>
+                        <p>DPrice:- <%= product.discountedPrice %> </p>
+                      </div>
+                      
+                      <footer class="w3-container w3-bar">
+                        <div style="display: flex; flex-direction: row; align-items:center;">
+                                <form class="w3-container" action="/edit-product/<%= product._id %>" method="GET">
+                                    <button class="w3-bar-item  w3-btn w3-green" type="submit">Update</button>
+                                
+                                </form>
+                                <form class="w3-container w3-bar" action="/delete-product" method="POST">
+                                    <input type="hidden" name="prodId" value="<%= product._id%>">
+                                    <button style="width: 100%;" class=" w3-bar-item w3-btn w3-red" name="submit" type="submit">Delete</button>
+                                </form>
+                        </div>
+                      </footer>
+                      
+                </div>
+             
+                <% } %>
+            </div>
+      <% } %>
+
+
+</body>
+</html>
