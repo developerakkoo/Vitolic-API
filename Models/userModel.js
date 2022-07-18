@@ -8,9 +8,7 @@ const userSchema = new Schema({
     fName:{
         type: String,
     },
-    lName:{
-        type: String,
-    },
+   
     email:{
         type: String,
    
@@ -18,35 +16,7 @@ const userSchema = new Schema({
   
     contactNumber:{
         type: String,
-    },
-
-    verificationStatus:{
-        type: Boolean,
-    },
-
-
-    area:{
-      type: String,
-    },
-    landmark: {
-      type: String,
-    },
-
-    city:{
-      type: String,
-    },
-
-    houseAddress:{
-      type: String,
-    },
-
-    colony:{
-      type: String
-    },
-
-streetName:{
-  type: String
-}
+    }
 ,
     walletCashbackAvailable:{
         type: Number,
@@ -66,9 +36,9 @@ streetName:{
     type: String,
     },
 
-    address:[
-      {type: Schema.Types.ObjectId, ref: "Address"}
-    ],
+    address:{
+      type: String,
+    },
       
 
     cart:{

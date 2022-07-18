@@ -1,12 +1,14 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const path = require("path");
+const cors = require("cors");
 
 const { v4: uuidv4 } = require("uuid");
 
 const multer = require("multer");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
+const swaggerUi = require('swagger-ui-express');
 
 //modal
 const Cart = require("./Models/cartModel");
@@ -24,23 +26,42 @@ const orderRoute = require("./Routes/orderRoute");
 const addressRoute = require("./Routes/addressRoute");
 const boyRoute =require("./Routes/DeliveryBoyRoute");
 const slotRoute = require("./Routes/slotroute");
+const cartRoute = require("./Routes/cartRoute");
+const couponRoute = require("./Routes/cuponRoute");
+const pincodeRoute = require("./Routes/pincodeRoute");
+const bannerRoute = require("./Routes/bannerRoute");
+const helpRoute = require("./Routes/helpRoute");
 //Error Handlers
 const errorController = require("./Controllers/errorController");
 const globalErrorHandler = require("./Utils/globalErrorHandler");
 const AppError = require("./Utils/app.Error");
-
-// const MONGODB_URI = "mongodb://localhost:27017/farmsell";
-const MONGODB_URI = "mongodb+srv://farmsell:farmsell@cluster0.mh36s.mongodb.net/Farmsell?retryWrites=true&w=majority";
+const swaggerJSDoc = require("swagger-jsdoc");
+// const MONGODB_URI = "mongodb://localhost:27017/milkdelivery";
+const MONGODB_URI = "mongodb+srv://farmsell:farmsell@cluster0.mh36s.mongodb.net/Vitolic?retryWrites=true&w=majority";
 
 const app = express();
 const port = 8080;
-
 app.use(express.json());
+app.use(cors());
 
+
+const swaggerOptions = {
+  swaggerDefinition:{
+    info:{
+      title: "Vitolic API Docs",
+      version: "v1",
+    },
+
+  },
+  apis:['app.js', './Routes/productRoute.js']
+}
+
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
 dotenv.config({
   path: "./config.env",
 });
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
@@ -91,9 +112,16 @@ app.use(orderRoute);
 app.use(userAuthRoute);
 app.use(addressRoute);
 app.use(boyRoute);
+app.use(cartRoute);
 app.use(slotRoute);
 app.use(quantityRoute);
+app.use(couponRoute);
+app.use(helpRoute);
+app.use(pincodeRoute);
+app.use(bannerRoute);
+
 app.use(globalErrorHandler);
+
 
 app.use((err, req, res, next) => {
   console.log(err);
@@ -124,56 +152,6 @@ mongoose
 
     io.on("connection", (socket) => {
       console.log("Connected a User");
-
-      socket.on("addtocart", async (data) => {
-        const productId = data["productId"];
-        const userId = data["userId"];
-        console.log("addtocart " + data["productId"] + " " + userId);
-
-        User.findById(userId)
-          .then((user) => {
-            // console.log("IO user found " + user);
-            Product.findById(productId).then((product) => {
-              // console.log("IO product found " + product);
-
-              user.addToCart(product);
-
-              socket.emit("cart", { cart: user.cart });
-            });
-          })
-          .then((success) => {
-            // console.log("Product Added IO" + success);
-          })
-
-          .catch((err) => {
-            console.log(err);
-          });
-      });
-
-      socket.on("removeFromCart", (data) => {
-        const userId = data["userId"];
-        const productId = data["productId"];
-
-        // console.log("remove from cart " + data["productId"] + " " + userId);
-
-        User.findById(userId)
-          .then((user) => {
-            // console.log("IO user found " + user);
-            Product.findById(productId).then((product) => {
-              // console.log("IO product found " + product);
-
-              user.removeItem(product);
-              socket.emit("removecart", { user });
-            });
-          })
-          .then((success) => {
-            // console.log("Product Removed IO" + success);
-          })
-
-          .catch((err) => {
-            console.log(err);
-          });
-      });
 
       socket.on("disconnect", () => {
         console.log("User Disconnected");

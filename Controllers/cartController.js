@@ -7,7 +7,32 @@ exports.getCart = async(req, res, next) =>
 {
     try {
 
-        const cart = await Cart.find({});
+        const cart = await Cart.findById(req.params.id).populate("userId address");
+
+
+        if(cart){
+            res.status(200).json({
+                status: true,
+                count: cart.length,
+
+                cart
+            })
+        }
+
+
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+}
+
+exports.getCartByUser = async(req, res, next) =>
+{
+    try {
+
+        const cart = await Cart.find({userId: req.params.user});
 
 
         if(cart){
@@ -31,39 +56,24 @@ exports.getCart = async(req, res, next) =>
 
 exports.addToCart = async(req, res, next) =>{
    try {
-    const {userId, productId} = req.body;
+    const {userId, products, total, status, address} = req.body;
 
-    const quantity = Number.parseInt(req.body.quantity);
     console.log("ADD TO CART METHOD");
-
-   
-
-    let cart = await Cart.find({userId: userId}, async(err, cart) =>{
-        if(err){
-            res.status(500).json({
-                status: false,
-                message: error.message
-            })
-        }
-        console.log("CArt Exist"+ cart);
-        const productDetails = await Product.findById(productId);
-
-
-
-        res.status(200).json({
-            status: true,
-            message: productDetails
-        })
-
-
+    let cart = new Cart({
+        products: products,
+        userId: userId,
+        total: total,
+        status: status,
+        address: address
     });
+await cart.save();
 
-    
-
-    //Check if cart exists and Check if product exists in the cart-----
-
-
-
+    if(cart){
+        res.status(200).json({
+            cart,
+            message: 'Cart added successfully'
+        })
+    }
 
    } catch (error) {
     res.status(500).json({

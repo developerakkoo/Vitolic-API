@@ -10,10 +10,6 @@ const addressSchema = new Schema({
         required:[true, 'User is required for saving Address']
     },
 
-   googleadd: {
-        type: String
-    },
-
 useradd:{
 	type:String
 },

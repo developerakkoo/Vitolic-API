@@ -6,7 +6,7 @@ const boySchema = new Schema({
 
     fullName:{
         type: String,
-        required: [true, 'First Name is required']
+      
     },
    
     email:{
@@ -20,7 +20,7 @@ const boySchema = new Schema({
     },
     contactNumber:{
         type: String,
-        required: [true, 'Contact Number is required']
+        
     },
    
     cordinates:{
@@ -35,14 +35,7 @@ const boySchema = new Schema({
     type: String,
     },
       
-    orders: [
-        {type: Schema.Types.ObjectId, ref: 'PlacedOrder'},
-    ],
-
-    slot: [
-        {type: Schema.Types.ObjectId, ref:'Slot'}
-    ]
-
+ 
     
 
 }, {

@@ -11,7 +11,7 @@ const productSchema = new Schema({
     },
 
     price:{
-        type: String,
+        type: Number,
         required: [true, 'price is required'],
 
     },
@@ -36,10 +36,7 @@ const productSchema = new Schema({
     category:{
         type: String,
         required: [true, 'category is required'],
-        enum: {
-            values: ['DRYFRUIT', 'EXOTIC', 'VEGETABLE', 'LEAFYVEGETABLE', 'FRUITS', 'SALAD', 'BAKERYPRODUCT'],
-            message: 'Only DRYFRUIT, EXOTIC, VEGETABLE, LEAFYVEGETABLE, FRUITS, SALAD, BAKERYPRODUCT is available'
-        },
+       
     },
 
     stock:{

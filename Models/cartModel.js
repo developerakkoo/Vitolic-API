@@ -4,16 +4,12 @@ const Schema = mongoose.Schema;
 
 
 const itemSchema = new Schema({
-    productId:{
-        type: Schema.Types.ObjectId,
-        ref: 'Product'
-    },
+    products:[{
+        
+    }],
+    userId:{ type: Schema.Types.ObjectId, ref: 'User'},
 
-    quantity:{ type: Number, required: true, min: [1, "Quantity cannot be less than 1."]},
 
-    price:{
-        type: Number, required: true
-    },
 
     total:{
         type: Number,
@@ -27,17 +23,17 @@ module.exports = mongoose.model("Item", itemSchema);
 
 
 const cartSchema = new Schema({
-    userId: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-       
-    },
+    products:[{
+        
+    }],
+    userId:{ type: Schema.Types.ObjectId, ref: 'User'},
+    address:{ type: Schema.Types.ObjectId, ref: 'Address'},
 
-    products: [itemSchema],
+    status:{ type: String},
 
-    subTotal:{
-        default: 0,
+    total:{
         type: Number,
+        required: true
     }
 },{
     timestamps: true

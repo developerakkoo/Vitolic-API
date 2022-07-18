@@ -18,18 +18,6 @@ exports.postAddress = async(req, res, next) => {
                 res.status(500).json({message: 'Address Create Error'})
             }
 
-             
-            const user = await User.findByIdAndUpdate(userId, {
-                $addToSet:{
-                    address: add._id
-                }
-            });
-            
-            if(!user){
-                res.status(500).json({message: 'User not found'})
-
-            }
-
             res.status(200).json({
                 add: add,
                 message: 'Address created Successfully',

@@ -6,7 +6,8 @@ const bcrypt = require('bcryptjs');
 
 
 
-exports.loginUser = async(req, res, next) =>{
+exports.loginUser = async(req, res, next) =>
+{
     const email = req.body.email;
     const password = req.body.password;
 
