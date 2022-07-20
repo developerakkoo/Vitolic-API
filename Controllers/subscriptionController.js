@@ -36,14 +36,40 @@ exports.postSubscription = async (req, res, next) => {
 
 exports.getSubscription = async (req, res, next) => {
     try {
-
+        
         let subscription = await Subscription.find({});
         if(subscription){
             res.status(200).json({success: true, subscription})
-
         }
-        
     } catch (error) {
         res.status(500).json({message: error.message, devMessage:"Something went wrong!"});
+    }
+}
+
+
+exports.updateSubscription = async (req, res, next) => {
+    try {
+        const invoiceNumber = req.body.invoiceNumber;
+        let subscription = await Subscription.findOneAndUpdate(invoiceNumber);
+        if(subscription){
+            res.status(200).json({success: true,message:'Subscription updated successfully', subscription})
+        }
+    } catch (error) {
+        res.status(500).json({message: error.message, devMessage:"Something went wrong!"});
+    }
+}
+
+exports.deleteSubscription = async(req, res, next) => {
+    try {
+
+        const invoiceNumber = req.body.invoiceNumber;
+
+        const subscription = await Subscription.findOneAndDelete(invoiceNumber);
+
+        if(subscription){
+            res.status(200).json({ status: true, message:'Subscription deleted successfully', subscription: subscription })
+        }
+    } catch (error) {
+        res.status(404).json({ status: false,  error: error, message: error.message });
     }
 }
