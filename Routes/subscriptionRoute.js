@@ -65,7 +65,7 @@ router.post('/subscription', subscriptionController.postSubscription);
 /**
  * @swagger
  * /products:
- *  post:
+ *  get:
  *      description: Create a new subscription
  *      tags:
  *          - Product
@@ -122,7 +122,7 @@ router.get('/subscription', subscriptionController.getSubscription);
 /**
  * @swagger
  * /products:
- *  post:
+ *  put:
  *      description: Create a new subscription
  *      tags:
  *          - Product
@@ -179,7 +179,7 @@ router.put('/subscription/:invoicenumber', refundController.updateRefund);
 /**
  * @swagger
  * /products:
- *  post:
+ *  delete:
  *      description: Create a new subscription
  *      tags:
  *          - Product
@@ -232,62 +232,6 @@ router.put('/subscription/:invoicenumber', refundController.updateRefund);
  * 
  */
 router.delete('/subscription/:invoicenumber', refundController.deleteRefund);
-
-/**
- * @swagger
- * /products:
- *  post:
- *      description: Create a new subscription
- *      tags:
- *          - Product
- *      parameters:
- *          - name: invoice number
- *            description: invoice number
- *            in: formData
- *            required: true
- *            type: String
- *          - name: milk
- *            description: type of milk
- *            in: formData
- *            required: true
- *            type: Number
- *          - name: customer name
- *            description: Name of the customer
- *            in: formData
- *            required: true
- *            type: Number
- *          - name: phone
- *            description: true/false
- *            in: formData
- *            required: true
- *            type: Number
- *          - name: email Id 
- *            description: email id of customer
- *            in: formData
- *            required: true
- *            type: String
- *          - name: address
- *            description: address of the customer
- *            in: formData
- *            required: true
- *            type: Number
- *          - name: deliveryFrequency
- *            description: Frequency of delivery
- *            in: formData
- *            required: true
- *            type: String
- *          - name: deliveryPerson
- *            description: Delivery person assigned
- *            in: formData
- *            required: true
- *            type: String
- *      responses:
- *         200:
- *              description: Success
- *  
- *  
- * 
- */
 
 
 module.exports = router;
