@@ -6,17 +6,17 @@ const Schema = mongoose.Schema;
 const refundSchema = new Schema({
     userId:{
         type: String,
-        required: [true, 'Email is required']
+        required: [true, 'UserId is required']
     },
 
     orderId:{
         type: String,
-        required: [true, 'Password is required']
+        required: [true, 'OrderId is required']
     },
-    
+
     description:{
         type: String,
-        required: [true, 'Password is required']
+        required: [true, 'Description is required']
     }
 })
 

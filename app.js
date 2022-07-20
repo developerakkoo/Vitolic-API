@@ -33,6 +33,7 @@ const bannerRoute = require("./Routes/bannerRoute");
 const helpRoute = require("./Routes/helpRoute");
 const subAdminRoute = require("./Routes/subAdminRoute");
 const refundRoute = require("./Routes/refundRoute");
+const subscriptionRoute = require("./Routes/subscriptionRoute");
 //Error Handlers
 const errorController = require("./Controllers/errorController");
 const globalErrorHandler = require("./Utils/globalErrorHandler");
@@ -123,6 +124,7 @@ app.use(pincodeRoute);
 app.use(bannerRoute);
 app.use(subAdminRoute);
 app.use(refundRoute);
+app.use(subscriptionRoute);
 
 app.use(globalErrorHandler);
 
