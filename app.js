@@ -31,6 +31,8 @@ const couponRoute = require("./Routes/cuponRoute");
 const pincodeRoute = require("./Routes/pincodeRoute");
 const bannerRoute = require("./Routes/bannerRoute");
 const helpRoute = require("./Routes/helpRoute");
+const subAdminRoute = require("./Routes/subAdminRoute");
+const refundRoute = require("./Routes/refundRoute");
 //Error Handlers
 const errorController = require("./Controllers/errorController");
 const globalErrorHandler = require("./Utils/globalErrorHandler");
@@ -119,6 +121,8 @@ app.use(couponRoute);
 app.use(helpRoute);
 app.use(pincodeRoute);
 app.use(bannerRoute);
+app.use(subAdminRoute);
+app.use(refundRoute);
 
 app.use(globalErrorHandler);
 
