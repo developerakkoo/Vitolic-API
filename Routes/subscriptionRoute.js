@@ -174,7 +174,7 @@ router.get('/subscription', subscriptionController.getSubscription);
  *  
  * 
  */
-router.put('/subscription/:invoicenumber', refundController.updateRefund);
+router.put('/subscription/:invoicenumber', subscriptionController.updateSubscription);
 
 /**
  * @swagger
@@ -231,7 +231,7 @@ router.put('/subscription/:invoicenumber', refundController.updateRefund);
  *  
  * 
  */
-router.delete('/subscription/:invoicenumber', refundController.deleteRefund);
+router.delete('/subscription/:invoicenumber', subscriptionController.deleteSubscription);
 
 
 module.exports = router;

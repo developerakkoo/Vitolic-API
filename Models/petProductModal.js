@@ -33,17 +33,13 @@ const petProductSchema = new Schema({
         type: String,
         required: [true, 'inStock is required']
     },
-    category:{
-        type: String,
-        required: [true, 'category is required'],
-       
-    },
+    mainCategory:[
+        {type: mongoose.Types.ObjectId, ref: 'Category'}
+    ],
 
-    subCategory:{
-        type: String,
-        required: [true, 'sub category is required'],
-       
-    },
+    subCategory:[
+        {type: mongoose.Types.ObjectId, ref: 'Category'}
+    ],
 
     stock:{
         type: Number,
