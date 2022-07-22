@@ -8,21 +8,21 @@ const petProductController = require('../Controllers/petProductController');
 const router = express.Router();
 
 //GET all products
-router.get('/products', petProductController.getPetProduct);
-router.get('/products/:productId', petProductController.getPetProductById);
+router.get('/petproducts', petProductController.getPetProduct);
+router.get('/petproducts/:id', petProductController.getPetProductById);
 
 router.get('/filter/:query', petProductController.PetProductFilter);
 
 
 //save a product
-router.post('/products', petProductController.postPetProduct);
+router.post('/petproducts', petProductController.postPetProduct);
 
 //remove a product
-router.delete('/product/:productId', petProductController.deletePetProduct);
+router.delete('/petproduct/:id', petProductController.deletePetProduct);
 
 //update a product
-router.put('/products/:productId', petProductController.updatePetProduct);
-router.put('/products/stock', petProductController.updateStock);
+router.put('/petproducts/:id', petProductController.updatePetProduct);
+router.put('/petproducts/stock/:id', petProductController.updateStock);
 
 
 

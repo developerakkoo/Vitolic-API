@@ -24,8 +24,8 @@ const petProductSchema = new Schema({
 
     quantity:[
         {
-            type: Schema.Types.ObjectId,
-            ref: 'Quantity'
+            type: Number,
+            required: [true, 'Quantity is required'],
         }
     ],
     
@@ -34,11 +34,11 @@ const petProductSchema = new Schema({
         required: [true, 'inStock is required']
     },
     mainCategory:[
-        {type: mongoose.Types.ObjectId, ref: 'Category'}
+        {type: String, required: [true, 'Main Category is required']}
     ],
 
     subCategory:[
-        {type: mongoose.Types.ObjectId, ref: 'Category'}
+        {type:String, required: [true, 'Sub Category is required']}
     ],
 
     stock:{

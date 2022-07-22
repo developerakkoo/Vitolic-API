@@ -213,7 +213,7 @@ exports.postEditProduct = (req, res, next) => {
   const updatedTitle = req.body.title;
   const updatedPrice = req.body.price;
   const updatedDiscountedPrice = req.body.discountedPrice;
- let updatedImageUrl = req.protocol + '://' + req.hostname + '/' +  req.file.path.replace(/\\/g, "/");
+  let updatedImageUrl = req.protocol + '://' + req.hostname + '/' +  req.file.path.replace(/\\/g, "/");
   const updatedInStock = req.body.inStock;
   const units = req.body.units;
 

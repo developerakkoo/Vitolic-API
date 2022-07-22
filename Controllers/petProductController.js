@@ -32,7 +32,7 @@ exports.PetProductFilter = async(req, res,next) => {
 }
 
 
-exports.postPetProduct = async(req, res,next) => {
+exports. postPetProduct = async(req, res,next) => {
   
     const host = req.hostname;
 
@@ -52,7 +52,7 @@ exports.postPetProduct = async(req, res,next) => {
         const stock = req.body.stock;
         const units = req.body.units;
         const quantity = req.body.quantity;
-        const category = req.body.category;
+        const mainCategory = req.body.mainCategory;
         const imageFilePath = req.file.path.replace(/\\/g, "/");
         const imageUrl = req.file.path.replace(/\\/g, "/");
         console.log(imageUrl);
@@ -66,12 +66,12 @@ exports.postPetProduct = async(req, res,next) => {
             stock: stock,
             units: units,
             quantity: quantity,
-            category : category,
+            mainCategory : mainCategory,
             subCategory: subCategory,
             imageFilePath: imageFilePath,
             imageUrl: req.protocol + '://' + req.hostname +":" + process.env.PORT + '/' +  imageUrl
         });
-        product.quantity.push(quantity);
+        //product.quantity.push(quantity);
 
         product.save().then((result) => {
             console.log("Product Created!");
@@ -92,16 +92,22 @@ exports.postPetProduct = async(req, res,next) => {
 
 exports.getPetProduct = async(req, res,next) => {
     try {
-        const product = await Pet.find({}).populate("category");
+        const product = await Pet.find({}).populate("PetProduct");
 
-        if(product){
+       /*  if(product){
             res.status(200).json({ status: true, message:'product fetched successfully', product: product })
             io.getIO().emit('get:product', product);
 
         }  
     } catch (error) {
         res.status(500).json({message: error.message});
+    } */
+    if (product) {
+        res.status(200).json({ product, message: 'Product found' })
     }
+} catch (error) {
+    res.status(500).json({ error, message: 'Something went wrong!' });
+}
 
 }
 
@@ -139,23 +145,34 @@ exports.updatePetProduct = async(req, res,next) => {
     }
 }
 
+
 exports.updateStock = async(req, res,next) => {
     try {
         const id = req.params.id;
+        const quantity = req.body.quantity;
+        let product = await Pet.findOneAndUpdate({_id: id}, {$inc:{ stock : -quantity }});
+       
+       /*  //const product = await Pet.findOneAndUpdate({
+       //     _id: id
+       // }, {$inc: {stock : quantity}});
+       // console.log(product);
+            /* if(product){
 
-        const product = await Pet.findByIdAndUpdate(id, req.body);
-
-
-        if(product){
-            res.status(200).json({ status: true, message:'Product updated successfully', product: product })
-            io.getIO().emit('put:product', product);
-        }
-
-        
+              res.status(200).json({ status: true, message:'Product updated successfully', product })
+             io.getIO().emit('put:product', product);
+           }
     } catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({message: error.message, error});
+    }  */
+
+    if (product) {
+        res.status(200).json({ product, message: 'product found' })
     }
+} catch (error) {
+    res.status(500).json({ error, message: 'Something went wrong!' });
 }
+}
+
 
 exports.deletePetProduct = async(req, res,next) => {
     try {
