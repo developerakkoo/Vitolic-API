@@ -97,11 +97,47 @@ router.get('/products', productController.getProducts);
  */
 router.get('/products/:productId', productController.getSingleProduct);
 
+/**
+ * @swagger
+ * /search/:query:
+ *  get:
+ *      description: search for products 
+ *      tags:
+ *          - Product
+ * 
+ *     
+ *
+ *      responses:
+ *         200:
+ *              description: Success
+ *  
+ *  
+ * 
+ */
 router.get('/search/:query', productController.searchProduct);
 
 
 //save a product
-
+/**
+ * @swagger
+ * /products/quantity/{productId}:
+ *  post:
+ *      description: Add product quantity by Id
+ *      tags:
+ *          - Product
+ *      parameters:
+ *          - name: quantity
+ *            description: quantity of the product
+ *            in: formData
+ *            required: true
+ *            type: Number
+ *      responses:
+ *         200:
+ *              description: Success
+ *  
+ *  
+ * 
+ */
 router.post('/products/quantity/:productId', productController.addProductQuantity);
 
 /**
@@ -141,6 +177,27 @@ router.delete('/product/:productId', productController.postDeleteProduct);
  * 
  */
 router.put('/products/:productId',productController.postEditProduct);
+
+/**
+ * @swagger
+ * /products/price/{productId}:
+ *  put:
+ *      description: Update product price by Id
+ *      tags:
+ *          - Product
+ *      parameters:
+ *          - name: price
+ *            description: price of the product
+ *            in: formData
+ *            required: true
+ *            type: Number
+ *      responses:
+ *         200:
+ *              description: Success
+ *  
+ *  
+ * 
+ */
 router.put('/products/price/:productId',productController.productPriceChange);
 
 

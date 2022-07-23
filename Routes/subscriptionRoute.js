@@ -7,13 +7,13 @@ const router = express.Router();
 
 /**
  * @swagger
- * /products:
+ * /subscription:
  *  post:
  *      description: Create a new subscription
  *      tags:
- *          - Product
+ *          - subscription
  *      parameters:
- *          - name: invoice number
+ *          - name: invoiceNumber
  *            description: invoice number
  *            in: formData
  *            required: true
@@ -22,18 +22,18 @@ const router = express.Router();
  *            description: type of milk
  *            in: formData
  *            required: true
- *            type: Number
- *          - name: customer name
+ *            type: String
+ *          - name: customerName
  *            description: Name of the customer
  *            in: formData
  *            required: true
- *            type: Number
+ *            type: String
  *          - name: phone
- *            description: true/false
+ *            description: phone number of the customer
  *            in: formData
  *            required: true
  *            type: Number
- *          - name: email Id 
+ *          - name: emailId 
  *            description: email id of customer
  *            in: formData
  *            required: true
@@ -42,7 +42,7 @@ const router = express.Router();
  *            description: address of the customer
  *            in: formData
  *            required: true
- *            type: Number
+ *            type: String
  *          - name: deliveryFrequency
  *            description: Frequency of delivery
  *            in: formData
@@ -64,52 +64,12 @@ router.post('/subscription', subscriptionController.postSubscription);
 
 /**
  * @swagger
- * /products:
+ * /subscription:
  *  get:
- *      description: Create a new subscription
+ *      description: get all subscriptions
  *      tags:
- *          - Product
- *      parameters:
- *          - name: invoice number
- *            description: invoice number
- *            in: formData
- *            required: true
- *            type: String
- *          - name: milk
- *            description: type of milk
- *            in: formData
- *            required: true
- *            type: Number
- *          - name: customer name
- *            description: Name of the customer
- *            in: formData
- *            required: true
- *            type: Number
- *          - name: phone
- *            description: true/false
- *            in: formData
- *            required: true
- *            type: Number
- *          - name: email Id 
- *            description: email id of customer
- *            in: formData
- *            required: true
- *            type: String
- *          - name: address
- *            description: address of the customer
- *            in: formData
- *            required: true
- *            type: Number
- *          - name: deliveryFrequency
- *            description: Frequency of delivery
- *            in: formData
- *            required: true
- *            type: String
- *          - name: deliveryPerson
- *            description: Delivery person assigned
- *            in: formData
- *            required: true
- *            type: String
+ *          - subscription
+ * 
  *      responses:
  *         200:
  *              description: Success
@@ -121,52 +81,12 @@ router.get('/subscription', subscriptionController.getSubscription);
 
 /**
  * @swagger
- * /products:
+ * /subscription/{invoicenumber}:
  *  put:
- *      description: Create a new subscription
+ *      description: update subscription using invoice number
  *      tags:
- *          - Product
- *      parameters:
- *          - name: invoice number
- *            description: invoice number
- *            in: formData
- *            required: true
- *            type: String
- *          - name: milk
- *            description: type of milk
- *            in: formData
- *            required: true
- *            type: Number
- *          - name: customer name
- *            description: Name of the customer
- *            in: formData
- *            required: true
- *            type: Number
- *          - name: phone
- *            description: true/false
- *            in: formData
- *            required: true
- *            type: Number
- *          - name: email Id 
- *            description: email id of customer
- *            in: formData
- *            required: true
- *            type: String
- *          - name: address
- *            description: address of the customer
- *            in: formData
- *            required: true
- *            type: Number
- *          - name: deliveryFrequency
- *            description: Frequency of delivery
- *            in: formData
- *            required: true
- *            type: String
- *          - name: deliveryPerson
- *            description: Delivery person assigned
- *            in: formData
- *            required: true
- *            type: String
+ *          - subscription
+ * 
  *      responses:
  *         200:
  *              description: Success
@@ -178,52 +98,12 @@ router.put('/subscription/:invoicenumber', subscriptionController.updateSubscrip
 
 /**
  * @swagger
- * /products:
+ * /subscription/{invoicenumber}:
  *  delete:
- *      description: Create a new subscription
+ *      description: delete subscription using invoice number
  *      tags:
- *          - Product
- *      parameters:
- *          - name: invoice number
- *            description: invoice number
- *            in: formData
- *            required: true
- *            type: String
- *          - name: milk
- *            description: type of milk
- *            in: formData
- *            required: true
- *            type: Number
- *          - name: customer name
- *            description: Name of the customer
- *            in: formData
- *            required: true
- *            type: Number
- *          - name: phone
- *            description: true/false
- *            in: formData
- *            required: true
- *            type: Number
- *          - name: email Id 
- *            description: email id of customer
- *            in: formData
- *            required: true
- *            type: String
- *          - name: address
- *            description: address of the customer
- *            in: formData
- *            required: true
- *            type: Number
- *          - name: deliveryFrequency
- *            description: Frequency of delivery
- *            in: formData
- *            required: true
- *            type: String
- *          - name: deliveryPerson
- *            description: Delivery person assigned
- *            in: formData
- *            required: true
- *            type: String
+ *          - subscription
+ * 
  *      responses:
  *         200:
  *              description: Success
