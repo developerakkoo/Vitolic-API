@@ -186,7 +186,7 @@ exports.getAllUsers = async (req, res, next) => {
 
         if (users) {
             res.status(200).json({
-                message: 'All users',
+                message: 'All Users',
                 users
             })
         }
