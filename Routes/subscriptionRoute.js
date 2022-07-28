@@ -1,8 +1,8 @@
 const express = require('express');
-
 const subscriptionController = require('../Controllers/subscriptionController');
 const router = express.Router();
-
+const apicache = require('apicache');
+const cache = apicache.middleware;
 
 
 /**
@@ -60,7 +60,7 @@ const router = express.Router();
  *  
  * 
  */
-router.post('/subscription', subscriptionController.postSubscription);
+router.post('/subscription', cache('7 days'), subscriptionController.postSubscription);
 
 /**
  * @swagger
@@ -77,7 +77,7 @@ router.post('/subscription', subscriptionController.postSubscription);
  *  
  * 
  */
-router.get('/subscription', subscriptionController.getSubscription);
+router.get('/subscription', cache('7 days'), subscriptionController.getSubscription);
 
 /**
  * @swagger
@@ -94,7 +94,7 @@ router.get('/subscription', subscriptionController.getSubscription);
  *  
  * 
  */
-router.put('/subscription/:invoicenumber', subscriptionController.updateSubscription);
+router.put('/subscription/:invoicenumber', cache('7 days'), subscriptionController.updateSubscription);
 
 /**
  * @swagger
@@ -111,7 +111,7 @@ router.put('/subscription/:invoicenumber', subscriptionController.updateSubscrip
  *  
  * 
  */
-router.delete('/subscription/:invoicenumber', subscriptionController.deleteSubscription);
+router.delete('/subscription/:invoicenumber', cache('7 days'), subscriptionController.deleteSubscription);
 
 
 module.exports = router;

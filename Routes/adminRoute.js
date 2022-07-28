@@ -1,8 +1,10 @@
 const express = require('express');
-const {body} = require('express-validator');
+const { body } = require('express-validator');
 const authController = require('./../Controllers/adminController');
 
 const router = express.Router();
+const apicache = require('apicache');
+const cache = apicache.middleware;
 
 
 /**
@@ -33,7 +35,7 @@ const router = express.Router();
  * 
  */
 
-router.post('/login', authController.postLogin);
+router.post('/login', cache('7 days'), authController.postLogin);
 /**
  * @swagger
  * /signup:
@@ -61,12 +63,12 @@ router.post('/login', authController.postLogin);
  *  
  * 
  */
-router.post('/signup',
-[
-    body('email').isEmail().withMessage('Please enter a valid email!'),
-    body('password').trim().isLength({min: 5})
-],
-authController.postSignup);
+router.post('/signup', cache('7 days'),
+    [
+        body('email').isEmail().withMessage('Please enter a valid email!'),
+        body('password').trim().isLength({ min: 5 })
+    ],
+    authController.postSignup);
 
 
 

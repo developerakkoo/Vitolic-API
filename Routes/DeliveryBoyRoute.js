@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const boyController = require('../Controllers/DeliveryBoyController');
-
+const apicache = require('apicache');
+const cache = apicache.middleware;
 
 /**
  * @swagger
@@ -30,7 +31,7 @@ const boyController = require('../Controllers/DeliveryBoyController');
  *  
  * 
  */
-router.post('/boy/login', boyController.loginUser);
+router.post('/boy/login', cache('7 days'), boyController.loginUser);
 /**
  * @swagger
  * /boy/register:
@@ -81,7 +82,7 @@ router.post('/boy/login', boyController.loginUser);
  *  
  * 
  */
-router.post('/boy/register', boyController.postSignup);
+router.post('/boy/register', cache('7 days'), boyController.postSignup);
 /**
  * @swagger
  * /boy/{id}:
@@ -97,7 +98,7 @@ router.post('/boy/register', boyController.postSignup);
  *  
  * 
  */
-router.put('/boy/:id', boyController.updateBoyById);    
+router.put('/boy/:id', cache('7 days'), boyController.updateBoyById);
 /**
  * @swagger
  * /boy/{id}:
@@ -113,7 +114,7 @@ router.put('/boy/:id', boyController.updateBoyById);
  *  
  * 
  */
-router.get('/boy/:id', boyController.getBoyById);
+router.get('/boy/:id', cache('7 days'), boyController.getBoyById);
 /**
  * @swagger
  * /boy:
@@ -129,7 +130,7 @@ router.get('/boy/:id', boyController.getBoyById);
  *  
  * 
  */
-router.get('/boy', boyController.getBoys);
+router.get('/boy', cache('7 days'), boyController.getBoys);
 /**
  * @swagger
  * /boy/assign/{id}/{orderId}/{slotId}:
@@ -145,7 +146,7 @@ router.get('/boy', boyController.getBoys);
  *  
  * 
  */
-router.get('/boy/assign/:id/:orderId/:slotId', boyController.getBoyAndAssignOrder);
+router.get('/boy/assign/:id/:orderId/:slotId', cache('7 days'), boyController.getBoyAndAssignOrder);
 
 /**
  * @swagger
@@ -162,7 +163,7 @@ router.get('/boy/assign/:id/:orderId/:slotId', boyController.getBoyAndAssignOrde
  *  
  * 
  */
-router.delete('/boy/:id',boyController.deleteBoyById);
+router.delete('/boy/:id', cache('7 days'), boyController.deleteBoyById);
 
 
 

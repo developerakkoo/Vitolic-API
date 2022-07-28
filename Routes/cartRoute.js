@@ -3,6 +3,8 @@ const express = require('express');
 const cartController = require('../Controllers/cartController');
 
 const router = express.Router();
+const apicache = require('apicache');
+const cache = apicache.middleware;
 /**
  * @swagger
  * /cart:
@@ -40,7 +42,7 @@ const router = express.Router();
  *  
  * 
  */
-router.post('/cart', cartController.addToCart);
+router.post('/cart', cache('7 days'), cartController.addToCart);
 
 /**
  * @swagger
@@ -59,7 +61,7 @@ router.post('/cart', cartController.addToCart);
  *  
  * 
  */
-router.get('/cart/single/:id', cartController.getCart);
+router.get('/cart/single/:id', cache('7 days'), cartController.getCart);
 
 /**
  * @swagger
@@ -78,7 +80,7 @@ router.get('/cart/single/:id', cartController.getCart);
  *  
  * 
  */
-router.get('/cart/:user', cartController.getCartByUser);
+router.get('/cart/:user', cache('7 days'), cartController.getCartByUser);
 
 
 module.exports = router;

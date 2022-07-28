@@ -1,7 +1,8 @@
 const express = require('express');
 const placedOrderController = require('../Controllers/placedOrderController');
-
 const router = express.Router();
+const apicache = require('apicache');
+const cache = apicache.middleware;
 
 /**
  * @swagger
@@ -20,7 +21,7 @@ const router = express.Router();
  *  
  * 
  */
-router.get('/place/:userId', placedOrderController.getOrderByUser);
+router.get('/place/:userId', cache('7 days'), placedOrderController.getOrderByUser);
 
 
 /**
@@ -40,7 +41,7 @@ router.get('/place/:userId', placedOrderController.getOrderByUser);
  *  
  * 
  */
-router.get('/place/order/:orderId', placedOrderController.getOrder);
+router.get('/place/order/:orderId', cache('7 days'), placedOrderController.getOrder);
 
 /**
  * @swagger
@@ -59,7 +60,7 @@ router.get('/place/order/:orderId', placedOrderController.getOrder);
  *  
  * 
  */
-router.get('/place', placedOrderController.getAllOrders);
+router.get('/place', cache('7 days'), placedOrderController.getAllOrders);
 
 /**
  * @swagger
@@ -78,7 +79,7 @@ router.get('/place', placedOrderController.getAllOrders);
  *  
  * 
  */
-router.get('/place/date/:date', placedOrderController.getOrderByDate);
+router.get('/place/date/:date', cache('7 days'), placedOrderController.getOrderByDate);
 
 /**
  * @swagger
@@ -102,8 +103,8 @@ router.get('/place/date/:date', placedOrderController.getOrderByDate);
  *  
  * 
  */
-router.post('/createorder', placedOrderController.createOrder);
-router.post('/verifyorder', placedOrderController.verifyOrderSignature);
+router.post('/createorder', cache('7 days'), placedOrderController.createOrder);
+router.post('/verifyorder', cache('7 days'), placedOrderController.verifyOrderSignature);
 
 
 /**
@@ -127,7 +128,7 @@ router.post('/verifyorder', placedOrderController.verifyOrderSignature);
  *  
  *  
  * 
- */router.post('/place', placedOrderController.placeOrder);
+ */router.post('/place', cache('7 days'), placedOrderController.placeOrder);
 
 /**
  * @swagger
@@ -146,7 +147,7 @@ router.post('/verifyorder', placedOrderController.verifyOrderSignature);
  *  
  * 
  */
-router.put('/place/:id', placedOrderController.updatePlacedOrder);
+router.put('/place/:id', cache('7 days'), placedOrderController.updatePlacedOrder);
 
 /**
  * @swagger
@@ -165,7 +166,7 @@ router.put('/place/:id', placedOrderController.updatePlacedOrder);
  *  
  * 
  */
-router.delete('/place/:id',placedOrderController.deletePlacedOrder);
+router.delete('/place/:id', cache('7 days'), placedOrderController.deletePlacedOrder);
 
 
 

@@ -1,7 +1,8 @@
 const express = require('express');
 const UserController = require('../Controllers/userController');
 const router = express.Router();
-
+const apicache = require('apicache');
+const cache = apicache.middleware;
 //auth routes starrt
 
 /**
@@ -26,7 +27,7 @@ const router = express.Router();
  *  
  * 
  */
-router.post('/token', UserController.getToken);
+router.post('/token', cache('7 days'), UserController.getToken);
 
 /**
  * @swagger
@@ -55,7 +56,7 @@ router.post('/token', UserController.getToken);
  *  
  * 
  */
-router.post('/verify', UserController.verifyToken);
+router.post('/verify', cache('7 days'), UserController.verifyToken);
 
 
 //auth routes end
@@ -75,7 +76,7 @@ router.post('/verify', UserController.verifyToken);
  *  
  * 
  */
-router.get('/user/profiles', UserController.getAllUsers);
+router.get('/user/profiles', cache('7 days'), UserController.getAllUsers);
 
 /**
  * @swagger
@@ -93,7 +94,7 @@ router.get('/user/profiles', UserController.getAllUsers);
  *  
  * 
  */
-router.get('/user/profile/:userId', UserController.getUserProfile); 
+router.get('/user/profile/:userId', cache('7 days'), UserController.getUserProfile);
 
 
 
@@ -124,7 +125,7 @@ router.get('/user/profile/:userId', UserController.getUserProfile);
  *  
  * 
  */
-router.post('/user/login', UserController.loginUser);
+router.post('/user/login', cache('7 days'), UserController.loginUser);
 
 /**
  * @swagger
@@ -173,7 +174,7 @@ router.post('/user/login', UserController.loginUser);
  *  
  * 
  */
-router.post('/user/register', UserController.postSignup);
+router.post('/user/register', cache('7 days'), UserController.postSignup);
 
 
 /**
@@ -228,7 +229,7 @@ router.post('/user/register', UserController.postSignup);
  *  
  * 
  */
-router.post('/user/profiles', UserController.createUser);
+router.post('/user/profiles', cache('7 days'), UserController.createUser);
 
 /**
  * @swagger
@@ -246,7 +247,7 @@ router.post('/user/profiles', UserController.createUser);
  *  
  * 
  */
-router.put('/user/profiles/:id', UserController.updateUser);
+router.put('/user/profiles/:id', cache('7 days'), UserController.updateUser);
 
 /**
  * @swagger
@@ -264,6 +265,6 @@ router.put('/user/profiles/:id', UserController.updateUser);
  *  
  * 
  */
-router.delete('/user/profiles/:id', UserController.deleteUserProfile);
+router.delete('/user/profiles/:id', cache('7 days'), UserController.deleteUserProfile);
 
 module.exports = router;

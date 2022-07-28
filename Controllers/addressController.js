@@ -11,7 +11,6 @@ exports.postAddress = async(req, res, next) => {
             const coordinates = req.body.coordinates;
             
            
-
             const add = await Address.create(req.body);
 
             if(!add){

@@ -1,10 +1,8 @@
 const express = require('express');
 const orderController = require('../Controllers/orderController');
-
-
 const router = express.Router();
-
-
+const apicache = require('apicache');
+const cache = apicache.middleware;
 
 
 /**
@@ -17,10 +15,19 @@ const router = express.Router();
  * 
  *      parameters:
  *          - name: products
+ *  
+ *          - name: product
  *            description: products to order
  *            in: formData
  *            required: true
- *            type: String
+ *            type: String 
+ *          - name: quantity
+ *            description: quantity to order
+ *            in: formData
+ *            required: true
+ *            type: Number ]    
+ *       
+ *           
  *          - name: products
  *            description: products to order
  *            in: formData
@@ -39,7 +46,7 @@ const router = express.Router();
  *  
  * 
  */
-router.post('/order', orderController.createOrder);
+router.post('/order', cache('7 days'), orderController.createOrder);
 
 
 

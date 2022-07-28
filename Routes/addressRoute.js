@@ -1,6 +1,8 @@
 const express = require('express');
 const addressController = require('../Controllers/addressController');
 const router = express.Router();
+const apicache = require('apicache');
+const cache = apicache.middleware;
 
 /**
  * @swagger
@@ -16,14 +18,15 @@ const router = express.Router();
  *  
  * 
  */
-router.get('/address/:userId', addressController.getAddressByUserId);
+router.get('/address/:userId', cache('7 days'), addressController.getAddressByUserId);
 /**
  * @swagger
- * /address
+ * /address:
  *  post:
  *      description: Create a new product
  *      tags:
  *          - Address
+ * 
  *      parameters:
  *          - name: userId
  *            description: Id of the user
@@ -48,7 +51,7 @@ router.get('/address/:userId', addressController.getAddressByUserId);
  *  
  * 
  */
-router.post('/address', addressController.postAddress);
+router.post('/address', cache('7 days'),addressController.postAddress);
 /**
  * @swagger
  * /address/{id}:
@@ -63,7 +66,7 @@ router.post('/address', addressController.postAddress);
  *  
  * 
  */
-router.put('/address/:id', addressController.updateAddress);
+router.put('/address/:id', cache('7 days'),addressController.updateAddress);
 /**
  * @swagger
  * /address/{id}:
@@ -78,6 +81,6 @@ router.put('/address/:id', addressController.updateAddress);
  *  
  * 
  */
-router.delete('/address/:id', addressController.deleteAddress);
+router.delete('/address/:id', cache('7 days'),addressController.deleteAddress);
 
 module.exports = router;

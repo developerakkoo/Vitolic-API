@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const banner = require('../Controllers/bannerController');
+const apicache = require('apicache');
+const cache = apicache.middleware;
 
 /**
  * @swagger
@@ -25,7 +27,7 @@ const banner = require('../Controllers/bannerController');
  *  
  * 
  */
-router.post('/banner', banner.createBanner);
+router.post('/banner', cache('7days'), banner.createBanner);
 
 /**
  * @swagger
@@ -44,7 +46,7 @@ router.post('/banner', banner.createBanner);
  *  
  * 
  */
-router.get('/banner', banner.getBanners);
+router.get('/banner', cache('7days'), banner.getBanners);
 /**
  * @swagger
  * /banner/{id}:
@@ -60,7 +62,7 @@ router.get('/banner', banner.getBanners);
  *  
  * 
  */
-router.get('/banner/:id', banner.getBannerById);
+router.get('/banner/:id', cache('7days'), banner.getBannerById);
 /**
  * @swagger
  * /banner/{id}:
@@ -83,7 +85,7 @@ router.get('/banner/:id', banner.getBannerById);
  *  
  * 
  */
-router.put('/banner/:id', banner.updateBanner);
+router.put('/banner/:id', cache('7days'), banner.updateBanner);
 /**
  * @swagger
  * /banner/{id}:
@@ -100,7 +102,7 @@ router.put('/banner/:id', banner.updateBanner);
  *  
  * 
  */
-router.delete('/banner/:id', banner.deleteBanner);
+router.delete('/banner/:id', cache('7days'), banner.deleteBanner);
 
 
 module.exports = router;

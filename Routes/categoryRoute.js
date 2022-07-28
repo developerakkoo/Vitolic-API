@@ -1,11 +1,9 @@
 const express = require('express');
 const { body } = require('express-validator');
-
-
 const categoryController = require('../Controllers/categoryController');
-
-
 const router = express.Router();
+const apicache = require('apicache');
+const cache = apicache.middleware;
 
 //GET all category
 /**
@@ -21,7 +19,7 @@ const router = express.Router();
  *              description: Success  
  * 
  */
-router.get('/category', categoryController.getCategory);
+router.get('/category', cache('7 days'), categoryController.getCategory);
 /**
  * @swagger
  * /category/{id}:
@@ -35,7 +33,7 @@ router.get('/category', categoryController.getCategory);
  *              description: Success  
  * 
  */
-router.get('/category/:id', categoryController.getCategoryById);
+router.get('/category/:id', cache('7 days'), categoryController.getCategoryById);
 
 
 //save a category
@@ -67,7 +65,7 @@ router.get('/category/:id', categoryController.getCategoryById);
  *  
  * 
  */
-router.post('/category', categoryController.postCategory);
+router.post('/category', cache('7 days'), categoryController.postCategory);
 
 //remove a category
 /**
@@ -83,7 +81,7 @@ router.post('/category', categoryController.postCategory);
  *              description: Success  
  * 
  */
-router.delete('/category/:id', categoryController.deleteCategory);
+router.delete('/category/:id', cache('7 days'), categoryController.deleteCategory);
 
 //update a category
 /**
@@ -99,7 +97,7 @@ router.delete('/category/:id', categoryController.deleteCategory);
  *              description: Success  
  * 
  */
-router.put('/category/:id', categoryController.updateCategory);
+router.put('/category/:id', cache('7 days'), categoryController.updateCategory);
 
 
 

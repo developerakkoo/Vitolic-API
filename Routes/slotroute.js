@@ -1,7 +1,8 @@
 const express = require('express');
-
 const slotController = require('../Controllers/slotController');
 const router = express.Router();
+const apicache = require('apicache');
+const cache = apicache.middleware;
 
 
 /**
@@ -46,7 +47,7 @@ const router = express.Router();
  *  
  * 
  */
-router.post('/slot', slotController.postSlot);
+router.post('/slot', cache('7 days'), slotController.postSlot);
 
 /**
  * @swagger
@@ -65,7 +66,7 @@ router.post('/slot', slotController.postSlot);
  *  
  * 
  */
-router.get('/slot', slotController.getSlot);
+router.get('/slot', cache('7 days'), slotController.getSlot);
 
 /**
  * @swagger
@@ -84,7 +85,7 @@ router.get('/slot', slotController.getSlot);
  *  
  * 
  */
-router.get('/slot/date/:date', slotController.getSlotByDate);
+router.get('/slot/date/:date', cache('7 days'), slotController.getSlotByDate);
 
 /**
  * @swagger
@@ -103,7 +104,7 @@ router.get('/slot/date/:date', slotController.getSlotByDate);
  *  
  * 
  */
-router.get('/slot/:id', slotController.getSlotById);
+router.get('/slot/:id', cache('7 days'), slotController.getSlotById);
 
 /**
  * @swagger
@@ -122,7 +123,7 @@ router.get('/slot/:id', slotController.getSlotById);
  *  
  * 
  */
-router.get('/slot/assign/:id/:orderId', slotController.assignSlot);
+router.get('/slot/assign/:id/:orderId', cache('7 days'), slotController.assignSlot);
 
 /**
  * @swagger
@@ -141,7 +142,7 @@ router.get('/slot/assign/:id/:orderId', slotController.assignSlot);
  *  
  * 
  */
-router.put('/slot/:id', slotController.putSlot);
+router.put('/slot/:id', cache('7 days'), slotController.putSlot);
 
 /**
  * @swagger
@@ -160,7 +161,7 @@ router.put('/slot/:id', slotController.putSlot);
  *  
  * 
  */
-router.delete('/slot/:id', slotController.deleteSlot);
+router.delete('/slot/:id', cache('7 days'), slotController.deleteSlot);
 
 
 
