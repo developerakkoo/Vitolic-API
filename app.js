@@ -24,7 +24,7 @@ const userAuthRoute = require("./Routes/userAuthRoute");
 const placeRoute = require("./Routes/placeOrderRoute");
 const orderRoute = require("./Routes/orderRoute");
 const addressRoute = require("./Routes/addressRoute");
-const boyRoute =require("./Routes/DeliveryBoyRoute");
+const boyRoute = require("./Routes/DeliveryBoyRoute");
 const slotRoute = require("./Routes/slotroute");
 const cartRoute = require("./Routes/cartRoute");
 const couponRoute = require("./Routes/cuponRoute");
@@ -51,14 +51,20 @@ app.use(cors());
 
 
 const swaggerOptions = {
-  swaggerDefinition:{
-    info:{
+  swaggerDefinition: {
+    info: {
       title: "Vitolic API Docs",
       version: "v1",
     },
 
   },
-  apis:['app.js', './Routes/productRoute.js','./Routes/orderRoute.js','./Routes/addressRoute.js','./Routes/adminRoute.js','./Routes/bannerRoute.js']
+  apis: ['app.js', './Routes/productRoute.js', './Routes/orderRoute.js', 
+  './Routes/addressRoute.js', './Routes/adminRoute.js', './Routes/bannerRoute.js', 
+  './Routes/cartRoute.js','./Routes/couponRoute.js','./Routes/DeliveryBoyRoute.js',
+  './Routes/helpRoute.js','./Routes/pincodeRoute.js','./Routes/placeOrderRoute.js',
+  './Routes/quantityRoute.js','./Routes/refundRoute.js','./Routes/slotRoute.js',
+  './Routes/userRoute.js','./Routes/userAuthRoute.js','./Routes/subAdminRoute.js',
+  './Routes/subscriptionRoute.js']
 }
 
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
@@ -97,7 +103,7 @@ app.use(
   multer({ storage: diskStorage, fileFilter: fileFilter }).single("file")
 );
 
-app.use("/image", express.static(path.join(__dirname, "image"))); 
+app.use("/image", express.static(path.join(__dirname, "image")));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -170,4 +176,3 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
-   

@@ -88,7 +88,10 @@ await cart.save();
 
 exports.updateCart = async(req, res, next) => {
     try {
-        
+        let cart = await Cart.findByIdAndDelete(req.params.id);
+        if(cart) {
+            res.status(200).send("Cart Delete Successfully");
+        }
     } catch (error) {
         res.status(500).json({
             status: false,
