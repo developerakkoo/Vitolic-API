@@ -3,14 +3,13 @@ const io = require('../socket');
 const User = require('../Models/userModel');
 const Product = require('../Models/productModel');
 
-exports.getCart = async(req, res, next) =>
-{
+exports.getCart = async (req, res, next) => {
     try {
 
         const cart = await Cart.findById(req.params.id).populate("userId address");
 
 
-        if(cart){
+        if (cart) {
             res.status(200).json({
                 status: true,
                 count: cart.length,
@@ -28,14 +27,13 @@ exports.getCart = async(req, res, next) =>
     }
 }
 
-exports.getCartByUser = async(req, res, next) =>
-{
+exports.getCartByUser = async (req, res, next) => {
     try {
 
-        const cart = await Cart.find({userId: req.params.user});
+        const cart = await Cart.find({ userId: req.params.user });
 
 
-        if(cart){
+        if (cart) {
             res.status(200).json({
                 status: true,
                 count: cart.length,
@@ -54,43 +52,47 @@ exports.getCartByUser = async(req, res, next) =>
 }
 
 
-exports.addToCart = async(req, res, next) =>{
-   try {
-    const {userId, products, total, status, address} = req.body;
+exports.addToCart = async (req, res, next) => {
+    try {
+        const { userId, products, total, status, address } = req.body;
 
-    console.log("ADD TO CART METHOD");
-    let cart = new Cart({
-        products: products,
-        userId: userId,
-        total: total,
-        status: status,
-        address: address
-    });
-await cart.save();
+        console.log("ADD TO CART METHOD");
+        let cart = new Cart({
+            products: products,
+            userId: userId,
+            total: total,
+            status: status,
+            address: address
+        });
+        await cart.save();
 
-    if(cart){
-        res.status(200).json({
-            cart,
-            message: 'Cart added successfully'
+        if (cart) {
+            res.status(200).json({
+                cart,
+                message: 'Cart added successfully'
+            })
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error.message
         })
     }
-
-   } catch (error) {
-    res.status(500).json({
-        status: false,
-        message: error.message
-    })
-   }
 
 }
 
 
 
-exports.updateCart = async(req, res, next) => {
+exports.updateCart = async (req, res, next) => {
     try {
-        let cart = await Cart.findByIdAndDelete(req.params.id);
-        if(cart) {
-            res.status(200).send("Cart Delete Successfully");
+        const id = req.params.id;
+
+        const cart = await Cart.findByIdAndUpdate(id, req.body);
+
+
+        if (cart) {
+            res.status(200).json({ cart, message: 'cart updated' })
         }
     } catch (error) {
         res.status(500).json({
@@ -101,9 +103,12 @@ exports.updateCart = async(req, res, next) => {
 }
 
 
-exports.deleteCart = async(req, res, next) =>{
+exports.deleteCart = async (req, res, next) => {
     try {
-        
+        let cart = await Cart.findByIdAndDelete(req.params.id);
+        if (cart) {
+            res.status(200).send("Cart Delete Successfully");
+        }
     } catch (error) {
         res.status(500).json({
             status: false,

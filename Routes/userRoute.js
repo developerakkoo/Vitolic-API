@@ -187,7 +187,7 @@ router.post('/user/register', cache('7 days'), UserController.postSignup);
  * 
  *      parameters:
  *          - name: fName
- *            description:first name of  the user
+ *            description: first name of  the user
  *            in: formData
  *            required: true
  *            type: String
