@@ -266,7 +266,7 @@ router.put('/user/profiles/:id',  UserController.updateUser);
  */
 router.delete('/user/profiles/:id',  UserController.deleteUserProfile);
 
-router.post('/user/subscription',  UserController.postSubscription);
+//router.post('/user/subscription',  UserController.postSubscription);
 
 //router.post('/user/login/promocode',  UserController.promoCode);
 

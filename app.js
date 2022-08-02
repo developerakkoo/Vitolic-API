@@ -43,13 +43,21 @@ const AppError = require("./Utils/app.Error");
 const swaggerJSDoc = require("swagger-jsdoc");
 // const MONGODB_URI = "mongodb://localhost:27017/milkdelivery";
 const MONGODB_URI = "mongodb+srv://farmsell:farmsell@cluster0.mh36s.mongodb.net/Vitolic?retryWrites=true&w=majority";
+//const apicache = require('apicache');
+//const cache = apicache.middleware;
+
+ 
 
 const app = express();
 const port = 8080;
 app.use(express.json());
 app.use(cors());
 
-
+/* app.use(cache('7 days'))
+ 
+app.get('/will-be-cached', (req, res) => {
+  res.json({ success: true })
+}) */
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
@@ -162,7 +170,7 @@ mongoose
     useFindAndModify: false,
   })
   .then((result) => {
-    const server = app.listen(5000);
+    const server = app.listen(8080);
     const io = require("./socket").init(server);
 
     io.on("connection", (socket) => {

@@ -78,6 +78,7 @@ exports.loginUser = async (req, res, next) => {
                         userId: loadedUser._id.toString(),
                     }, "!23ThisisaSecretFor@#$%^%^^&&allthebest", { expiresIn: '3h' })
 
+
                     res.status(200).json({
                         message: 'Sign In Successfull',
                         token: token,
@@ -260,3 +261,129 @@ exports.deleteUserProfile = async (req, res, next) => {
         res.status(500).json({ error, message: 'Something went wrong!' });
     }
 }
+
+exports.getSubscription = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+
+        const user = await User.findById(id);
+
+        if (user) {
+            res.status(200).json({
+                status: true,
+                message: 'User Profile Deleted Successfully'
+            })
+        }
+
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
+}
+/* 
+exports.postSubscription = async (req, res, next) => {
+
+    const isMonth = req.body.isMonth;
+    const isAlternate = req.body.isAlternate;
+    /* switch(subEndDate){
+        case isMonth:
+            subEndDate= Date.today().add(30).day();
+            break;
+        case isAlternate:
+            subEndDate= Date.today().add(30).day();
+            break;
+        default:
+            console.log("Please select Subscription type");
+            break;
+    } */
+    /*  if(isMonth===true){
+       let subEndDate= Date.today().add(30).day();
+       return subEndDate;
+     } */
+    /* }
+    else if(isAlternate===true){
+         let subEndDate= Date.today().add(60).day()
+        //return subEndDate;
+    }
+    else{
+        console.log("Please select a subscription type");
+    }  */
+/*
+    const subscription = new User({
+        isMonth: isMonth,
+        isAlternate: isAlternate,
+
+    });
+
+    subscription.save().then((result) => {
+        console.log("Subscription Created!");
+
+        res.status(201).json({
+            result,
+            message: "Subscription Created",
+        });
+        io.getIO().emit('subscription:create', { action: 'created', subscription })
+
+    }).catch((err) => {
+        res.status(500).json({
+            status: false,
+            message: err.message
+        })
+    })
+};
+
+exports.endDate= async (req, res, next) => {
+   
+        let endDate = res.body.subEndDate;
+
+        const user = await User.find({}).populate('subscription');
+
+        if (isMonth==true) 
+             endDate= Date.today().add(30).day();
+             else if(isAlternate)endDate= Date.today().add(30).day();
+        
+            const sub = new User({
+                subEndDate: endDate,
+                
+        
+            });
+        
+            sub.save().then((result) => {
+                console.log("Subscription Created!");
+            
+                res.status(201).json({
+                    result,
+                    message: endDate,
+                });
+                io.getIO().emit('subscription:create', { action: 'created', subscription })
+        
+            }).catch((err) => {
+                res.status(500).json({
+                    status: false,
+                    message: err.message
+                })
+            })
+        }
+     */
+
+/* exports.promoCode =async (req, res, next) => {
+    try {
+        const id = req.params.id;
+
+        const user = await User.findById(id);
+
+        if (user) {
+            voucher_codes.generate({
+                length: 8,
+                count: 1
+            });
+            res.status(200).json({
+                status: true,
+                message: 'User Profile Deleted Successfully'
+            })
+        }
+
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
+}
+ */
