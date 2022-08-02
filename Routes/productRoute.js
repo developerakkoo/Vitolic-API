@@ -2,8 +2,7 @@ const express = require('express');
 const { body } = require('express-validator');
 const productController = require('../Controllers/productController');
 const router = express.Router();
-const apicache = require('apicache');
-const cache = apicache.middleware;
+
 
 /**
  * @swagger
@@ -49,7 +48,7 @@ const cache = apicache.middleware;
  *            required: true
  *            type: String
  *          - name: imageUrl
- *            description: Image of the product
+ *            description: Image file of the product, multer key(file)
  *            in: formData
  *            required: true
  *            type: String
@@ -60,7 +59,7 @@ const cache = apicache.middleware;
  *  
  * 
  */
-router.post('/products', cache('7 days'), productController.postAddProduct);
+router.post('/products',  productController.postAddProduct);
 
 /**
  * @swagger
@@ -76,7 +75,7 @@ router.post('/products', cache('7 days'), productController.postAddProduct);
  *  
  * 
  */
-router.get('/products', cache('7 days'), productController.getProducts);
+router.get('/products',  productController.getProducts);
 /**
  * @swagger
  * /products/:id:
@@ -93,7 +92,7 @@ router.get('/products', cache('7 days'), productController.getProducts);
  *  
  * 
  */
-router.get('/products/:productId', cache('7 days'), productController.getSingleProduct);
+router.get('/products/:productId',  productController.getSingleProduct);
 
 /**
  * @swagger
@@ -112,7 +111,7 @@ router.get('/products/:productId', cache('7 days'), productController.getSingleP
  *  
  * 
  */
-router.get('/search/:query', cache('7 days'), productController.searchProduct);
+router.get('/search/:query',  productController.searchProduct);
 
 
 //save a product
@@ -136,7 +135,7 @@ router.get('/search/:query', cache('7 days'), productController.searchProduct);
  *  
  * 
  */
-router.post('/products/quantity/:productId', cache('7 days'), productController.addProductQuantity);
+router.post('/products/quantity/:productId',  productController.addProductQuantity);
 
 /**
  * @swagger
@@ -154,7 +153,7 @@ router.post('/products/quantity/:productId', cache('7 days'), productController.
  *  
  * 
  */
-router.delete('/product/:productId', cache('7 days'), productController.postDeleteProduct);
+router.delete('/product/:productId',  productController.postDeleteProduct);
 
 
 
@@ -174,7 +173,7 @@ router.delete('/product/:productId', cache('7 days'), productController.postDele
  *  
  * 
  */
-router.put('/products/:productId', cache('7 days'), productController.postEditProduct);
+router.put('/products/:productId',  productController.postEditProduct);
 
 /**
  * @swagger
@@ -196,7 +195,7 @@ router.put('/products/:productId', cache('7 days'), productController.postEditPr
  *  
  * 
  */
-router.put('/products/price/:productId', cache('7 days'), productController.productPriceChange);
+router.put('/products/price/:productId',  productController.productPriceChange);
 
 
 module.exports = router;

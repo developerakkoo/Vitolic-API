@@ -1,8 +1,7 @@
 const express = require('express');
 const refundController = require('../Controllers/refundController');
 const router = express.Router();
-const apicache = require('apicache');
-const cache = apicache.middleware;
+
 
 /**
  * @swagger
@@ -19,7 +18,7 @@ const cache = apicache.middleware;
  *  
  * 
  */
-router.get('/refund/:userId', cache('7 days'), refundController.getRefundByUserId);
+router.get('/refund/:userId',  refundController.getRefundByUserId);
 
 /**
  * @swagger
@@ -53,7 +52,7 @@ router.get('/refund/:userId', cache('7 days'), refundController.getRefundByUserI
  *  
  * 
  */
-router.post('/refund', cache('7 days'), refundController.postRefund);
+router.post('/refund',  refundController.postRefund);
 
 /**
  * @swagger
@@ -70,7 +69,7 @@ router.post('/refund', cache('7 days'), refundController.postRefund);
  *  
  * 
  */
-router.put('/refund/:userId', cache('7 days'), refundController.updateRefund);
+router.put('/refund/:userId',  refundController.updateRefund);
 
 /**
  * @swagger
@@ -87,6 +86,6 @@ router.put('/refund/:userId', cache('7 days'), refundController.updateRefund);
  *  
  * 
  */
-router.delete('/refund/:userId', cache('7 days'), refundController.deleteRefund);
+router.delete('/refund/:userId',  refundController.deleteRefund);
 
 module.exports = router;

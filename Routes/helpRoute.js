@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const help = require('./../Controllers/helpController');
-const apicache = require('apicache');
-const cache = apicache.middleware;
+
 
 /**
  * @swagger
@@ -39,7 +38,7 @@ router.get('/help', help.getHelp);
  *  
  * 
  */
-router.get('/help/:id', cache('7 days'), help.getHelpByUserId);
+router.get('/help/:id',  help.getHelpByUserId);
 /**
  * @swagger
  * /help:
@@ -72,7 +71,7 @@ router.get('/help/:id', cache('7 days'), help.getHelpByUserId);
  *  
  * 
  */
-router.post('/help', cache('7 days'), help.createHelp);
+router.post('/help',  help.createHelp);
 /**
  * @swagger
  * /help/{id}:
@@ -90,7 +89,7 @@ router.post('/help', cache('7 days'), help.createHelp);
  *  
  * 
  */
-router.delete('/help/:id', cache('7 days'), help.deleteHelp);
+router.delete('/help/:id',  help.deleteHelp);
 
 
 

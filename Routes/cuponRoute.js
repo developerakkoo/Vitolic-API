@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const coupon = require('../Controllers/couponController');
-const apicache = require('apicache');
-const cache = apicache.middleware;
+
 
 /**
  * @swagger
@@ -36,7 +35,7 @@ const cache = apicache.middleware;
  *  
  * 
  */
-router.post('/coupon', cache('7days'), coupon.createCoupon);
+router.post('/coupon',  coupon.createCoupon);
 /**
  * @swagger
  * /banner:
@@ -53,7 +52,7 @@ router.post('/coupon', cache('7days'), coupon.createCoupon);
  *  
  * 
  */
-router.get('/banner', cache('7days'), coupon.getCoupons);
+router.get('/banner',  coupon.getCoupons);
 /**
  * @swagger
  * /banner/{id}:
@@ -70,7 +69,7 @@ router.get('/banner', cache('7days'), coupon.getCoupons);
  *  
  * 
  */
-router.get('/banner/:id', cache('7days'), coupon.getCouponById);
+router.get('/banner/:id',  coupon.getCouponById);
 /**
  * @swagger
  * /banner/{id}:
@@ -87,7 +86,7 @@ router.get('/banner/:id', cache('7days'), coupon.getCouponById);
  *  
  * 
  */
-router.delete('/banner/:id', cache('7days'), coupon.deleteCoupon);
+router.delete('/banner/:id',  coupon.deleteCoupon);
 
 
 module.exports = router;

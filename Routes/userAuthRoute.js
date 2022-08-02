@@ -1,8 +1,7 @@
 const express = require('express');
 const UserAuthController = require('../Controllers/userAuthController');
 const router = express.Router();
-const apicache = require('apicache');
-const cache = apicache.middleware;
+
 
 
 /**
@@ -32,7 +31,7 @@ const cache = apicache.middleware;
  *  
  * 
  */
-router.post('/user/login', cache('7 days'), UserAuthController.loginUser);
+router.post('/user/login',  UserAuthController.loginUser);
 
 /**
  * @swagger
@@ -61,7 +60,7 @@ router.post('/user/login', cache('7 days'), UserAuthController.loginUser);
  *  
  * 
  */
-router.post('/user/register', cache('7 days'), UserAuthController.postSignup);
+router.post('/user/register',  UserAuthController.postSignup);
 
 /**
  * @swagger
@@ -79,7 +78,7 @@ router.post('/user/register', cache('7 days'), UserAuthController.postSignup);
  *  
  * 
  */
-router.get('/user', cache('7 days'), UserAuthController.getAllUsers);
+router.get('/user',  UserAuthController.getAllUsers);
 
 /**
  * @swagger
@@ -97,7 +96,7 @@ router.get('/user', cache('7 days'), UserAuthController.getAllUsers);
  *  
  * 
  */
-router.get('/user/:id', cache('7 days'), UserAuthController.getUser);
+router.get('/user/:id',  UserAuthController.getUser);
 
 
 /**
@@ -116,7 +115,7 @@ router.get('/user/:id', cache('7 days'), UserAuthController.getUser);
  *  
  * 
  */
-router.put('/user/:id', cache('7 days'), UserAuthController.updateUser);
+router.put('/user/:id',  UserAuthController.updateUser);
 
 
 /**
@@ -135,7 +134,7 @@ router.put('/user/:id', cache('7 days'), UserAuthController.updateUser);
  *  
  * 
  */
-router.delete('/user/:id', cache('7 days'), UserAuthController.deleteUser);
+router.delete('/user/:id',  UserAuthController.deleteUser);
 
 
 module.exports = router;

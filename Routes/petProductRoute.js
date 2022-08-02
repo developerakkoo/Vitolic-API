@@ -1,8 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const petProductController = require('../Controllers/petProductController');
-const apicache = require('apicache');
-const cache = apicache.middleware;
+
 
 const router = express.Router();
 
@@ -24,7 +23,7 @@ const router = express.Router();
  *  
  * 
  */
-router.get('/petproducts', cache('7 days'), petProductController.getPetProduct);
+router.get('/petproducts',  petProductController.getPetProduct);
 /**
  * @swagger
  * /petproducts/{id}:
@@ -42,7 +41,7 @@ router.get('/petproducts', cache('7 days'), petProductController.getPetProduct);
  *  
  * 
  */
-router.get('/petproducts/:id', cache('7 days'), petProductController.getPetProductById);
+router.get('/petproducts/:id',  petProductController.getPetProductById);
 /**
  * @swagger
  * /filter/:query:
@@ -60,7 +59,7 @@ router.get('/petproducts/:id', cache('7 days'), petProductController.getPetProdu
  *  
  * 
  */
-router.get('/filter/:query', cache('7 days'), petProductController.PetProductFilter);
+router.get('/filter/:query',  petProductController.PetProductFilter);
 
 
 //save a product
@@ -131,7 +130,7 @@ router.get('/filter/:query', cache('7 days'), petProductController.PetProductFil
  * 
  */
 
-router.post('/petproducts', cache('7 days'), petProductController.postPetProduct);
+router.post('/petproducts',  petProductController.postPetProduct);
 
 //remove a product
 /**
@@ -151,7 +150,7 @@ router.post('/petproducts', cache('7 days'), petProductController.postPetProduct
  *  
  * 
  */
-router.delete('/petproduct/:id', cache('7 days'), petProductController.deletePetProduct);
+router.delete('/petproduct/:id',  petProductController.deletePetProduct);
 
 //update a product
 /**
@@ -171,7 +170,7 @@ router.delete('/petproduct/:id', cache('7 days'), petProductController.deletePet
  *  
  * 
  */
-router.put('/petproducts/:id', cache('7 days'), petProductController.updatePetProduct);
+router.put('/petproducts/:id',  petProductController.updatePetProduct);
 /**
  * @swagger
  * /petproducts/stock/{id}:
@@ -189,7 +188,7 @@ router.put('/petproducts/:id', cache('7 days'), petProductController.updatePetPr
  *  
  * 
  */
-router.put('/petproducts/stock/:id', cache('7 days'), petProductController.updateStock);
+router.put('/petproducts/stock/:id',  petProductController.updateStock);
 
 
 

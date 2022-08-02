@@ -2,8 +2,7 @@ const express = require('express');
 const { body } = require('express-validator');
 const authController = require('./../Controllers/subAdminController');
 const router = express.Router();
-const apicache = require('apicache');
-const cache = apicache.middleware;
+
 
 /**
  * @swagger
@@ -32,7 +31,7 @@ const cache = apicache.middleware;
  *  
  * 
  */
-router.post('/subadminlogin', cache('7 days'), authController.postLogin);
+router.post('/subadminlogin',  authController.postLogin);
 
 /**
  * @swagger
@@ -61,7 +60,7 @@ router.post('/subadminlogin', cache('7 days'), authController.postLogin);
  *  
  * 
  */
-router.post('/subadminsignup', cache('7 days'),
+router.post('/subadminsignup', 
     [
         body('email').isEmail().withMessage('Please enter a valid email!'),
         body('password').trim().isLength({ min: 5 })

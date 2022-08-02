@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pincode = require('../Controllers/pincodeController');
-const apicache = require('apicache');
-const cache = apicache.middleware;
+
 
 /**
  * @swagger
@@ -31,7 +30,7 @@ const cache = apicache.middleware;
  *  
  * 
  */
-router.post('/pincode', cache('7 days'), pincode.createPincode);
+router.post('/pincode',  pincode.createPincode);
 
 /**
  * @swagger
@@ -50,7 +49,7 @@ router.post('/pincode', cache('7 days'), pincode.createPincode);
  *  
  * 
  */
-router.get('/pincode', cache('7 days'), pincode.getPincodes);
+router.get('/pincode',  pincode.getPincodes);
 /**
  * @swagger
  * /pincode/{id}:
@@ -68,7 +67,7 @@ router.get('/pincode', cache('7 days'), pincode.getPincodes);
  *  
  * 
  */
-router.put('/pincode/:id', cache('7 days'), pincode.updatePincode);
+router.put('/pincode/:id',  pincode.updatePincode);
 /**
  * @swagger
  * /pincode/{id}:
@@ -86,7 +85,7 @@ router.put('/pincode/:id', cache('7 days'), pincode.updatePincode);
  *  
  * 
  */
-router.delete('/pincode/:id', cache('7 days'), pincode.deletePincode);
+router.delete('/pincode/:id',  pincode.deletePincode);
 
 
 module.exports = router;

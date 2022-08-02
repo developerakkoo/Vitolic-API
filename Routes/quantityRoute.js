@@ -1,8 +1,7 @@
 const QuantityController = require('../Controllers/quantityController');
 const express = require('express');
 const router = express.Router();
-const apicache = require('apicache');
-const cache = apicache.middleware;
+
 
 /**
  * @swagger
@@ -36,7 +35,7 @@ const cache = apicache.middleware;
  *  
  * 
  */
-router.post('/quantity', cache('7 days'), QuantityController.PostQuantity);
+router.post('/quantity',  QuantityController.PostQuantity);
 
 
 module.exports = router;
