@@ -6,7 +6,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const io = require('../socket');
-
+const voucher_codes = require('voucher-code-generator');
+var moment = require('moment');
 exports.getToken = async (req, res, next) => {
     const phonenumber = req.body.phonenumber;
 
@@ -100,15 +101,16 @@ exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const contactNo = req.body.contactNumber;
 
-    const couponCode = req.body.couponCode;
+    const couponCode = voucher_codes.generate({
+        length: 8,
+        count: 1
+    });
     const walletCashbackAvailable = req.body.walletCashbackAvailable;
-
-
 
     User.findOne({ contactNumber: contactNo })
         .then(user => {
             if (user) {
-                res.status(201).json({ message: 'User Logged  Successfully!', status: '201', userId: user._id });
+                res.status(201).json({ message: 'User Logged  Successfully!', status: '201', userId: user._id, });
             }
 
 
@@ -122,7 +124,8 @@ exports.postSignup = (req, res, next) => {
             })
 
             newuser.save().then((result) => {
-                res.status(201).json({ message: 'User Created Successfully!', status: '201', userId: result._id });
+                //let promoCode =
+                res.status(201).json({ message: 'User Created Successfully!', status: '201', userId: result._id, CouponCde: couponCode });
             })
         })
 
@@ -133,7 +136,7 @@ exports.postSignup = (req, res, next) => {
 }
 
 
-
+/* 
 exports.createUser = async (req, res, next) => {
     try {
         const fName = req.body.fName;
@@ -161,10 +164,14 @@ exports.createUser = async (req, res, next) => {
 
         user.save().then((result) => {
             if (result) {
+                let promoCode =voucher_codes.generate({
+                    length: 8,
+                    count: 1
+                });
                 res.status(200).json({
                     status: 'success',
                     message: "Profile Created Successfully!",
-                    result
+                    result,PromoCode:promoCode
                 });
 
             }
@@ -178,7 +185,7 @@ exports.createUser = async (req, res, next) => {
     } catch (error) {
         res.status(500).json({ error, message: error.message })
     }
-}
+} */
 
 
 exports.getAllUsers = async (req, res, next) => {
@@ -279,39 +286,30 @@ exports.getSubscription = async (req, res, next) => {
         res.status(500).json({ error, message: 'Something went wrong!' });
     }
 }
-/* 
+
 exports.postSubscription = async (req, res, next) => {
 
     const isMonth = req.body.isMonth;
     const isAlternate = req.body.isAlternate;
-    /* switch(subEndDate){
-        case isMonth:
-            subEndDate= Date.today().add(30).day();
-            break;
-        case isAlternate:
-            subEndDate= Date.today().add(30).day();
-            break;
-        default:
-            console.log("Please select Subscription type");
-            break;
+    
+        //let subEndDate = await req.body.isMonth ? moment().add(30, 'd').toDate() : moment().add(60, 'd').toDate()
+
+
+    /* let subEndDate;
+    if (isMonth === true) {
+        subEndDate = moment()
+            .add(30, 'd')
+            .toDate()
+    } else {
+        subEndDate = moment()
+            .add(60, 'd')
+            .toDate()
     } */
-    /*  if(isMonth===true){
-       let subEndDate= Date.today().add(30).day();
-       return subEndDate;
-     } */
-    /* }
-    else if(isAlternate===true){
-         let subEndDate= Date.today().add(60).day()
-        //return subEndDate;
-    }
-    else{
-        console.log("Please select a subscription type");
-    }  */
-/*
+
     const subscription = new User({
         isMonth: isMonth,
         isAlternate: isAlternate,
-
+        //subEndDate: subEndDate
     });
 
     subscription.save().then((result) => {
@@ -331,39 +329,53 @@ exports.postSubscription = async (req, res, next) => {
     })
 };
 
-exports.endDate= async (req, res, next) => {
-   
-        let endDate = res.body.subEndDate;
+exports.endDate = async (req, res, next) => {
+    const id = req.params.id;
 
-        const user = await User.find({}).populate('subscription');
+    //const user = await User.findById(id);
+    const user = await User.find({}).populate('subscription');
+    console.log(user)
+    let subEndDate = await user.isMonth ? moment().add(30, 'd').toDate() : moment().add(60, 'd').toDate()
+    /* let endDate;
+    for (i = 0; i < user.length; i++) {
+        if (isMonth == true) {
 
-        if (isMonth==true) 
-             endDate= Date.today().add(30).day();
-             else if(isAlternate)endDate= Date.today().add(30).day();
-        
-            const sub = new User({
-                subEndDate: endDate,
-                
-        
-            });
-        
-            sub.save().then((result) => {
-                console.log("Subscription Created!");
-            
-                res.status(201).json({
-                    result,
-                    message: endDate,
-                });
-                io.getIO().emit('subscription:create', { action: 'created', subscription })
-        
-            }).catch((err) => {
-                res.status(500).json({
-                    status: false,
-                    message: err.message
-                })
-            })
+            endDate = moment()
+                .add(30, 'd')
+                .toDate();
+            console.log(endDate);
         }
-     */
+
+        else if (isAlternate == true) {
+            endDate = moment()
+                .add(60, 'd')
+                .toDate();
+            console.log(endDate);
+        }
+    } */
+    const sub = new User({
+        //userId:userId,
+        subEndDate: subEndDate,
+
+    });
+
+    sub.save().then((result) => {
+        console.log("Subscription!");
+
+        res.status(201).json({
+            result,
+            message: 'End date is' + subEndDate,
+        });
+        io.getIO().emit('subscription:Enddate', { action: 'created', sub })
+
+    }).catch((err) => {
+        res.status(500).json({
+            status: false,
+            message: err.message
+        })
+    })
+}
+
 
 /* exports.promoCode =async (req, res, next) => {
     try {
