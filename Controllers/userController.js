@@ -8,6 +8,7 @@ const bcrypt = require('bcryptjs');
 const io = require('../socket');
 const voucher_codes = require('voucher-code-generator');
 var moment = require('moment');
+
 exports.getToken = async (req, res, next) => {
     const phonenumber = req.body.phonenumber;
 
@@ -287,55 +288,41 @@ exports.getSubscription = async (req, res, next) => {
     }
 }
 
-exports.postSubscription = async (req, res, next) => {
+exports.addSubscription = async (req, res, next) => {
+    try {
+        const id = req.params.id;
 
-    const isMonth = req.body.isMonth;
-    const isAlternate = req.body.isAlternate;
-    
-        //let subEndDate = await req.body.isMonth ? moment().add(30, 'd').toDate() : moment().add(60, 'd').toDate()
+        const user = await User.findOneAndUpdate({ _id: id }, req.body);
 
+        if (user) {
+            res.status(201).json({ status: 'success', user: user, message: 'Profile updated successfully!' });
+        }
 
-    /* let subEndDate;
-    if (isMonth === true) {
-        subEndDate = moment()
-            .add(30, 'd')
-            .toDate()
-    } else {
-        subEndDate = moment()
-            .add(60, 'd')
-            .toDate()
-    } */
-
-    const subscription = new User({
-        isMonth: isMonth,
-        isAlternate: isAlternate,
-        //subEndDate: subEndDate
-    });
-
-    subscription.save().then((result) => {
-        console.log("Subscription Created!");
-
-        res.status(201).json({
-            result,
-            message: "Subscription Created",
-        });
-        io.getIO().emit('subscription:create', { action: 'created', subscription })
-
-    }).catch((err) => {
-        res.status(500).json({
-            status: false,
-            message: err.message
-        })
-    })
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
 };
 
 exports.endDate = async (req, res, next) => {
-    const id = req.params.id;
+    try {
+        const id = req.params.id;
+        //let subEndDate;
+        let user = await User.findById(id);
+        //let {isMonth } = user;
+        //user = await User.find({})
+        console.log(user.isMonth)
+        let subEndDate = await user.isMonth ? moment().add(30, 'd').toDate() : moment().add(60, 'd').toDate()
+        console.log(subEndDate);
+        user = await user.updateOne({ endDate: subEndDate });
+        console.log(user)
 
-    //const user = await User.findById(id);
-    const user = await User.find({}).populate('subscription');
-    console.log(user)
-    let subEndDate = await user.isMonth ? moment().add(30, 'd').toDate() : moment().add(60, 'd').toDate()
+        if (user) {
+            res.status(201).json({ status: 'success', user: user, message: 'Profile updated successfully!' });
+        }
+
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
     /* let endDate;
     for (i = 0; i < user.length; i++) {
         if (isMonth == true) {
@@ -353,27 +340,28 @@ exports.endDate = async (req, res, next) => {
             console.log(endDate);
         }
     } */
-    const sub = new User({
-        //userId:userId,
-        subEndDate: subEndDate,
+    /*  const sub =  User({
+         //userId:userId,
+         subEndDate: subEndDate,
+ 
+     });
+ 
+     sub.save().then((result) => {
+         console.log("Subscription!");
+ 
+         res.status(201).json({
+             result,
+             message: 'End date is ' + subEndDate,
+         });
+         io.getIO().emit('subscription:Enddate', { action: 'created', sub })
+ 
+     }).catch((err) => {
+         res.status(500).json({
+             status: false,
+             message: err.message
+         })
+     }) */
 
-    });
-
-    sub.save().then((result) => {
-        console.log("Subscription!");
-
-        res.status(201).json({
-            result,
-            message: 'End date is' + subEndDate,
-        });
-        io.getIO().emit('subscription:Enddate', { action: 'created', sub })
-
-    }).catch((err) => {
-        res.status(500).json({
-            status: false,
-            message: err.message
-        })
-    })
 }
 
 

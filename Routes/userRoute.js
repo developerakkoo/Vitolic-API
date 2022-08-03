@@ -175,7 +175,6 @@ router.post('/user/login',  UserController.loginUser);
  */
 router.post('/user/register',  UserController.postSignup);
 
-
 /**
  * @swagger
  * /user/profiles:
@@ -247,7 +246,7 @@ router.post('/user/register',  UserController.postSignup);
  * 
  */
 router.put('/user/profiles/:id',  UserController.updateUser);
-
+ 
 /**
  * @swagger
  * /user/profiles/{id}:
@@ -266,8 +265,8 @@ router.put('/user/profiles/:id',  UserController.updateUser);
  */
 router.delete('/user/profiles/:id',  UserController.deleteUserProfile);
 
-router.post('/user/subscription/',  UserController.postSubscription);
-router.get('/user/enddate/:id',  UserController.endDate);
+router.put('/user/subscription/:id',  UserController.addSubscription);
+router.put('/user/enddate/:id',  UserController.endDate);
 //router.post('/user/login/promocode',  UserController.promoCode);
 
 module.exports = router;
