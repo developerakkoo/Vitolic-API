@@ -80,7 +80,24 @@ router.get('/subscription',  subscriptionController.getSubscription);
 
 /**
  * @swagger
- * /subscription/{invoicenumber}:
+ * /subscription:
+ *  get:
+ *      description: get all subscriptions
+ *      tags:
+ *          - subscription
+ * 
+ *      responses:
+ *         200:
+ *              description: Success
+ *  
+ *  
+ * 
+ */
+ router.get('/subscription/:id',  subscriptionController.getSubscriptionById);
+
+/**
+ * @swagger
+ * /subscription/{id}:
  *  put:
  *      description: update subscription using invoice number
  *      tags:
@@ -93,11 +110,11 @@ router.get('/subscription',  subscriptionController.getSubscription);
  *  
  * 
  */
-router.put('/subscription/:invoicenumber',  subscriptionController.updateSubscription);
+router.put('/subscription/:id',  subscriptionController.updateSubscription);
 
 /**
  * @swagger
- * /subscription/{invoicenumber}:
+ * /subscription/{id}:
  *  delete:
  *      description: delete subscription using invoice number
  *      tags:
@@ -110,7 +127,7 @@ router.put('/subscription/:invoicenumber',  subscriptionController.updateSubscri
  *  
  * 
  */
-router.delete('/subscription/:invoicenumber',  subscriptionController.deleteSubscription);
+router.delete('/subscription/:id',  subscriptionController.deleteSubscription);
 
 
 module.exports = router;

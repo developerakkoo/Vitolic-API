@@ -46,11 +46,25 @@ exports.getSubscription = async (req, res, next) => {
     }
 }
 
+exports.getSubscriptionById = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+
+        const subscription = await Subscription.findOneAndUpdate({ _id: id }, req.body);
+
+        if(subscription){
+            res.status(200).json({success: true, subscription})
+        }
+    } catch (error) {
+        res.status(500).json({message: error.message, devMessage:"Something went wrong!"});
+    }
+}
+
 
 exports.updateSubscription = async (req, res, next) => {
     try {
-        const invoiceNumber = req.body.invoiceNumber;
-        let subscription = await Subscription.findOneAndUpdate(invoiceNumber);
+        const id = req.params.id;
+        let subscription = await Subscription.findOneAndUpdate({ _id: id }, req.body);
         if(subscription){
             res.status(200).json({success: true,message:'Subscription updated successfully', subscription})
         }
@@ -62,9 +76,9 @@ exports.updateSubscription = async (req, res, next) => {
 exports.deleteSubscription = async(req, res, next) => {
     try {
 
-        const invoiceNumber = req.body.invoiceNumber;
+        const id = req.params.id;
 
-        const subscription = await Subscription.findOneAndDelete(invoiceNumber);
+        const subscription = await Subscription.findOneAndDelete(id);
 
         if(subscription){
             res.status(200).json({ status: true, message:'Subscription deleted successfully', subscription: subscription })
