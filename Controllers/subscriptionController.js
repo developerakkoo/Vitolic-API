@@ -73,3 +73,4 @@ exports.deleteSubscription = async(req, res, next) => {
         res.status(404).json({ status: false,  error: error, message: error.message });
     }
 }
+

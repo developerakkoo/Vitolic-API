@@ -45,7 +45,7 @@ exports.AddToCart = async(req, res, next) => {
             if(product){
                 const user = await User.findById(userId);//.populate('cart.items.productId');
                 if(user){
-                    console.log("FOUIND USER "+ user);
+                    console.log("FOUND USER "+ user);
                     console.log("FOUND PRODUCT "+ product);
                     return user.addToCart(product);
                    

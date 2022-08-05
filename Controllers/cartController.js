@@ -90,7 +90,6 @@ exports.updateCart = async (req, res, next) => {
 
         const cart = await Cart.findByIdAndUpdate(id, req.body);
 
-
         if (cart) {
             res.status(200).json({ cart, message: 'cart updated' })
         }
@@ -105,7 +104,8 @@ exports.updateCart = async (req, res, next) => {
 
 exports.deleteCart = async (req, res, next) => {
     try {
-        let cart = await Cart.findByIdAndDelete(req.params.id);
+        const id = req.params.id;
+        let cart = await Cart.findByIdAndDelete(id);
         if (cart) {
             res.status(200).send("Cart Delete Successfully");
         }

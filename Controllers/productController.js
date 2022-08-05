@@ -113,7 +113,7 @@ exports.getSingleProduct = async (req, res, next) => {
 }
 
 exports.postAddProduct = (req, res, next) => {
- 
+  
 
     const host = req.hostname;
 
@@ -123,8 +123,6 @@ exports.postAddProduct = (req, res, next) => {
         message: 'Please provide a image'
       })
     }
-  
-
         const title = req.body.title;
         const price = req.body.price;
         const discountedPrice = req.body.discountedPrice;
@@ -170,6 +168,7 @@ exports.postAddProduct = (req, res, next) => {
         })
         })
 };
+
 exports.addProductQuantity = async (req, res, next) => {
   try{
     const prodId = req.params.productId;

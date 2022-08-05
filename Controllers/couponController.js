@@ -29,7 +29,8 @@ exports.getCoupons = async(req, res, next) =>{
 
 exports.getCouponById = async(req, res, next) =>{
     try {
-        let coupon = await coupon.findById(req.params.id);
+        const id= req.params.id;
+        let coupon = await coupon.findById(id);
         if(coupon){
             res.status(200).json({success: true, coupon})
 
@@ -42,7 +43,8 @@ exports.getCouponById = async(req, res, next) =>{
 
 exports.deleteCoupon = async(req, res, next) =>{
     try {
-        let coupon = await coupon.findByIdAndDelete(req.params.id);
+        const id= req.params.id;
+        let coupon = await coupon.findByIdAndDelete(id);
 
         if(coupon){
             res.status(200).json({success: true, message:"Deleted Coupon"})

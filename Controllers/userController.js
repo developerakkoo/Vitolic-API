@@ -206,7 +206,6 @@ exports.getAllUsers = async (req, res, next) => {
 }
 
 
-
 exports.getUser = async (req, res, next) => {
     try {
         const id = req.params.id;
@@ -270,23 +269,6 @@ exports.deleteUserProfile = async (req, res, next) => {
     }
 }
 
-exports.getSubscription = async (req, res, next) => {
-    try {
-        const id = req.params.id;
-
-        const user = await User.findById(id);
-
-        if (user) {
-            res.status(200).json({
-                status: true,
-                message: 'User Profile Deleted Successfully'
-            })
-        }
-
-    } catch (error) {
-        res.status(500).json({ error, message: 'Something went wrong!' });
-    }
-}
 
 exports.addSubscription = async (req, res, next) => {
     try {
@@ -306,15 +288,12 @@ exports.addSubscription = async (req, res, next) => {
 exports.endDate = async (req, res, next) => {
     try {
         const id = req.params.id;
-        //let subEndDate;
+
         let user = await User.findById(id);
-        //let {isMonth } = user;
-        //user = await User.find({})
-        console.log(user.isMonth)
+
         let subEndDate = await user.isMonth ? moment().add(30, 'd').toDate() : moment().add(60, 'd').toDate()
-        console.log(subEndDate);
+    
         user = await user.updateOne({ endDate: subEndDate });
-        console.log(user)
 
         if (user) {
             res.status(201).json({ status: 'success', user: user, message: 'Profile updated successfully!' });
@@ -323,67 +302,5 @@ exports.endDate = async (req, res, next) => {
     } catch (error) {
         res.status(500).json({ error, message: 'Something went wrong!' });
     }
-    /* let endDate;
-    for (i = 0; i < user.length; i++) {
-        if (isMonth == true) {
-
-            endDate = moment()
-                .add(30, 'd')
-                .toDate();
-            console.log(endDate);
-        }
-
-        else if (isAlternate == true) {
-            endDate = moment()
-                .add(60, 'd')
-                .toDate();
-            console.log(endDate);
-        }
-    } */
-    /*  const sub =  User({
-         //userId:userId,
-         subEndDate: subEndDate,
- 
-     });
- 
-     sub.save().then((result) => {
-         console.log("Subscription!");
- 
-         res.status(201).json({
-             result,
-             message: 'End date is ' + subEndDate,
-         });
-         io.getIO().emit('subscription:Enddate', { action: 'created', sub })
- 
-     }).catch((err) => {
-         res.status(500).json({
-             status: false,
-             message: err.message
-         })
-     }) */
-
 }
 
-
-/* exports.promoCode =async (req, res, next) => {
-    try {
-        const id = req.params.id;
-
-        const user = await User.findById(id);
-
-        if (user) {
-            voucher_codes.generate({
-                length: 8,
-                count: 1
-            });
-            res.status(200).json({
-                status: true,
-                message: 'User Profile Deleted Successfully'
-            })
-        }
-
-    } catch (error) {
-        res.status(500).json({ error, message: 'Something went wrong!' });
-    }
-}
- */

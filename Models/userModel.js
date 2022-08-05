@@ -65,14 +65,11 @@ const userSchema = new Schema({
 
   },
 
-  subscription: {
-    isMonth: { type: Boolean },
-    isAlternate: { type: Boolean },
-   
-   
-  },
-  subEndDate: { type: String}
+  isMonth: { type: Boolean },
 
+  isAlternate: { type: Boolean },
+
+  endDate: { type: String}
 
 }, {
   timestamps: true

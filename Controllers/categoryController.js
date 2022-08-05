@@ -91,7 +91,7 @@ exports.deleteCategory = async (req, res, next) => {
         if (category) {
             res.status(200).json({ status: true, message: 'category deleted successfully', category: category })
             io.getIO().emit('delete:category', category);
-        } c
+        } 
 
 
     } catch (error) {

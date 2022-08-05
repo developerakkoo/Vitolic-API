@@ -126,7 +126,7 @@ exports.updateBoyById = async(req, res, next) =>{
         const id = req.params.id;
         
         const boy = await Boy.findByIdAndUpdate(req.body);
-
+        console.log(boy);
         if(boy){
             res.status(201).json({message: 'User updated Successfully', boy});
         }

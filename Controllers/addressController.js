@@ -33,16 +33,18 @@ exports.postAddress = async(req, res, next) => {
 
 exports.getAddressByUserId = async(req, res, next) => {
     try{
-        const userId = req.params.userId;
+        const userId = req.params.userId;//passing id instead of userId works
 
-        const add = await Address.find({userId: userId});
+        const add = await Address.find({userId: userId});//passing id instead of userId works
 
         if(add){
             res.status(200).json({
                 add,
+               
                 message: 'Address Found'
             })
         }
+        console.log(add);
     }
     catch(err){
         res.status(500).json({
@@ -61,6 +63,7 @@ exports.updateAddress = async(req, res, next) => {
             res.status(200).json({status: true, add, message: 'Address Updated'})
         }
         io.getIO.emit('add:update',{address: add});
+        return;
     }
     catch(err){
         res.status(500).json({
