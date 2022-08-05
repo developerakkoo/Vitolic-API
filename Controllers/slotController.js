@@ -1,5 +1,7 @@
 const Slot = require('../Models/slotModel');
 const io = require('../socket');
+
+
 exports.postSlot = async(req, res, next) => {
     try {
         const slot = await Slot.create(req.body);
