@@ -17,11 +17,10 @@ exports.postLogin = (req, res, next) => {
     SubAdmin.findOne({ email: email})
     .then(subAdmin => {
         if(!subAdmin){
-            const error = new Error('Admin not found');
+            const error = new Error('Sub Admin not found');
             error.status = 404;
             next(error);
         }
-
         loadedUser = subAdmin;
 
         bcrypt.compare(password, subAdmin.password)
@@ -65,14 +64,14 @@ exports.postSignup = (req, res, next) => {
 
         bcrypt.hash(password, 12)
         .then((hashedPasswords) => {
-            const subAdmin = new subAdmin({
+            const subAdmin = new SubAdmin({
                 email: email,
                 password: hashedPasswords
             })
     
             return subAdmin.save();
         }).then((result) => {
-            res.status(201).json({message: 'Admin Created Successfully!', status: '201', userId: result._id});
+            res.status(201).json({message: 'Sub Admin Created Successfully!', status: '201', userId: result._id});
         })
     })
     
