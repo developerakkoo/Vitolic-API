@@ -69,7 +69,7 @@ const userSchema = new Schema({
 
   isAlternate: { type: Boolean },
 
-  endDate: { type: String}
+  endDate: { type: String, default: 'NA'}
 
 }, {
   timestamps: true
