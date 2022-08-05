@@ -31,15 +31,13 @@ exports.PostQuantity = async (req, res, next) => {
     }
 }
 
-const GetQuantityById = async (req, res, next) => {
+exports.GetQuantityById = async (req, res, next) => {
     try {
         let quantityId = req.params.id;
-
-        if (quantityId) {
-            res.status(200).json({ success: true, quantityId })
+        let quantity = await Quantity.findById(quantityId);
+        if (quantity) {
+            res.status(200).json({ success: true, quantity })
         }
-
-
     } catch (error) {
         res.status(500).json({
             error: error, message: error.message, devMessage: "Something went wrong"
@@ -47,12 +45,13 @@ const GetQuantityById = async (req, res, next) => {
     }
 }
 
-const GetQuantityByProductId = async (req, res, next) => {
+exports.GetQuantityByProductId = async (req, res, next) => {
     try {
         let productId = req.params.productId;
-        let product = await Product.find({});
-        if (product) {
-            res.status(200).json({ success: true, product })
+        let quantity = await Quantity.findById(productId);//Product schema or quantity schema?
+
+        if (quantity) {
+            res.status(200).json({ success: true, quantity })
         }
     } catch (error) {
         res.status(500).json({
@@ -61,11 +60,12 @@ const GetQuantityByProductId = async (req, res, next) => {
     }
 }
 
-const PutQuantity = async (req, res, next) => {
+exports.PutQuantity = async (req, res, next) => {
     try {
         let quantityId = req.params.id;
-        if (quantityId) {
-            res.status(200).json({ success: true, productId })
+        const quantity = await Quantity.findByOneAndUpdate({ _id: quantityId }, req.body);
+        if (quantity) {
+            res.status(200).json({ success: true, quantity })
         }
 
     } catch (error) {
@@ -75,10 +75,13 @@ const PutQuantity = async (req, res, next) => {
     }
 }
 
-const DeleteQuantity = async (req, res, next) => {
+exports.DeleteQuantity = async (req, res, next) => {
     try {
         let quantityId = req.params.id;
-
+        const quantity = await Quantity.findByIdAndDelete(quantityId);
+        if (quantity) {
+            res.status(200).json({ success: true, quantity })
+        }
     } catch (error) {
         res.status(500).json({
             error: error, message: error.message, devMessage: "Something went wrong"

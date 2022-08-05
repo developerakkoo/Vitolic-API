@@ -59,7 +59,6 @@ exports.loginUser = async (req, res, next) => {
 
     let loadedUser;
 
-
     User.findOne({ email: email })
         .then(user => {
             if (!user) {
@@ -89,7 +88,7 @@ exports.loginUser = async (req, res, next) => {
                     })
                 });
         }).catch(err => {
-            res.status(500).json({ err: err.message, message: 'Something went wrong!' })
+           return res.status(500).json({ err: err.message, message: 'Something went wrong!' })
 
         })
 }
