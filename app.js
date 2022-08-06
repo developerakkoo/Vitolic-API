@@ -46,7 +46,7 @@ const MONGODB_URI = "mongodb+srv://farmsell:farmsell@cluster0.mh36s.mongodb.net/
 //const apicache = require('apicache');
 //const cache = apicache.middleware;
 
- 
+
 
 const app = express();
 const port = 8080;
@@ -66,13 +66,13 @@ const swaggerOptions = {
     },
 
   },
-  apis: ['app.js', './Routes/productRoute.js', './Routes/orderRoute.js', 
-  './Routes/addressRoute.js', './Routes/adminRoute.js', './Routes/bannerRoute.js', 
-  './Routes/cartRoute.js','./Routes/couponRoute.js','./Routes/DeliveryBoyRoute.js',
-  './Routes/helpRoute.js','./Routes/pincodeRoute.js','./Routes/placeOrderRoute.js',
-  './Routes/quantityRoute.js','./Routes/refundRoute.js','./Routes/slotRoute.js',
-  './Routes/userRoute.js','./Routes/userAuthRoute.js','./Routes/subAdminRoute.js',
-  './Routes/subscriptionRoute.js']
+  apis: ['app.js', './Routes/productRoute.js', './Routes/orderRoute.js',
+    './Routes/addressRoute.js', './Routes/adminRoute.js', './Routes/bannerRoute.js',
+    './Routes/cartRoute.js', './Routes/couponRoute.js', './Routes/DeliveryBoyRoute.js',
+    './Routes/helpRoute.js', './Routes/pincodeRoute.js', './Routes/placeOrderRoute.js',
+    './Routes/quantityRoute.js', './Routes/refundRoute.js', './Routes/slotRoute.js',
+    './Routes/userRoute.js', './Routes/userAuthRoute.js', './Routes/subAdminRoute.js',
+    './Routes/subscriptionRoute.js']
 }
 
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
@@ -132,7 +132,7 @@ app.use(userAuthRoute);
 app.use(addressRoute);
 app.use(boyRoute);
 app.use(cartRoute);
-// app.use(slotRoute);
+app.use(slotRoute);
 app.use(quantityRoute);
 app.use(couponRoute);
 app.use(helpRoute);
@@ -184,3 +184,32 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
+const PlaceOrder = require('./Models/placeOrderModel')
+exports.orderDelivered = async (req, res, next) => {
+  try {
+    const orderId = req.params.orderId
+    const order = await PlaceOrder.findById(orderId);
+    
+
+    if (order) {
+      res.status(200).json({
+        message: 'Your Order',
+        order
+      })
+      io.getIO().emit('order:delivered', orderId);
+      let delivered= PlaceOrder.isDelivered;
+      delivered = true;
+      order = await PlaceOrder.updateOne({ isDelivered: delivered });
+      io.getIO().emit('Order Delivered');
+      
+    }
+  
+    
+
+  } catch (error) {
+    res.status(500).json({ error, message: error.message })
+
+  }
+}
+
