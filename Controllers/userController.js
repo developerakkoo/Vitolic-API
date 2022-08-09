@@ -11,7 +11,7 @@ var moment = require('moment');
 
 exports.getToken = async (req, res, next) => {
     const phonenumber = req.body.phonenumber;
-
+ 
     console.log("PHONE:- " + phonenumber);
     client.verify.services('VAd9cf754966edfca3471746c788ee7812')
         .verifications
@@ -94,7 +94,6 @@ exports.loginUser = async (req, res, next) => {
 }
 
 
-
 exports.postSignup = (req, res, next) => {
 
     const fName = req.body.fName;
@@ -107,11 +106,11 @@ exports.postSignup = (req, res, next) => {
     });
     const walletCashbackAvailable = req.body.walletCashbackAvailable;
 
-    User.findOne({ contactNumber: contactNo })
+   /*  User.findOne({ contactNumber: contactNo })
         .then(user => {
             if (user) {
                 res.status(201).json({ message: 'User Logged  Successfully!', status: '201', userId: user._id, });
-            }
+            } */
 
 
             const newuser = new User({
@@ -127,12 +126,11 @@ exports.postSignup = (req, res, next) => {
                 //let promoCode =
                 res.status(201).json({ message: 'User Created Successfully!', status: '201', userId: result._id, CouponCde: couponCode });
             })
-        })
+       // })
 
         .catch(err => {
             res.status(500).json({ error: err.message, message: 'Something went wrong!' })
         })
-
 }
 
 
