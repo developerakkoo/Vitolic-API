@@ -26,7 +26,7 @@ exports.loginUser = async(req, res, next) =>
         .then(doMatch => {
             if(!doMatch){
                 res.status(400).json({message: 'Password do not match', status:'error'})
-
+                return;
             }
 
             const token = jwt.sign({
