@@ -3,7 +3,7 @@ const io = require('../socket');
 const User = require('../Models/userModel');
 const Product = require('../Models/productModel');
 
-exports.getCart = async (req, res, next) => {
+exports.getCartByUser = async (req, res, next) => {
     try {
 
         const cart = await Cart.findById(req.params.id).populate("userId address");
@@ -27,11 +27,10 @@ exports.getCart = async (req, res, next) => {
     }
 }
 
-exports.getCartByUser = async (req, res, next) => {
+exports.getCart = async (req, res, next) => {
     try {
 
         const cart = await Cart.find({});
-
 
         if (cart) {
             res.status(200).json({
