@@ -245,3 +245,26 @@ exports.getOrderByUser = async(req, res, next) => {
         })
     }
 }
+
+exports.orderDelivered = async (req, res, next) => {
+    try {
+      const orderId = req.params.orderId
+      const order = await PlaceOrder.findById(orderId);
+  
+      if (order) {
+        res.status(200).json({
+          message: 'Your Order',
+          order
+        })
+        io.getIO().emit('order:delivered', orderId);
+        let delivered = PlaceOrder.isDelivered;
+        delivered = true;
+        order = await PlaceOrder.updateOne({ isDelivered: delivered });
+        io.getIO().emit('Order Delivered');
+  
+      }
+    } catch (error) {
+      res.status(500).json({ error, message: error.message })
+  
+    }
+  }

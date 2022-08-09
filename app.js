@@ -14,6 +14,7 @@ const swaggerUi = require('swagger-ui-express');
 const Cart = require("./Models/cartModel");
 const Product = require("./Models/productModel");
 const User = require("./Models/userModel");
+const PlaceOrder = require('./Models/placeOrderModel')
 
 //Routes
 const adminRoute = require("./Routes/adminRoute");
@@ -46,12 +47,19 @@ const MONGODB_URI = "mongodb+srv://farmsell:farmsell@cluster0.mh36s.mongodb.net/
 //const apicache = require('apicache');
 //const cache = apicache.middleware;
 
-
-
 const app = express();
 const port = 8080;
 app.use(express.json());
 app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "OPTIONS, GET, POST, PUT, PATCH, DELETE"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "*");
+  next();
+});
 
 /* app.use(cache('7 days'))
  
@@ -113,15 +121,7 @@ app.use(
 
 app.use("/image", express.static(path.join(__dirname, "image")));
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "OPTIONS, GET, POST, PUT, PATCH, DELETE"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "*");
-  next();
-});
+
 
 app.use(adminRoute);
 app.use(productRoute);
@@ -185,31 +185,6 @@ mongoose
     console.log(err);
   });
 
-const PlaceOrder = require('./Models/placeOrderModel')
-exports.orderDelivered = async (req, res, next) => {
-  try {
-    const orderId = req.params.orderId
-    const order = await PlaceOrder.findById(orderId);
-    
+//Route is in placeOrderRoute.js
 
-    if (order) {
-      res.status(200).json({
-        message: 'Your Order',
-        order
-      })
-      io.getIO().emit('order:delivered', orderId);
-      let delivered= PlaceOrder.isDelivered;
-      delivered = true;
-      order = await PlaceOrder.updateOne({ isDelivered: delivered });
-      io.getIO().emit('Order Delivered');
-      
-    }
-  
-    
-
-  } catch (error) {
-    res.status(500).json({ error, message: error.message })
-
-  }
-}
 
