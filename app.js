@@ -127,7 +127,7 @@ app.use(adminRoute);
 app.use(productRoute);
 app.use(userRoute);
 app.use(placeRoute);
-// app.use(orderRoute);
+app.use(orderRoute);
 app.use(userAuthRoute);
 app.use(addressRoute);
 app.use(boyRoute);
