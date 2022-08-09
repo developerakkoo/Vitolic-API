@@ -170,7 +170,7 @@ mongoose
     useFindAndModify: false,
   })
   .then((result) => {
-    const server = app.listen(5000);
+    const server = app.listen(8080);
     const io = require("./socket").init(server);
 
     io.on("connection", (socket) => {
