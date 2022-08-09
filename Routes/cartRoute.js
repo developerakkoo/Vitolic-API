@@ -60,7 +60,7 @@ router.post('/cart',  cartController.addToCart);
  *  
  * 
  */
-router.get('/cart/single/:id',  cartController.getCart);
+router.get('/cart/:userId',  cartController.getCartByUser);
 
 /**
  * @swagger
@@ -79,7 +79,7 @@ router.get('/cart/single/:id',  cartController.getCart);
  *  
  * 
  */
-router.get('/cart',  cartController.getCartByUser);
+router.get('/cart',  cartController.getCart);
 
 
 module.exports = router;
