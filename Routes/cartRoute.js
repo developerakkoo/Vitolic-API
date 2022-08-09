@@ -64,9 +64,9 @@ router.get('/cart/single/:id',  cartController.getCart);
 
 /**
  * @swagger
- * /cart/{user}:
+ * /cart:
  *  get:
- *      description: get cart details by user
+ *      description: get cart details of all users
  *      tags:
  *          - cart
  * 
@@ -79,7 +79,7 @@ router.get('/cart/single/:id',  cartController.getCart);
  *  
  * 
  */
-router.get('/cart/:user',  cartController.getCartByUser);
+router.get('/cart',  cartController.getCartByUser);
 
 
 module.exports = router;

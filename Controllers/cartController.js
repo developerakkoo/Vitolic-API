@@ -30,7 +30,7 @@ exports.getCart = async (req, res, next) => {
 exports.getCartByUser = async (req, res, next) => {
     try {
 
-        const cart = await Cart.find({ userId: req.params.user });
+        const cart = await Cart.find({});
 
 
         if (cart) {
