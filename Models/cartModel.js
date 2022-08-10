@@ -34,6 +34,10 @@ const cartSchema = new Schema({
     total:{
         type: Number,
         required: true
+    },
+    isDelivered:{
+        type: Boolean,
+        default: false
     }
 },{
     timestamps: true

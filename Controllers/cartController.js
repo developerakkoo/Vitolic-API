@@ -3,11 +3,10 @@ const io = require('../socket');
 const User = require('../Models/userModel');
 const Product = require('../Models/productModel');
 
-exports.getCartByUser = async (req, res, next) => {
+exports.getCartByCartId = async (req, res, next) => {
     try {
-
+        
         const cart = await Cart.findById(req.params.id).populate("userId address");
-
 
         if (cart) {
             res.status(200).json({
@@ -27,11 +26,34 @@ exports.getCartByUser = async (req, res, next) => {
     }
 }
 
+exports.getCartByUserId = async (req, res, next) => {
+    try {
+        const user = req.params.id;
+        console.log(user);
+        const cart = await Cart.findById({userId:user}).populate("products address");
+
+        if (cart) {
+            res.status(200).json({
+                status: true,
+                count: cart.length,
+
+                cart
+            })
+        }else {console.log("not found")}
+
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+}
+
 exports.getCart = async (req, res, next) => {
     try {
 
-        const cart = await Cart.find({});
-
+        const cart = await Cart.find({}).populate("userId address");
+        //if (isDelivered)
         if (cart) {
             res.status(200).json({
                 status: true,

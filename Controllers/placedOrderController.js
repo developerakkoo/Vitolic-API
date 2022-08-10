@@ -1,4 +1,5 @@
 const PlacedOrder = require('../Models/placeOrderModel');
+const Cart = require('../Models/cartModel');
 const Razorpay = require('razorpay');
 
 const io = require('./../socket');
@@ -248,20 +249,16 @@ exports.getOrderByUser = async(req, res, next) => {
 
 exports.orderDelivered = async (req, res, next) => {
     try {
-      const orderId = req.params.orderId
-      const order = await PlaceOrder.findById(orderId);
+      const cartId = req.params.id
+      const cart = await Cart.findById({_id:cartId});
   
       if (order) {
         res.status(200).json({
-          message: 'Your Order',
+          message: 'Order Delivered',
           order
         })
-        io.getIO().emit('order:delivered', orderId);
-        let delivered = PlaceOrder.isDelivered;
-        delivered = true;
-        order = await PlaceOrder.updateOne({ isDelivered: delivered });
-        io.getIO().emit('Order Delivered');
-  
+        io.getIO().emit('order:delivered', cartId);
+
       }
     } catch (error) {
       res.status(500).json({ error, message: error.message })

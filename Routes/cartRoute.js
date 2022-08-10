@@ -60,7 +60,9 @@ router.post('/cart',  cartController.addToCart);
  *  
  * 
  */
-router.get('/cart/:id',  cartController.getCartByUser);
+router.get('/cart/:id',  cartController.getCartByCartId);
+
+router.get('/cart/user/:id',  cartController.getCartByUserId);
 
 /**
  * @swagger
