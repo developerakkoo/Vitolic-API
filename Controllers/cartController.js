@@ -28,9 +28,9 @@ exports.getCartByCartId = async (req, res, next) => {
 
 exports.getCartByUserId = async (req, res, next) => {
     try {
-        const user = req.params.id;
-        console.log(user);
-        const cart = await Cart.findById({userId:user}).populate("products address");
+        const cartId = req.params.id;
+        
+        const cart = await Cart.find(cartId).populate("userId address");
 
         if (cart) {
             res.status(200).json({
