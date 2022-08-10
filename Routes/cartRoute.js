@@ -84,4 +84,5 @@ router.get('/cart/user/:id',  cartController.getCartByUserId);
 router.get('/cart',  cartController.getCart);
 
 router.get('/deliver/:id', cartController.orderDelivered);
+router.put('/deliver/status/:id', cartController.orderStatus);
 module.exports = router;

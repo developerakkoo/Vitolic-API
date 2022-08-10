@@ -29,7 +29,6 @@ exports.getCartByCartId = async (req, res, next) => {
 exports.getCartByUserId = async (req, res, next) => {
     try {
         
-
         const cart = await Cart.find({userId:req.params.id}).populate("userId address");
 
         if (cart) {
@@ -166,13 +165,15 @@ exports.orderStatus= async (req, res, next) => {
     try {
         const cartId = req.params.id
         const cart = await Cart.findById({ _id: cartId });
+        cart = await Cart.updateOne({isDelivered:'true'})
 
         if (cart) {
+
             res.status(200).json({
-                message: 'Order Delivered',
+                
                 cart
             })
-            io.getIO().emit('order:delivered', cartId);
+            io.getIO().emit('status:Order delivered', cartId);
 
         }
     } catch (error) {
