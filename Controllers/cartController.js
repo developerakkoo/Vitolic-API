@@ -28,9 +28,9 @@ exports.getCartByCartId = async (req, res, next) => {
 
 exports.getCartByUserId = async (req, res, next) => {
     try {
-        const cartId = req.params.id;
+        
 
-        const cart = await Cart.find(cartId).populate("userId address");
+        const cart = await Cart.find({userId:req.params.id}).populate("userId address");
 
         if (cart) {
             res.status(200).json({
@@ -162,4 +162,22 @@ exports.orderDelivered = async (req, res, next) => {
     }
 }
 
+exports.orderStatus= async (req, res, next) => {
+    try {
+        const cartId = req.params.id
+        const cart = await Cart.findById({ _id: cartId });
+
+        if (cart) {
+            res.status(200).json({
+                message: 'Order Delivered',
+                cart
+            })
+            io.getIO().emit('order:delivered', cartId);
+
+        }
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' })
+
+    }
+}
 
