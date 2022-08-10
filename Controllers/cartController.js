@@ -5,7 +5,7 @@ const Product = require('../Models/productModel');
 
 exports.getCartByCartId = async (req, res, next) => {
     try {
-        
+
         const cart = await Cart.findById(req.params.id).populate("userId address");
 
         if (cart) {
@@ -29,7 +29,7 @@ exports.getCartByCartId = async (req, res, next) => {
 exports.getCartByUserId = async (req, res, next) => {
     try {
         const cartId = req.params.id;
-        
+
         const cart = await Cart.find(cartId).populate("userId address");
 
         if (cart) {
@@ -39,7 +39,7 @@ exports.getCartByUserId = async (req, res, next) => {
 
                 cart
             })
-        }else {console.log("not found")}
+        } else { console.log("not found") }
 
     } catch (error) {
         res.status(500).json({
@@ -52,24 +52,29 @@ exports.getCartByUserId = async (req, res, next) => {
 exports.getCart = async (req, res, next) => {
     try {
 
-        const cart = await Cart.find({}).populate("userId address");
-        //if (isDelivered)
-        if (cart) {
-            res.status(200).json({
-                status: true,
-                count: cart.length,
+        const cart = await Cart.find({}).sort({ _id: -1 }).populate("userId address");
+        //let { isDelivered } = cart;
+        //console.log(isDelivered)
+        //let isDelivered = cart.isDelivered
+        for (i = 0; i < cart.length; i++) {
 
-                cart
-            })
+            if (cart[i].isDelivered == false) {
+
+                res.status(200).json({
+                    status: true,
+                    count: cart.length,
+
+                    cart
+                })
+            }
         }
-
-
     } catch (error) {
         res.status(500).json({
             status: false,
             message: error
         })
     }
+
 }
 
 
@@ -140,20 +145,21 @@ exports.deleteCart = async (req, res, next) => {
 
 exports.orderDelivered = async (req, res, next) => {
     try {
-      const cartId = req.params.id
-      const cart = await Cart.findById({_id:cartId});
-  
-      if (cart) {
-        res.status(200).json({
-          message: 'Order Delivered',
-          cart
-        })
-        io.getIO().emit('order:delivered', cartId);
+        const cartId = req.params.id
+        const cart = await Cart.findById({ _id: cartId });
 
-      }
+        if (cart) {
+            res.status(200).json({
+                message: 'Order Delivered',
+                cart
+            })
+            io.getIO().emit('order:delivered', cartId);
+
+        }
     } catch (error) {
-      res.status(500).json({ error, message: error.message })
-  
+        res.status(500).json({ error, message: 'Something went wrong!' })
+
     }
-  }
-  
+}
+
+
