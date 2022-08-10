@@ -167,7 +167,7 @@ router.put('/place/:id', placedOrderController.updatePlacedOrder);
  */
 router.delete('/place/:id', placedOrderController.deletePlacedOrder);
 
-router.put('/deliver/:orderid', placedOrderController.orderDelivered);
+
 
 
 module.exports = router;

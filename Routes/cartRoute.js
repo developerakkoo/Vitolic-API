@@ -83,5 +83,5 @@ router.get('/cart/user/:id',  cartController.getCartByUserId);
  */
 router.get('/cart',  cartController.getCart);
 
-
+router.get('/deliver/:id', placedOrderController.orderDelivered);
 module.exports = router;

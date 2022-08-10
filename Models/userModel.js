@@ -24,7 +24,7 @@ const userSchema = new Schema({
   },
 
   couponCode: {
-    type: Array,
+    type: String,
 
   },
 
