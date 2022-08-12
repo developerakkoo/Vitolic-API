@@ -35,6 +35,7 @@ const boySchema = new Schema({
     type: String,
     },
       
+    isOnline: { type: Boolean, default: false },
  
     
 

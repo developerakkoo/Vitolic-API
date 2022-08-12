@@ -42,6 +42,7 @@ const userSchema = new Schema({
 
   promoCode: { type: String },
 
+  isOnline: { type: Boolean, default: false },
 
   cart: {
     items: [
@@ -64,12 +65,13 @@ const userSchema = new Schema({
 
 
   },
+ 
 
   isMonth: { type: Boolean },
 
   isAlternate: { type: Boolean },
 
-  endDate: { type: String, default: 'NA'}
+  endDate: { type: String, default: 'NA' }
 
 }, {
   timestamps: true

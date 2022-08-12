@@ -19,6 +19,8 @@ exports.loginUser = async(req, res, next) =>
         if(!user){
            res.status(400).json({message: 'User not found', status:'error'})
         }
+        Boy.updateOne({isOnline:true});
+        console.log(user.isOnline);
 
         loadedUser = user;
 
@@ -28,12 +30,14 @@ exports.loginUser = async(req, res, next) =>
                 res.status(400).json({message: 'Password do not match', status:'error'})
                 return;
             }
-
+            
             const token = jwt.sign({
                 email: loadedUser.email,
                 userId: loadedUser._id.toString(),
             },"!23ThisisaSecretFor@#$%^%^^&&allthebest", {expiresIn: '3h'})
 
+          
+            
             res.status(200).json({
                 message: 'Sign In Successfull',
                 token: token,
