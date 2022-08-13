@@ -1,17 +1,17 @@
 const CartModel = require('../Models/cartModel');
 const User = require('../Models/userModel');
 const Boy = require('../Models/DeliveryBoyModel');
-
+const io = require('../socket');
 
 exports.getLiveUsers = async (req, res, next) => {
-    try {
+    /* try {
 
         const user = await User.find({});
         user = await user.isOnline ? res.status(200).json({
             status: true,
             count: user.length,
         }) : console.log("No User is Online");
-        /* let { isOnline } = user[0];
+        let { isOnline } = user[0];
         console.log(isOnline)
         //let isDelivered = user.isDelivered
         for (i = 0; i < user.length; i++) {
@@ -24,17 +24,30 @@ exports.getLiveUsers = async (req, res, next) => {
                 })
                 return;
             }
-        } */
+        }
     } catch (error) {
         res.status(500).json({
             status: false,
             message: error
         })
+    } */
+    try {
+        const users = await User.find({}).populate('products');
+
+        if (users) {
+            res.status(200).json({
+                message: 'All Users',
+                users:users.length
+            })
+        }
+    } catch (error) {
+        res.status(500).json({ error, message: error.message })
+
     }
 }
 
 exports.getLiveBoys = async (req, res, next) => {
-    try {
+   /*  try {
 
         const user = await Boy.find({});
         user = await user.isOnline ? res.status(200).json({
@@ -46,6 +59,20 @@ exports.getLiveBoys = async (req, res, next) => {
             status: false,
             message: error
         })
+    } */
+    try {
+
+        const boy = await Boy.find({});
+
+        if (boy) {
+            res.status(200).json({
+                message: 'User Found',
+                boy:boy.length
+            })
+        }
+    } catch (err) {
+        res.status(500).json({ error: err.message, message: 'Something went wrong!' })
+
     }
 
 }
