@@ -1,12 +1,13 @@
 const Refund = require('./../Models/refundModel');
 const User = require('./../Models/userModel');
+const Cart = require('./../Models/cartModel');
 const Order = require('./../Models/orderModal');
 const io = require('./../socket');
 
 exports.postRefund = async (req, res, next) => {
     try {
         const userId = req.body.userId;
-        const orderId = req.body.orderId;
+        const orderId = req.body.cartId;
         const description = req.body.discription;
 
         const refund = await Refund.create(req.body);
@@ -37,13 +38,13 @@ exports.getRefundByUserId = async (req, res, next) => {
         const refund = await Refund.find({ userId: userId });
 
         if (refund) {
-            Refund.findOne({ orderId: orderId }).populate("orders") // key to populate
-                .then(refund => {
+            //Refund.findOne({ orderId: orderId }).populate("orders") // key to populate
+                //.then(refund => {
                     res.status(200).json({
                         refund,
                         message: 'Orders Found'
                     })
-                })
+                //}) 
 
         }
     }
