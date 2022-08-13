@@ -37,7 +37,7 @@ exports.getLiveUsers = async (req, res, next) => {
         if (users) {
             res.status(200).json({
                 message: 'All Users',
-                users:users.length
+                users: users.length
             })
         }
     } catch (error) {
@@ -47,19 +47,19 @@ exports.getLiveUsers = async (req, res, next) => {
 }
 
 exports.getLiveBoys = async (req, res, next) => {
-   /*  try {
-
-        const user = await Boy.find({});
-        user = await user.isOnline ? res.status(200).json({
-            status: true,
-            count: user.length
-        }) : console.log("No Delivery Boy is Online");
-    } catch (error) {
-        res.status(500).json({
-            status: false,
-            message: error
-        })
-    } */
+    /*  try {
+ 
+         const user = await Boy.find({});
+         user = await user.isOnline ? res.status(200).json({
+             status: true,
+             count: user.length
+         }) : console.log("No Delivery Boy is Online");
+     } catch (error) {
+         res.status(500).json({
+             status: false,
+             message: error
+         })
+     } */
     try {
 
         const boy = await Boy.find({});
@@ -67,7 +67,7 @@ exports.getLiveBoys = async (req, res, next) => {
         if (boy) {
             res.status(200).json({
                 message: 'User Found',
-                boy:boy.length
+                boy: boy.length
             })
         }
     } catch (err) {
@@ -117,6 +117,30 @@ exports.getEarning = async (req, res, next) => {
                     status: true,
                     total: (result[0].sum)
                 }));
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+}
+
+exports.sortOrders = async (req, res, next) => {
+    try {
+
+        const cart = await CartModel.find();
+
+        if (cart) {
+            CartModel.aggregate([{ $match: {} }, { $unwind: '$products' },
+            { $project: { _id: 0, 'products.title': 1, 'products.price': 1 } },
+            { $sort: { 'products.price': -1 } }
+            ]).then(result =>
+            res.status(200).json({
+                status: true,
+                result
+            }));
         }
 
     } catch (error) {
