@@ -56,6 +56,24 @@ router.post('/refund',  refundController.postRefund);
 
 /**
  * @swagger
+ * /refund:
+ *  get:
+ *      description: get all refunds  
+ *      tags:
+ *          - refund
+ * 
+ *      responses:
+ *         200:
+ *              description: Success
+ *  
+ *  
+ * 
+ */
+router.get('/refunds',  refundController.getRefund);
+
+
+/**
+ * @swagger
  * /refund/{userId}:
  *  put:
  *      description: upadte refund by userid 
