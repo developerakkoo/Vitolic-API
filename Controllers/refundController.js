@@ -29,6 +29,28 @@ exports.postRefund = async (req, res, next) => {
     }
 }
 
+exports.getRefund= async (req, res, next) => {
+    try {
+        const refund = await Refund.find({});
+
+        if (refund) {
+            //Refund.findOne({ orderId: orderId }).populate("orders") // key to populate
+                //.then(refund => {
+                    res.status(200).json({
+                        refund,
+                        message: 'Refunds Found'
+                    })
+                //}) 
+
+        }
+    }
+    catch (err) {
+        res.status(500).json({
+            status: false,
+            message: err.message
+        });
+    }
+}
 
 exports.getRefundByUserId = async (req, res, next) => {
     try {
@@ -42,7 +64,7 @@ exports.getRefundByUserId = async (req, res, next) => {
                 //.then(refund => {
                     res.status(200).json({
                         refund,
-                        message: 'Orders Found'
+                        message: 'Refund Found'
                     })
                 //}) 
 
