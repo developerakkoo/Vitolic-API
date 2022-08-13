@@ -56,7 +56,7 @@ router.post('/refund',  refundController.postRefund);
 
 /**
  * @swagger
- * /refund:
+ * /refunds:
  *  get:
  *      description: get all refunds  
  *      tags:
