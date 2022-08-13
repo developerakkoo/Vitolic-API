@@ -18,6 +18,7 @@ const PlaceOrder = require('./Models/placeOrderModel')
 
 //Routes
 const adminRoute = require("./Routes/adminRoute");
+const dashboardRoute = require("./Routes/dashboardRoute");
 const productRoute = require("./Routes/productRoute");
 const quantityRoute = require("./Routes/quantityRoute");
 const userRoute = require("./Routes/userRoute");
@@ -124,6 +125,7 @@ app.use("/image", express.static(path.join(__dirname, "image")));
 
 
 app.use(adminRoute);
+app.use(dashboardRoute);
 app.use(productRoute);
 app.use(userRoute);
 app.use(placeRoute);
