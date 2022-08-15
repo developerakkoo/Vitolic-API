@@ -303,6 +303,33 @@ exports.postDeleteProduct = async(req, res, next) => {
     
 };
 
+exports.updateStock = async(req, res,next) => {
+  try {
+      const id = req.params.id;
+      const quantity = req.body.quantity;
+      let product = await Pet.findOneAndUpdate({_id: id}, {$inc:{ stock : -quantity }});
+     
+     /*  //const product = await Pet.findOneAndUpdate({
+     //     _id: id
+     // }, {$inc: {stock : quantity}});
+     // console.log(product);
+          /* if(product){
+
+            res.status(200).json({ status: true, message:'Product updated successfully', product })
+           io.getIO().emit('put:product', product);
+         }
+  } catch (error) {
+      res.status(500).json({message: error.message, error});
+  }  */
+
+  if (product) {
+      res.status(200).json({ product, message: 'product found' })
+  }
+} catch (error) {
+  res.status(500).json({ error, message: 'Something went wrong!' });
+}
+}
+
 const clearImage = (filePath) => {
   filePath = path.join(__dirname, "..", filePath);
   fs.unlink(filePath, (err) => console.log(err));

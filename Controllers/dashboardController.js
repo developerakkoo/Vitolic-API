@@ -1,6 +1,8 @@
 const CartModel = require('../Models/cartModel');
 const User = require('../Models/userModel');
 const Boy = require('../Models/DeliveryBoyModel');
+const Product = require('../Models/productModel');
+
 const io = require('../socket');
 
 exports.getLiveUsers = async (req, res, next) => {
@@ -127,7 +129,82 @@ exports.getEarning = async (req, res, next) => {
     }
 }
 
+exports.getEarningByMonth = async (req, res, next) => {
+    try {
+
+        const cart = await CartModel.find();
+
+        if (cart) {
+            CartModel.aggregate([{ $match: {} }, {
+                $group:
+                    { _id: null, sum: { $sum: "$total" } }
+            }])
+                .then(result => res.status(200).json({
+                    status: true,
+                    total: (result[0].sum)
+                }));
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+}
 exports.sortOrders = async (req, res, next) => {
+    try {
+
+        const cart = await CartModel.find();
+
+        if (cart) {
+            CartModel.aggregate([{ $match: {} },
+                //{$group:   { _id: null, count: { $count: "$cart" } }}, 
+            { $project: { _id: 0, '_id':1, 'createdAt': 1 } },
+            
+            { $sort: { 'createdAt': -1 } }
+            ]).then(result =>
+                res.status(200).json({
+                    status: true,
+                    result
+                }));
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+}
+
+exports.sortProducts = async (req, res, next) => {
+    try {
+
+        const cart = await Product.find();
+
+        if (cart) {
+            Product.aggregate([{ $match: {} }, 
+            { $project: { _id: 0, 'title': 1, 'price': 1 } },
+            { $sort: { 'price': -1 } }
+            ]).then(result =>
+                res.status(200).json({
+                    status: true,
+                    result
+                }));
+        }
+        
+
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+}
+
+
+exports.sortEarnings = async (req, res, next) => {
     try {
 
         const cart = await CartModel.find();
@@ -137,10 +214,10 @@ exports.sortOrders = async (req, res, next) => {
             { $project: { _id: 0, 'products.title': 1, 'products.price': 1 } },
             { $sort: { 'products.price': -1 } }
             ]).then(result =>
-            res.status(200).json({
-                status: true,
-                result
-            }));
+                res.status(200).json({
+                    status: true,
+                    result
+                }));
         }
 
     } catch (error) {
@@ -149,4 +226,60 @@ exports.sortOrders = async (req, res, next) => {
             message: error
         })
     }
+}
+
+exports.earnings = async (req,res,next) => {
+    let oneYearFromNow="2019-04-07T00:00:00";
+    let dateNow="2020-04-06T23:59:59";
+    const monthStrings = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    CartModel.aggregate([
+        {
+            $match: {
+                // Match only salses with a specific productId
+                
+                // Match only salses that fufils the date constraint below
+                $expr: {
+                    $and: [
+                        { $gt: ["$created_at", oneYearFromNow] },
+                        { $lt: ["$created_at", dateNow] }
+                    ],
+                }
+            }
+        },
+        {
+            $group: {
+                // Group by both month and year of the sale
+                _id: {
+                    month: { $month: "$created_at" },
+                    year: { $year: "$created_at" },
+                },
+                // Count the no of sales
+                count: {
+                    $sum: 1
+                }
+            }
+        },
+        // Adding a project here to just to format the group date better
+        {
+            $project: {
+                _id: {
+                    $concat: [
+                        {
+                            $arrayElemAt: [
+                                monthStrings,
+                                "$_id.month"
+                            ]
+                        },
+                        "-",
+                        "$_id.year"
+                    ]
+                },
+                count: 1,
+            }
+        }
+    ]).then(result =>
+        res.status(200).json({
+            status: true,
+            result
+        }));
 }

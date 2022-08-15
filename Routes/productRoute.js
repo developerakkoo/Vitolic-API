@@ -197,5 +197,24 @@ router.put('/products/:productId',  productController.postEditProduct);
  */
 router.put('/products/price/:productId',  productController.productPriceChange);
 
+/**
+ * @swagger
+ * /products/stock/{id}:
+ *  put:
+ *      description: update stock of products using id
+ *      tags:
+ *          - Product
+ * 
+ *     
+ *
+ *      responses:
+ *         200:
+ *              description: Success
+ *  
+ *  
+ * 
+ */
+ router.put('/petproducts/stock/:id',  productController.updateStock);
+
 
 module.exports = router;

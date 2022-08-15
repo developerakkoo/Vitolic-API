@@ -22,6 +22,7 @@ const dashboardRoute = require("./Routes/dashboardRoute");
 const productRoute = require("./Routes/productRoute");
 const quantityRoute = require("./Routes/quantityRoute");
 const userRoute = require("./Routes/userRoute");
+const userOrdersRoute = require("./Routes/userOrdersRoute");
 const userAuthRoute = require("./Routes/userAuthRoute");
 const placeRoute = require("./Routes/placeOrderRoute");
 const orderRoute = require("./Routes/orderRoute");
@@ -80,7 +81,7 @@ const swaggerOptions = {
     './Routes/cartRoute.js', './Routes/couponRoute.js', './Routes/DeliveryBoyRoute.js',
     './Routes/helpRoute.js', './Routes/pincodeRoute.js', './Routes/placeOrderRoute.js',
     './Routes/quantityRoute.js', './Routes/refundRoute.js', './Routes/slotRoute.js',
-    './Routes/userRoute.js', './Routes/userAuthRoute.js', './Routes/subAdminRoute.js',
+    './Routes/userRoute.js', './Routes/userOrdersRoute.js', './Routes/userAuthRoute.js', './Routes/subAdminRoute.js',
     './Routes/subscriptionRoute.js']
 }
 
@@ -128,6 +129,7 @@ app.use(adminRoute);
 app.use(dashboardRoute);
 app.use(productRoute);
 app.use(userRoute);
+app.use(userOrdersRoute);
 app.use(placeRoute);
 app.use(orderRoute);
 app.use(userAuthRoute);

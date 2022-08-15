@@ -83,4 +83,11 @@ router.get('/dashboard/orders', dashboardController.getTotalOrders);
  */
 router.get('/dashboard/earning', dashboardController.getEarning);
 
+router.get('/dashboard/sortorders', dashboardController.sortOrders);
+
+router.get('/dashboard/sortproducts', dashboardController.sortProducts);
+
+router.get('/dashboard/earnings', dashboardController.earnings);
+
+router.get('/dashboard/sortearnings', dashboardController.sortEarnings);
 module.exports = router;
