@@ -87,7 +87,7 @@ router.get('/dashboard/sortorders', dashboardController.sortOrders);
 
 router.get('/dashboard/sortproducts', dashboardController.sortProducts);
 
-router.get('/dashboard/earnings', dashboardController.earnings);
+//router.get('/dashboard/earnings', dashboardController.earnings);
 
-router.get('/dashboard/sortearnings', dashboardController.sortEarnings);
+router.get('/dashboard/sortearnings', dashboardController.getEarningByMonth);
 module.exports = router;

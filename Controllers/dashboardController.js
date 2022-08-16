@@ -135,13 +135,18 @@ exports.getEarningByMonth = async (req, res, next) => {
         const cart = await CartModel.find();
 
         if (cart) {
-            CartModel.aggregate([{ $match: {} }, {
-                $group:
-                    { _id: null, sum: { $sum: "$total" } }
-            }])
+            CartModel.aggregate([
+                {
+                    $group: {
+                        _id: { month: { $month: { $toDate: "$createdAt" } } },
+                        earnings: { $sum: '$total' }
+                    }
+                },
+                { $sort: { month: -1 } }
+            ])
                 .then(result => res.status(200).json({
                     status: true,
-                    total: (result[0].sum)
+                    result
                 }));
         }
 
@@ -152,17 +157,21 @@ exports.getEarningByMonth = async (req, res, next) => {
         })
     }
 }
+
 exports.sortOrders = async (req, res, next) => {
     try {
 
         const cart = await CartModel.find();
 
         if (cart) {
-            CartModel.aggregate([{ $match: {} },
-                //{$group:   { _id: null, count: { $count: "$cart" } }}, 
-            { $project: { _id: 0, '_id':1, 'createdAt': 1 } },
-            
-            { $sort: { 'createdAt': -1 } }
+            CartModel.aggregate([
+                {
+                    $group: {
+                        _id: { month: { $month: { $toDate: "$createdAt" } }, },
+                        orders: { $sum: 1 }
+                    }
+                },
+                { $sort: { orders: -1 } }
             ]).then(result =>
                 res.status(200).json({
                     status: true,
@@ -184,7 +193,7 @@ exports.sortProducts = async (req, res, next) => {
         const cart = await Product.find();
 
         if (cart) {
-            Product.aggregate([{ $match: {} }, 
+            Product.aggregate([{ $match: {} },
             { $project: { _id: 0, 'title': 1, 'price': 1 } },
             { $sort: { 'price': -1 } }
             ]).then(result =>
@@ -193,7 +202,7 @@ exports.sortProducts = async (req, res, next) => {
                     result
                 }));
         }
-        
+
 
     } catch (error) {
         res.status(500).json({
@@ -228,15 +237,15 @@ exports.sortEarnings = async (req, res, next) => {
     }
 }
 
-exports.earnings = async (req,res,next) => {
-    let oneYearFromNow="2019-04-07T00:00:00";
-    let dateNow="2020-04-06T23:59:59";
+/* exports.earnings = async (req, res, next) => {
+    let oneYearFromNow = "2019-04-07T00:00:00";
+    let dateNow = "2020-04-06T23:59:59";
     const monthStrings = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     CartModel.aggregate([
         {
             $match: {
                 // Match only salses with a specific productId
-                
+
                 // Match only salses that fufils the date constraint below
                 $expr: {
                     $and: [
@@ -282,4 +291,4 @@ exports.earnings = async (req,res,next) => {
             status: true,
             result
         }));
-}
+} */
