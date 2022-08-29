@@ -65,13 +65,15 @@ const userSchema = new Schema({
 
 
   },
- 
+
 
   isMonth: { type: Boolean },
 
   isAlternate: { type: Boolean },
 
-  endDate: { type: String, default: 'NA' }
+  startDate: { type: String, default: 'NA' },
+
+  endDate: { type: String, default: 'NA' },
 
 }, {
   timestamps: true

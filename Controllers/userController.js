@@ -74,18 +74,23 @@ exports.loginUser = async (req, res, next) => {
 
                     }
 
+                    //const online= ()=>{
                     const token = jwt.sign({
                         email: loadedUser.email,
                         userId: loadedUser._id.toString(),
                     }, "!23ThisisaSecretFor@#$%^%^^&&allthebest", { expiresIn: '3h' })
 
+                    
+                    User.isOnline=true;
 
                     res.status(200).json({
                         message: 'Sign In Successfull',
                         token: token,
                         userId: loadedUser._id.toString(),
-                        expiresIn: '3h'
+                        expiresIn: '3h',
+                        //isOnline:User.isOnline
                     })
+               // }
                 });
         }).catch(err => {
            return res.status(500).json({ err: err.message, message: 'Something went wrong!' })
@@ -119,7 +124,7 @@ exports.postSignup = (req, res, next) => {
                 contactNumber: contactNo,
                 address: req.body.address,
                 walletCashbackAvailable: walletCashbackAvailable,
-                couponCode: couponCode,
+                couponCode: couponCode[0],
             })
 
             newuser.save().then((result) => {
@@ -270,8 +275,8 @@ exports.deleteUserProfile = async (req, res, next) => {
 exports.addSubscription = async (req, res, next) => {
     try {
         const id = req.params.id;
-
-        const user = await User.findOneAndUpdate({ _id: id }, req.body);
+        const startDate= moment().toDate();
+        const user = await User.findOneAndUpdate({ _id: id }, {startDate},req.body);
 
         if (user) {
             res.status(201).json({ status: 'success', user: user, message: 'Profile updated successfully!' });
@@ -288,7 +293,7 @@ exports.endDate = async (req, res, next) => {
 
         let user = await User.findById(id);
 
-        let subEndDate = await user.isMonth ? moment().add(30, 'd').toDate() : moment().add(60, 'd').toDate()
+        let subEndDate = await user.isMonth ? moment().add(30, 'd').toDate() : moment().add(60, 'd').toDate();
     
         user = await user.updateOne({ endDate: subEndDate });
 
