@@ -1,7 +1,7 @@
 const PlacedOrder = require('../Models/placeOrderModel');
 const Cart = require('../Models/cartModel');
 const Razorpay = require('razorpay');
-
+const User = require('../Models/userModel');
 const io = require('./../socket');
 const { customAlphabet } = require('nanoid/async')
 
@@ -86,10 +86,9 @@ exports.verifyOrderSignature = async (req, res, next) => {
     }
 }
 
-exports.placeOrder = async(req, res, next) =>
-{
+exports.placeOrder = async (req, res, next) => {
     try {
-        
+
         const order = await new PlacedOrder({
             orderId: await nanoid(),
             totalAmount: req.body.totalAmount,
@@ -97,19 +96,32 @@ exports.placeOrder = async(req, res, next) =>
             paymentMode: req.body.paymentMode,
             userId: req.body.userId,
             cordinates: req.body.coordinates,
-            slot: req.body.slot
+            slot: req.body.slot,
+            couponCode: req.body.couponCode
         })
 
+        if (couponCode === User.couponCode && totalAmount < 500) {
+            let discount = 10;
+            totalAmount = totalAmount - discount;
+        }
+        else if (couponCode === User.couponCode && totalAmount > 5000) {
+            let discount = 100;
+            totalAmount = totalAmount - discount;
+        }
+        else if (couponCode !== User.couponCode) {
+            res.status(200).json({ status: 'Coupon Code is not valid' });
+            return;
+        }
         order.save();
 
-        if(order){
-            res.status(200).json({status: 'success', order});
-            io.getIO().emit('placeorder:post', {order: order});
+        if (order) {
+            res.status(200).json({ status: 'success', order });
+            io.getIO().emit('placeorder:post', { order: order });
         }
 
     } catch (error) {
-        
-        
+
+
         res.status(200).json({
             status: 'error',
             error: error.message
@@ -118,14 +130,14 @@ exports.placeOrder = async(req, res, next) =>
 }
 
 
-exports.updatePlacedOrder = async(req, res, next) =>{
+exports.updatePlacedOrder = async (req, res, next) => {
     try {
         const id = req.params.id;
 
         const order = await PlacedOrder.findByIdAndUpdate(id, req.body);
-        if(order){
-            res.status(201).json({status: 'success', message: 'Placed order updated successfully', order});
-            io.getIO().emit('getAllPlaceOrder:get', {order: order});
+        if (order) {
+            res.status(201).json({ status: 'success', message: 'Placed order updated successfully', order });
+            io.getIO().emit('getAllPlaceOrder:get', { order: order });
 
 
         }
@@ -137,17 +149,17 @@ exports.updatePlacedOrder = async(req, res, next) =>{
     }
 }
 
-exports.deletePlacedOrder = async(req, res, next) => {
+exports.deletePlacedOrder = async (req, res, next) => {
     try {
         const orderId = req.params.id;
         const order = await PlacedOrder.findByIdAndDelete(orderId);
 
-        if(order){
+        if (order) {
             res.status(200).json({
                 status: 'success',
                 message: 'Order Cancled Successfully!'
             })
-            io.getIO().emit('placeorder:delete', {order: order});
+            io.getIO().emit('placeorder:delete', { order: order });
 
         }
 
@@ -159,15 +171,15 @@ exports.deletePlacedOrder = async(req, res, next) => {
     }
 }
 
-exports.getOrderByDate = async(req, res, next) => {
+exports.getOrderByDate = async (req, res, next) => {
     try {
         let date = req.params.date;
         let inputDate = new Date(date);
-        
-        const order = await PlacedOrder.find({createdAt:  {$gte: inputDate}, isDelivered: false }).populate("userId productId boyId");
-        if(order){
-            res.status(200).json({status: true, message: 'Order Fetched', order});
-            io.getIO().emit('getOrderByDate:get', {order: order});
+
+        const order = await PlacedOrder.find({ createdAt: { $gte: inputDate }, isDelivered: false }).populate("userId productId boyId");
+        if (order) {
+            res.status(200).json({ status: true, message: 'Order Fetched', order });
+            io.getIO().emit('getOrderByDate:get', { order: order });
 
         }
     } catch (error) {
@@ -179,16 +191,16 @@ exports.getOrderByDate = async(req, res, next) => {
 }
 
 
-exports.getAllOrders = async(req, res, next) => {
+exports.getAllOrders = async (req, res, next) => {
     try {
-        const order = await PlacedOrder.find({isDelivered: false}).populate('productId userId boyId');
+        const order = await PlacedOrder.find({ isDelivered: false }).populate('productId userId boyId');
 
-        if(order){
-            res.status(200).json({status: 'success', message: 'Order Fetched Successfully', length: order.length, order})
-            io.getIO().emit('placeorder:get', {order: order});
-        
+        if (order) {
+            res.status(200).json({ status: 'success', message: 'Order Fetched Successfully', length: order.length, order })
+            io.getIO().emit('placeorder:get', { order: order });
+
         }
-        
+
     } catch (error) {
         res.status(401).json({
             status: 'error',
@@ -196,19 +208,18 @@ exports.getAllOrders = async(req, res, next) => {
         })
     }
 }
-exports.getOrder = async(req, res, next) =>
-{
+exports.getOrder = async (req, res, next) => {
     try {
         const id = req.params.orderId;
 
-        const order = await PlacedOrder.find({_id: id, isDelivered: false}).populate('productId userId boyId');
-        if(order){
+        const order = await PlacedOrder.find({ _id: id, isDelivered: false }).populate('productId userId boyId');
+        if (order) {
             res.status(200).json({
                 order,
                 status: true,
                 message: 'Found Order'
             })
-            io.getIO().emit('getAllPlaceOrder:get', {order: order});
+            io.getIO().emit('getAllPlaceOrder:get', { order: order });
 
         }
     } catch (error) {
@@ -219,26 +230,28 @@ exports.getOrder = async(req, res, next) =>
     }
 }
 
-exports.getOrderByUser = async(req, res, next) => {
+exports.getOrderByUser = async (req, res, next) => {
     try {
         const userId = req.params.userId;
 
-        PlacedOrder.find({ userId: userId, isDelivered: false})
-        .sort({createdAt: -1})
-        .populate({ path: 'userId productId slot', populate:{
-            path: 'quantity'
-        }})
-        .then((order) => {
-            if(order){
-                res.status(200).json({
-                    status: 'success',
-                    order: order
-                })
-                
-            io.getIO().emit('getPlaceOrderByUser:get', {order: order});
+        PlacedOrder.find({ userId: userId, isDelivered: false })
+            .sort({ createdAt: -1 })
+            .populate({
+                path: 'userId productId slot', populate: {
+                    path: 'quantity'
+                }
+            })
+            .then((order) => {
+                if (order) {
+                    res.status(200).json({
+                        status: 'success',
+                        order: order
+                    })
 
-            }
-        })
+                    io.getIO().emit('getPlaceOrderByUser:get', { order: order });
+
+                }
+            })
     } catch (error) {
         res.status(401).json({
             status: 'error',
