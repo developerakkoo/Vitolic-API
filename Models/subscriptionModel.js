@@ -9,10 +9,12 @@ const subscriptionSchema = new Schema({
         //required: [true, 'Invoice number is required']
     },
 
+    userId:{ type: Schema.Types.ObjectId, ref: 'User'},
+
     milk:{
         type: String,
     },
-    
+    fName:{ type: Schema.Types.ObjectId, ref: 'User'},
     customerName:{
         type: String,
         //required: [true, 'Customer name is required']

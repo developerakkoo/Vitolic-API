@@ -60,7 +60,7 @@ const router = express.Router();
  * 
  */
 router.post('/subscription',  subscriptionController.postSubscription);
-
+ 
 /**
  * @swagger
  * /subscription:
@@ -80,9 +80,9 @@ router.get('/subscription',  subscriptionController.getSubscription);
 
 /**
  * @swagger
- * /subscription:
+ * /subscription/{id}:
  *  get:
- *      description: get all subscriptions
+ *      description: get subscription by subscription id
  *      tags:
  *          - subscription
  * 
@@ -94,6 +94,26 @@ router.get('/subscription',  subscriptionController.getSubscription);
  * 
  */
  router.get('/subscription/:id',  subscriptionController.getSubscriptionById);
+
+
+/**
+ * @swagger
+ * /subscription/user/{userid}:
+ *  get:
+ *      description: get  subscription by userId
+ *      tags:
+ *          - subscription
+ * 
+ *      responses:
+ *         200:
+ *              description: Success
+ *  
+ *  
+ * 
+ */
+ router.get('/subscription/user/:id',  subscriptionController.getSubscriptionByUserId);
+
+ 
 
 /**
  * @swagger
