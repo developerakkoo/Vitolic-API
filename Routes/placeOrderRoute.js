@@ -120,6 +120,46 @@ router.post('/verifyorder', placedOrderController.verifyOrderSignature);
  *            in: formData
  *            required: true
  *            type: String
+ *          - name: totalAmount
+ *            description: total amount of the order
+ *            in: formData
+ *            required: true
+ *            type: Number
+ *          - name: items
+ *            description: all items ordered
+ *            in: formData
+ *            required: true
+ *            type: String
+ *          - name: paymentMode
+ *            description: payment mode of the order
+ *            in: formData
+ *            required: true
+ *            type: String
+ *          - name: userrId
+ *            description: userId of the user placing the order
+ *            in: formData
+ *            required: true
+ *            type: String
+ *          - name: coordinates
+ *            description: coordinates of the user address
+ *            in: formData
+ *            required: true
+ *            type: Number
+ *          - name: slot
+ *            description: slot time requested for the order
+ *            in: formData
+ *            required: true
+ *            type: Date
+ *          - name: couponCode
+ *            description: id of the order
+ *            in: formData
+ *            required: true
+ *            type: String
+ *          - name: couponCode
+ *            description: id of the order
+ *            in: formData
+ *            required: true
+ *            type: String
  *
  *      responses:
  *         200:

@@ -100,17 +100,16 @@ exports.placeOrder = async (req, res, next) => {
             couponCode: req.body.couponCode
         })
 
-        if (couponCode === User.couponCode && totalAmount < 500) {
+        if (PlacedOrder.couponCode === User.couponCode && totalAmount < 500) {
             let discount = 10;
             totalAmount = totalAmount - discount;
         }
-        else if (couponCode === User.couponCode && totalAmount > 5000) {
+        else if (PlacedOrder.couponCode === User.couponCode && totalAmount > 5000) {
             let discount = 100;
             totalAmount = totalAmount - discount;
         }
-        else if (couponCode !== User.couponCode) {
+        else if (PlacedOrder.couponCode !== User.couponCode) {
             res.status(200).json({ status: 'Coupon Code is not valid' });
-            return;
         }
         order.save();
 

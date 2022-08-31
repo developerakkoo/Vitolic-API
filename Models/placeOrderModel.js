@@ -4,81 +4,84 @@ const Schema = mongoose.Schema;
 
 const placedOrderSchema = new Schema({
 
-   orderId:{
-    type: String
-   },
-    title:{
+    orderId: {
+        type: String
+    },
+    title: {
         type: String
     },
     image: String,
-   totalAmount:{
-       type: Number,
-   },
+    totalAmount: {
+        type: Number,
+    },
+    couponCode: {
+        type: String
+    },
 
-   slot:{
-        createdDate:{
+    slot: {
+        createdDate: {
             type: Date,
         },
 
-        startTime:{
+        startTime: {
             type: Date
         },
 
-        endTime:{
+        endTime: {
             type: Date
         }
-    
-   },
-
-   
-    items:[
-      {
-        productId:{
-         type: Schema.Types.ObjectId,
-         ref: 'Product',
-         required: true
-        },
-     quantity: { type: Number, required: true, default: 1 },
-     price: { type: Number, required: true, default: 0 },
-     title: {type: String},
-     url: {type: String},
-     orderPrice: {type: Number},
-     subTotal:{type: Number},
-     units: {type: String}
 
     },
-   ],
 
 
-   userId: {
-       type: Schema.Types.ObjectId,
-       ref: 'User',
+    items: [
+        {
+            productId: {
+                type: Schema.Types.ObjectId,
+                ref: 'Product',
+                required: true
+            },
+            quantity: { type: Number, required: true, default: 1 },
+            price: { type: Number, required: true, default: 0 },
+            title: { type: String },
+            url: { type: String },
+            orderPrice: { type: Number },
+            subTotal: { type: Number },
+            units: { type: String }
 
-   },
-   productId:[{
-       type: Schema.Types.ObjectId,
+        },
+    ],
+
+
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+
+    },
+    productId: [{
+        type: Schema.Types.ObjectId,
         ref: 'Product',
-   }],
-   
-
-   cordinates:{
-       type: [Number]
-   },
+    }],
 
 
-   status: {
-       type: String,
-       default: 'Ready to dispatch.'
-   },
+    cordinates: {
+        type: [Number]
+    },
 
-   isDelivered:{
-       type: Boolean,
-       default: false
-   }
-    ,
-    paymentMode:{
+
+    status: {
         type: String,
-        
+        default: 'Ready to dispatch.'
+    },
+
+    isDelivered: {
+        type: Boolean,
+        default: false
+    }
+    ,
+    paymentMode: {
+        type: String,
+
     }
 }, {
     timestamps: true
