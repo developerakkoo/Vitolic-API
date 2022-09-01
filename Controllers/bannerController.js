@@ -1,5 +1,5 @@
 const Banner = require("./../Models/bannerModal");
-
+const io = require('../socket');
 
 exports.createBanner = async (req, res, next) => {
 
