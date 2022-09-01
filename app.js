@@ -38,6 +38,7 @@ const subAdminRoute = require("./Routes/subAdminRoute");
 const refundRoute = require("./Routes/refundRoute");
 const subscriptionRoute = require("./Routes/subscriptionRoute");
 const petProductRoute = require("./Routes/petProductRoute");
+const billRoute = require("./Routes/billingRoute");
 //const categoryRoute = require("./Routes/categoryRoute");
 //Error Handlers
 const errorController = require("./Controllers/errorController");
@@ -48,6 +49,10 @@ const swaggerJSDoc = require("swagger-jsdoc");
 const MONGODB_URI = "mongodb+srv://farmsell:farmsell@cluster0.mh36s.mongodb.net/Vitolic?retryWrites=true&w=majority";
 //const apicache = require('apicache');
 //const cache = apicache.middleware;
+
+
+//excel
+
 
 const app = express();
 const port = 8080;
@@ -126,6 +131,7 @@ app.use("/image", express.static(path.join(__dirname, "image")));
 
 
 app.use(adminRoute);
+app.use(billRoute);
 app.use(dashboardRoute);
 app.use(productRoute);
 app.use(userRoute);
