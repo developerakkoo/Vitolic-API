@@ -52,7 +52,7 @@ router.post('/coupon',  coupon.createCoupon);
  *  
  * 
  */
-router.get('/banner',  coupon.getCoupons);
+router.get('/coupon',  coupon.getCoupons);
 /**
  * @swagger
  * /banner/{id}:
@@ -69,7 +69,7 @@ router.get('/banner',  coupon.getCoupons);
  *  
  * 
  */
-router.get('/banner/:id',  coupon.getCouponById);
+router.get('/coupon/:id',  coupon.getCouponById);
 /**
  * @swagger
  * /banner/{id}:
@@ -86,7 +86,7 @@ router.get('/banner/:id',  coupon.getCouponById);
  *  
  * 
  */
-router.delete('/banner/:id',  coupon.deleteCoupon);
+router.delete('/coupon/:id',  coupon.deleteCoupon);
 
 
 module.exports = router;
