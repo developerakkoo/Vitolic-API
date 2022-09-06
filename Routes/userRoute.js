@@ -310,7 +310,9 @@ router.put('/user/subscription/:id', UserController.addSubscription);
 router.put('/user/enddate/:id', UserController.endDate);
 //router.post('/user/login/promocode',  UserController.promoCode);
 
-router.get('/user/excel', UserController.usersExcel);
+
+
+//router.get('/user/excel', UserController.usersExcel);
 
 /**
  * @swagger
@@ -334,6 +336,7 @@ router.get('/user/excel', UserController.usersExcel);
  *  
  * 
  */
+
 router.put('/subscription/custom/:id', UserController.customDate1);
 
 

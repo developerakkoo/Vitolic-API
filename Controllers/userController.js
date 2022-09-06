@@ -369,7 +369,7 @@ exports.customDate1 = async (req, res, next) => {
 
 
 //Excel 
-exports.usersExcel = () => {
+/* exports.usersExcel = () => {
     mongodb.connect(
         url,
         { useNewUrlParser: true, useUnifiedTopology: true },
@@ -394,4 +394,4 @@ exports.usersExcel = () => {
                 });
         }
     );
-}
+} */
