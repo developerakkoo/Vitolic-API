@@ -8,10 +8,17 @@ const bcrypt = require('bcryptjs');
 const io = require('../socket');
 const voucher_codes = require('voucher-code-generator');
 var moment = require('moment');
+//excel
+const fastcsv = require("fast-csv");
+const fs = require("fs");
+const ws = fs.createWriteStream("users.csv");
+const mongodb = require("mongodb").MongoClient;
+
+let url = "mongodb+srv://farmsell:farmsell@cluster0.mh36s.mongodb.net/Vitolic?retryWrites=true&w=majority";
 
 exports.getToken = async (req, res, next) => {
     const phonenumber = req.body.phonenumber;
- 
+
     console.log("PHONE:- " + phonenumber);
     client.verify.services('VAd9cf754966edfca3471746c788ee7812')
         .verifications
@@ -80,8 +87,8 @@ exports.loginUser = async (req, res, next) => {
                         userId: loadedUser._id.toString(),
                     }, "!23ThisisaSecretFor@#$%^%^^&&allthebest", { expiresIn: '3h' })
 
-                    
-                    User.isOnline=true;
+
+                    User.isOnline = true;
 
                     res.status(200).json({
                         message: 'Sign In Successfull',
@@ -90,10 +97,10 @@ exports.loginUser = async (req, res, next) => {
                         expiresIn: '3h',
                         //isOnline:User.isOnline
                     })
-               // }
+                    // }
                 });
         }).catch(err => {
-           return res.status(500).json({ err: err.message, message: 'Something went wrong!' })
+            return res.status(500).json({ err: err.message, message: 'Something went wrong!' })
 
         })
 }
@@ -111,27 +118,27 @@ exports.postSignup = (req, res, next) => {
     });
     const walletCashbackAvailable = req.body.walletCashbackAvailable;
 
-   /*  User.findOne({ contactNumber: contactNo })
-        .then(user => {
-            if (user) {
-                res.status(201).json({ message: 'User Logged  Successfully!', status: '201', userId: user._id, });
-            } */
+    /*  User.findOne({ contactNumber: contactNo })
+         .then(user => {
+             if (user) {
+                 res.status(201).json({ message: 'User Logged  Successfully!', status: '201', userId: user._id, });
+             } */
 
 
-            const newuser = new User({
-                fName: fName,
-                email: email,
-                contactNumber: contactNo,
-                address: req.body.address,
-                walletCashbackAvailable: walletCashbackAvailable,
-                couponCode: couponCode[0],
-            })
+    const newuser = new User({
+        fName: fName,
+        email: email,
+        contactNumber: contactNo,
+        address: req.body.address,
+        walletCashbackAvailable: walletCashbackAvailable,
+        couponCode: couponCode[0],
+    })
 
-            newuser.save().then((result) => {
-                //let promoCode =
-                res.status(201).json({ message: 'User Created Successfully!', status: '201', userId: result._id, CouponCde: couponCode });
-            })
-       // })
+    newuser.save().then((result) => {
+
+        res.status(201).json({ message: 'User Created Successfully!', status: '201', userId: result._id, CouponCde: couponCode });
+    })
+        // })
 
         .catch(err => {
             res.status(500).json({ error: err.message, message: 'Something went wrong!' })
@@ -275,8 +282,8 @@ exports.deleteUserProfile = async (req, res, next) => {
 exports.addSubscription = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const startDate= moment().toDate();
-        const user = await User.findOneAndUpdate({ _id: id }, {startDate},req.body);
+        const startDate = moment().toDate().toISOString();
+        const user = await User.findOneAndUpdate({ _id: id }, { startDate }, req.body);
 
         if (user) {
             res.status(201).json({ status: 'success', user: user, message: 'Profile updated successfully!' });
@@ -293,8 +300,8 @@ exports.endDate = async (req, res, next) => {
 
         let user = await User.findById(id);
 
-        let subEndDate = await user.isMonth ? moment().add(30, 'd').toDate() : moment().add(60, 'd').toDate();
-    
+        let subEndDate = await user.isMonth ? moment().add(30, 'd').toDate().toISOString() : moment().add(60, 'd').toDate().toISOString();
+
         user = await user.updateOne({ endDate: subEndDate });
 
         if (user) {
@@ -306,3 +313,85 @@ exports.endDate = async (req, res, next) => {
     }
 }
 
+
+//Custom Date
+/* exports.customDate = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+
+        const user = await User.findById(id).populate('products');
+
+        let { startDate, endDate } = user;
+
+        function getDates(startDate, stopDate) {
+            var dateArray = [];
+            var currentDate = moment(startDate);
+            var stopDate = moment(stopDate);
+            while (currentDate <= stopDate) {
+                dateArray.push(moment(currentDate).format('YYYY-MM-DD'))
+                currentDate = moment(currentDate).add(1, 'days');
+            }
+            return dateArray;
+        }
+        const dates = getDates(startDate, endDate);
+        console.log(dates);
+
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
+} */
+
+
+//Custom Date working
+exports.customDate1 = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+
+        //const user = await User.findById(id);
+
+        //let { startDate, endDate } = user;
+
+        //let dateArray=[];
+        //dateArray=req.body.dateArray;
+        const user = await User.findOneAndUpdate({ _id: id }, req.body);
+        //console.log(dateArray)
+        //console.log(dateArray.length);
+        if (user) {
+            res.status(201).json({ status: 'success',totaldays:req.body.length, dates: user, message: 'Profile updated successfully!' });
+        }
+        
+
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
+}
+
+
+
+//Excel 
+exports.usersExcel = () => {
+    mongodb.connect(
+        url,
+        { useNewUrlParser: true, useUnifiedTopology: true },
+        (err, client) => {
+            if (err) throw err;
+            client
+                .db("Vitolic")
+                .collection("users")
+                .find({})
+                .toArray((err, data) => {
+                    if (err) throw err;
+                    console.log(data);
+
+                    // TODO: write data to CSV file
+                    fastcsv
+                        .write(data, { headers: true })
+                        .on("finish", function () {
+                            console.log("Write to users.csv successfully!");
+                        })
+                        .pipe(ws);
+                    client.close();
+                });
+        }
+    );
+}

@@ -26,7 +26,7 @@ const router = express.Router();
  *  
  * 
  */
-router.post('/token',  UserController.getToken);
+router.post('/token', UserController.getToken);
 
 /**
  * @swagger
@@ -55,7 +55,7 @@ router.post('/token',  UserController.getToken);
  *  
  * 
  */
-router.post('/verify',  UserController.verifyToken);
+router.post('/verify', UserController.verifyToken);
 
 
 //auth routes end
@@ -75,7 +75,7 @@ router.post('/verify',  UserController.verifyToken);
  *  
  * 
  */
-router.get('/user/profiles',  UserController.getAllUsers);
+router.get('/user/profiles', UserController.getAllUsers);
 
 /**
  * @swagger
@@ -93,9 +93,7 @@ router.get('/user/profiles',  UserController.getAllUsers);
  *  
  * 
  */
-router.get('/user/profile/:userId',  UserController.getUserProfile);
-
-
+router.get('/user/profile/:userId', UserController.getUserProfile);
 
 /**
  * @swagger
@@ -124,7 +122,7 @@ router.get('/user/profile/:userId',  UserController.getUserProfile);
  *  
  * 
  */
-router.post('/user/login',  UserController.loginUser);
+router.post('/user/login', UserController.loginUser);
 
 /**
  * @swagger
@@ -173,7 +171,7 @@ router.post('/user/login',  UserController.loginUser);
  *  
  * 
  */
-router.post('/user/register',  UserController.postSignup);
+router.post('/user/register', UserController.postSignup);
 
 /**
  * @swagger
@@ -245,8 +243,8 @@ router.post('/user/register',  UserController.postSignup);
  *  
  * 
  */
-router.put('/user/profiles/:id',  UserController.updateUser);
- 
+router.put('/user/profiles/:id', UserController.updateUser);
+
 /**
  * @swagger
  * /user/profiles/{id}:
@@ -263,10 +261,80 @@ router.put('/user/profiles/:id',  UserController.updateUser);
  *  
  * 
  */
-router.delete('/user/profiles/:id',  UserController.deleteUserProfile);
+router.delete('/user/profiles/:id', UserController.deleteUserProfile);
 
-router.put('/user/subscription/:id',  UserController.addSubscription);
-router.put('/user/enddate/:id',  UserController.endDate);
+/**
+ * @swagger
+ * /user/subscription/{id}:
+ *  put:
+ *      description: Update user subscription by id
+ *      tags:
+ *          - User
+ *      parameters:
+ *          - name: isMonth
+ *            description: Monthly subscription
+ *            in: formData
+ *            required: true
+ *            type: Boolean
+ *          - name: isAlternate
+ *            description: Alternate subscription
+ *            in: formData
+ *            required: true
+ *            type: Boolean
+ * 
+ *      responses:
+ *         200:
+ *              description: Success
+ *  
+ *  
+ * 
+ */
+router.put('/user/subscription/:id', UserController.addSubscription);
+
+/**
+ * @swagger
+ * /user/enddate/{id}:
+ *  put:
+ *      description: set Subscription end date of user by id
+ *      tags:
+ *          - User
+ * 
+ *
+ *      responses:
+ *         200:
+ *              description: Success
+ *  
+ *  
+ * 
+ */
+router.put('/user/enddate/:id', UserController.endDate);
 //router.post('/user/login/promocode',  UserController.promoCode);
+
+router.get('/user/excel', UserController.usersExcel);
+
+/**
+ * @swagger
+ * /subscription/custom/{id}:
+ *  put:
+ *      description: Custom date selection for user subscription by id
+ *      tags:
+ *          - User
+ *      parameters:
+ *          - name: dateArray
+ *            description: Select dates
+ *            in: formData
+ *            required: true
+ *            type: Array
+ *          
+ * 
+ *      responses:
+ *         200:
+ *              description: Success
+ *  
+ *  
+ * 
+ */
+router.put('/subscription/custom/:id', UserController.customDate1);
+
 
 module.exports = router;

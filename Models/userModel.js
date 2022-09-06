@@ -40,8 +40,6 @@ const userSchema = new Schema({
     type: String,
   },
 
-  promoCode: { type: String },
-
   isOnline: { type: Boolean, default: false },
 
   cart: {
@@ -74,6 +72,8 @@ const userSchema = new Schema({
   startDate: { type: String, default: 'NA' },
 
   endDate: { type: String, default: 'NA' },
+
+  dateArray: [],
 
 }, {
   timestamps: true
