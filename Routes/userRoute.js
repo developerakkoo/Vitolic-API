@@ -245,6 +245,7 @@ router.post('/user/register', UserController.postSignup);
  */
 router.put('/user/profiles/:id', UserController.updateUser);
 
+
 /**
  * @swagger
  * /user/profiles/{id}:
@@ -338,6 +339,8 @@ router.put('/user/enddate/:id', UserController.endDate);
  */
 
 router.put('/subscription/custom/:id', UserController.customDate1);
+
+router.put('/user/coupon/:id', UserController.updateUserCoupon);
 
 
 module.exports = router;
