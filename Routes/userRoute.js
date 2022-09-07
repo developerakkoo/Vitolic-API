@@ -340,6 +340,25 @@ router.put('/user/enddate/:id', UserController.endDate);
 
 router.put('/subscription/custom/:id', UserController.customDate1);
 
+
+
+/**
+ * @swagger
+ * /user/coupon/{id}:
+ *  put:
+ *      description: generate coupon for user by id
+ *      tags:
+ *          - User
+ *     
+ *          
+ * 
+ *      responses:
+ *         200:
+ *              description: Success
+ *  
+ *  
+ * 
+ */
 router.put('/user/coupon/:id', UserController.updateUserCoupon);
 
 
