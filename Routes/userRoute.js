@@ -319,15 +319,45 @@ router.put('/user/enddate/:id', UserController.endDate);
  * @swagger
  * /subscription/custom/{id}:
  *  put:
- *      description: Custom date selection for user subscription by id
+ *      description: Custom days selection for user subscription by id
  *      tags:
  *          - User
  *      parameters:
- *          - name: dateArray
- *            description: Select dates
+ *          - name: sunday
+ *            description: Select number of sundays for delivery of product
  *            in: formData
  *            required: true
- *            type: Array
+ *            type: Number
+ *          - name: monday
+ *            description: Select number of mondays for delivery of product
+ *            in: formData
+ *            required: true
+ *            type: Number
+ *          - name: tuesday
+ *            description: Select number of tuesdays for delivery of product
+ *            in: formData
+ *            required: true
+ *            type: Number
+ *          - name: wednesday
+ *            description: Select number of wednesdays for delivery of product
+ *            in: formData
+ *            required: true
+ *            type: Number
+ *          - name: thursday
+ *            description: Select number of thursdays for delivery of product
+ *            in: formData
+ *            required: true
+ *            type: Number
+ *          - name: friday
+ *            description: Select number of fridays for delivery of product
+ *            in: formData
+ *            required: true
+ *            type: Number
+ *          - name: saturday
+ *            description: Select number of saturdays for delivery of product
+ *            in: formData
+ *            required: true
+ *            type: Number
  *          
  * 
  *      responses:
