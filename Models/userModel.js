@@ -24,7 +24,7 @@ const userSchema = new Schema({
   },
 
   couponCode: {
-    type: String,default:"NA"
+    type: String, default: "NA"
 
   },
 
@@ -41,6 +41,23 @@ const userSchema = new Schema({
   },
 
   isOnline: { type: Boolean, default: false },
+
+
+  sunday: { type: Number, default: 0 },
+
+  monday: { type: Number, default: 0 },
+
+  tuesday: { type: Number, default: 0 },
+
+  wednesday: { type: Number, default: 0 },
+
+  thursday: { type: Number, default: 0 },
+
+  friday: { type: Number, default: 0 },
+
+  saturday: { type: Number, default: 0 },
+
+
 
   cart: {
     items: [

@@ -338,7 +338,10 @@ router.put('/user/enddate/:id', UserController.endDate);
  * 
  */
 
-router.put('/subscription/custom/:id', UserController.customDate1);
+//router.put('/subscription/custom/:id', UserController.customDate1);
+
+router.put('/subscription/custom/:id', UserController.customDate2);
+
 
 
 

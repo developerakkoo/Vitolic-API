@@ -266,8 +266,8 @@ exports.updateUserCoupon = async (req, res, next) => {
             length: 8,
             count: 1
         });
-        couponCode=couponCode[0];
-        const user = await User.findOneAndUpdate({ _id: id }, {couponCode:couponCode});
+        couponCode = couponCode[0];
+        const user = await User.findOneAndUpdate({ _id: id }, { couponCode: couponCode });
 
         if (user) {
             res.status(201).json({ status: 'success', user: user, message: 'Profile updated successfully!' });
@@ -361,7 +361,7 @@ exports.endDate = async (req, res, next) => {
 } */
 
 
-//Custom Date working
+//Custom Date working Dates
 exports.customDate1 = async (req, res, next) => {
     try {
         const id = req.params.id;
@@ -376,9 +376,49 @@ exports.customDate1 = async (req, res, next) => {
         //console.log(dateArray)
         //console.log(dateArray.length);
         if (user) {
-            res.status(201).json({ status: 'success',totaldays:req.body.length, dates: user, message: 'Profile updated successfully!' });
+            res.status(201).json({ status: 'success', totaldays: req.body.length, dates: user, message: 'Profile updated successfully!' });
         }
-        
+
+
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
+}
+
+
+//Weekdays
+exports.customDate2 = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+
+        //const user = await User.findById(id);
+
+        //let { startDate, endDate } = user;
+
+        //let dateArray=[];
+        //dateArray=req.body.dateArray;
+        //const totalDays= $sum(req.body);
+        let sunday = req.body.sunday;
+        let monday = req.body.monday;
+        let tuesday = req.body.tuesday;
+        let wednesday = req.body.wednesday;
+        let thursday = req.body.thursday;
+        let friday = req.body.friday;
+        let saturday = req.body.saturday;
+
+        const startDate = moment().toDate().toISOString();
+        const endDate = moment(startDate).add(30, 'd').toDate().toISOString();
+
+        const totalDays = parseInt(sunday) + parseInt(monday) + parseInt(tuesday) + parseInt(wednesday) + parseInt(thursday) + parseInt(friday) + parseInt(saturday);
+        console.log(totalDays)
+
+        const user = await User.findOneAndUpdate({ _id: id }, { startDate, endDate }, req.body);
+
+        //console.log(dateArray)
+        //console.log(dateArray.length);
+        if (user && totalDays == 30) {
+            res.status(201).json({ status: 'success', totalDays, user, message: 'Dates updated successfully!' });
+        }
 
     } catch (error) {
         res.status(500).json({ error, message: 'Something went wrong!' });
