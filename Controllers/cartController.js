@@ -216,7 +216,7 @@ exports.featured = async (req, res, next) => {
             },
             {
                 "$sort": {
-                    sum: -1
+                    totalOrdered: -1
                 }
             },
 
