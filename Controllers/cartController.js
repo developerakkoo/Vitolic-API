@@ -204,7 +204,7 @@ exports.featured = async (req, res, next) => {
                     "$group": {
                       "_id": "$products.title",
                       
-                      "sum": {
+                      "totalOrdered": {
                         "$sum": "$products.amount"
                       }
                     }
