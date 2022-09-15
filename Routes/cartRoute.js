@@ -4,7 +4,23 @@ const cartController = require('../Controllers/cartController');
 
 const router = express.Router();
 
-
+/**
+ * @swagger
+ * /cart/featured:
+ *  get:
+ *      description: get featured products
+ *      tags:
+ *          - cart
+ * 
+ *     
+ *
+ *      responses:
+ *         200:
+ *              description: Success
+ *  
+ *  
+ * 
+ */
 router.get('/cart/featured',  cartController.featured);
 
 /**
