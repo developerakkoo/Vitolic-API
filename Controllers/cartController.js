@@ -209,7 +209,7 @@ exports.featured = async (req, res, next) => {
                     "title": {
                         "$first": "$products.title"
                     },
-                    "sum": {
+                    "totalOrdered": {
                         "$sum": "$products.amount"
                     }
                 }
