@@ -209,7 +209,7 @@ exports.featured = async (req, res, next) => {
                     "title": {
                         "$first": "$products.title"
                     },
-                    "totalOrdered": {
+                    "sum": {
                         "$sum": "$products.amount"
                     }
                 }
@@ -219,6 +219,8 @@ exports.featured = async (req, res, next) => {
                     sum: -1
                 }
             },
+
+
 
             ]).then(result =>
                 res.status(200).json({
