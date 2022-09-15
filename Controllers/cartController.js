@@ -197,25 +197,30 @@ exports.featured = async (req, res, next) => {
 
         if (cart) {
             Cart.aggregate([{ $match: {} },
-                {
-                    "$unwind": "$products"
-                  },
-                  {
-                    "$group": {
-                      "_id": "$products.title",
-                      
-                      "totalOrdered": {
+            {
+                "$unwind": "$products"
+            },
+            {
+                "$group": {
+                    "_id": "$products._id",
+                    "image": {
+                        "$first": "$products.imageUrl"
+                    },
+                    "title": {
+                        "$first": "$products.title"
+                    },
+                    "totalOrdered": {
                         "$sum": "$products.amount"
-                      }
                     }
-                  },
-                  {
-                    "$sort": {
-                      sum: -1
-                    }
-                  },
-                  
-                ]).then(result =>
+                }
+            },
+            {
+                "$sort": {
+                    sum: -1
+                }
+            },
+
+            ]).then(result =>
                 res.status(200).json({
                     status: true,
                     result
