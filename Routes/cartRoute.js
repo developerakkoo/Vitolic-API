@@ -4,6 +4,9 @@ const cartController = require('../Controllers/cartController');
 
 const router = express.Router();
 
+
+router.get('/cart/featured',  cartController.featured);
+
 /**
  * @swagger
  * /cart:
@@ -85,4 +88,7 @@ router.get('/cart',  cartController.getCart);
 
 router.get('/deliver/:id', cartController.orderDelivered);
 router.put('/deliver/status/:id', cartController.orderStatus);
+
+
+
 module.exports = router;

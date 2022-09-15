@@ -28,8 +28,8 @@ exports.getCartByCartId = async (req, res, next) => {
 
 exports.getCartByUserId = async (req, res, next) => {
     try {
-        
-        const cart = await Cart.find({userId:req.params.id}).populate("userId address");
+
+        const cart = await Cart.find({ userId: req.params.id }).populate("userId address");
 
         if (cart) {
             res.status(200).json({
@@ -161,16 +161,23 @@ exports.orderDelivered = async (req, res, next) => {
     }
 }
 
-exports.orderStatus= async (req, res, next) => {
+exports.orderStatus = async (req, res, next) => {
     try {
         const cartId = req.params.id
         const cart = await Cart.findById({ _id: cartId });
-        cart = await Cart.updateOne({isDelivered:'true'})
+        //let delivered= await
+        cart = await cart.updateOne(isDelivered, { isDelivered: true });
+        console.log(cart);
 
+        /* let user = await User.findById(id);
+
+        let subEndDate = await user.isMonth ? moment().add(30, 'd').toDate() : moment().add(60, 'd').toDate();
+    
+        user = await user.updateOne({ endDate: subEndDate }); */
         if (cart) {
 
             res.status(200).json({
-                
+
                 cart
             })
             io.getIO().emit('status:Order delivered', cartId);
@@ -179,6 +186,47 @@ exports.orderStatus= async (req, res, next) => {
     } catch (error) {
         res.status(500).json({ error, message: 'Something went wrong!' })
 
+    }
+}
+
+
+exports.featured = async (req, res, next) => {
+    try {
+
+        const cart = await Cart.find();
+
+        if (cart) {
+            Cart.aggregate([{ $match: {} },
+                {
+                    "$unwind": "$products"
+                  },
+                  {
+                    "$group": {
+                      "_id": "$products.title",
+                      
+                      "sum": {
+                        "$sum": "$products.amount"
+                      }
+                    }
+                  },
+                  {
+                    "$sort": {
+                      sum: -1
+                    }
+                  },
+                  
+                ]).then(result =>
+                res.status(200).json({
+                    status: true,
+                    result
+                }));
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error
+        })
     }
 }
 
