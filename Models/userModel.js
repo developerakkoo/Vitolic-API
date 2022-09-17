@@ -82,9 +82,9 @@ const userSchema = new Schema({
   },
 
 
-  isMonth: { type: Boolean },
+  isMonth: { type: Boolean, default: false },
 
-  isAlternate: { type: Boolean },
+  isAlternate: { type: Boolean, default: false },
 
   startDate: { type: String, default: 'NA' },
 

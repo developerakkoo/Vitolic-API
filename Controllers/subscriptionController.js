@@ -6,24 +6,20 @@ exports.postSubscription = async (req, res, next) => {
     const userId = req.body.userId;
     const invoiceNumber = req.body.invoiceNumber;
     const milk = req.body.milk;
-    const customerName = req.body.customerName;
     const phone = req.body.phone;
     const emailId = req.body.emailId;
     const address = req.body.address;
     const deliveryFrequency = req.body.deliveryFrequency;
-    const deliveryPerson = req.body.deliveryPerson;
 
  
     const subscription = new Subscription({
         userId,
         invoiceNumber,
         milk,
-        customerName,
         phone,
         emailId,
         address,
         deliveryFrequency,
-        deliveryPerson
     });
     
 

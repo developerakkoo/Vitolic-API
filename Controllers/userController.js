@@ -13,7 +13,7 @@ var moment = require('moment');
 const fs = require("fs");
 const ws = fs.createWriteStream("users.csv");
 const mongodb = require("mongodb").MongoClient;
-
+const errorController = require('../Controllers/errorController');
 let url = "mongodb+srv://farmsell:farmsell@cluster0.mh36s.mongodb.net/Vitolic?retryWrites=true&w=majority";
 
 exports.getToken = async (req, res, next) => {
@@ -301,12 +301,17 @@ exports.deleteUserProfile = async (req, res, next) => {
 exports.addSubscription = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const startDate = moment().toDate().toISOString();
-        const user = await User.findOneAndUpdate({ _id: id }, { startDate }, req.body);
+        const isMonth = req.body.isMonth;
+        const isAlternate = req.body.isAlternate;
+        //const startDate = moment().toDate().toISOString();
+        const startDate = req.body.startDate;
+
+        const user = await User.findOneAndUpdate({ _id: id }, { isMonth, isAlternate, startDate });
 
         if (user) {
             res.status(201).json({ status: 'success', user: user, message: 'Profile updated successfully!' });
         }
+
 
     } catch (error) {
         res.status(500).json({ error, message: 'Something went wrong!' });
@@ -319,7 +324,7 @@ exports.endDate = async (req, res, next) => {
 
         let user = await User.findById(id);
 
-        let subEndDate = await user.isMonth ? moment().add(30, 'd').toDate().toISOString() : moment().add(60, 'd').toDate().toISOString();
+        let subEndDate = await user.isMonth ? moment().add(30, 'd').toDate().toISOString() : moment().add(30, 'd').toDate().toISOString();
 
         user = await user.updateOne({ endDate: subEndDate });
 
@@ -406,17 +411,17 @@ exports.customDate2 = async (req, res, next) => {
         let friday = req.body.friday;
         let saturday = req.body.saturday;
 
-        const startDate = moment().toDate().toISOString();
+        const startDate = req.body.startDate;
         const endDate = moment(startDate).add(30, 'd').toDate().toISOString();
 
         const totalDays = parseInt(sunday) + parseInt(monday) + parseInt(tuesday) + parseInt(wednesday) + parseInt(thursday) + parseInt(friday) + parseInt(saturday);
         console.log(totalDays)
 
-        const user = await User.findOneAndUpdate({ _id: id }, { startDate, endDate }, req.body);
+        const user = await User.findOneAndUpdate({ _id: id }, { endDate }, req.body);
 
         //console.log(dateArray)
         //console.log(dateArray.length);
-        if (user && totalDays == 30) {
+        if (user) {
             res.status(201).json({ status: 'success', totalDays, user, message: 'Dates updated successfully!' });
         }
 

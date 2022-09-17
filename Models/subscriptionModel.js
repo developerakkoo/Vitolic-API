@@ -14,11 +14,11 @@ const subscriptionSchema = new Schema({
     milk:{
         type: String,
     },
-    fName:{ type: Schema.Types.ObjectId, ref: 'User'},
+    /* fName:{ type: Schema.Types.ObjectId, ref: 'User'},
     customerName:{
         type: String,
         //required: [true, 'Customer name is required']
-    },
+    }, */
     phone:{
         type: Number,
         //required: [true, 'Phone number is required']
@@ -35,10 +35,10 @@ const subscriptionSchema = new Schema({
         type: String,
         //required: [true, 'Delivery Frequency is required']
     },
-    deliveryPerson: {
+    /* deliveryPerson: {
         type: String,
         //required: [true, 'Delivery Person is required']
-    }
+    } */
 })
 
 
