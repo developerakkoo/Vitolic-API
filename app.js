@@ -58,10 +58,10 @@ const MONGODB_URI = "mongodb+srv://farmsell:farmsell@cluster0.mh36s.mongodb.net/
 const app = express();
 const port = 8080;
 const bodyParser = require('body-parser');
-app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(express.json());
 app.use(cors());
-app.use((req, res, next) => {
+/* app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -69,8 +69,25 @@ app.use((req, res, next) => {
   );
   res.setHeader("Access-Control-Allow-Headers", "*");
   next();
-});
+}); */
+/* app.use((req, res, next) => {
+  //allow access to current url. work for https as well
+  res.setHeader('Access-Control-Allow-Origin', req.header('Origin'));
+  res.removeHeader('x-powered-by');
+  //allow access to current method
+  res.setHeader('Access-Control-Allow-Methods', req.method);
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+}) */
 
+
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', '*');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
 //apicache
 /* app.use(cache('7 days'))
  
