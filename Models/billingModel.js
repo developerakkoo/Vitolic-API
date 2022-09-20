@@ -4,11 +4,20 @@ const Schema = mongoose.Schema;
 
 
 const billingSchema = new Schema({
+
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
+
+    subscriptionId: { type: String },
+
+    orderId: { type: String },
+
     amount: { type: Number, },
 
-    product: { type: String },
+    products: [{
 
-    paymentStatus: { type: String },
+    }],
+
+    paymentStatus: { type: Boolean },
 }, {
     timestamps: true
 });
