@@ -86,7 +86,7 @@ exports.getCart = async (req, res, next) => {
 
 exports.addToCart = async (req, res, next) => {
     try {
-        const { userId, products, total, status, address, isCustom, isNormal, startDate, customStartDate } = req.body;
+        const { userId, products, total, status, address, isCustom, isNormal, isAlternate, startDate, customStartDate } = req.body;
 
         console.log("ADD TO CART METHOD");
         //Order Created
@@ -105,7 +105,7 @@ exports.addToCart = async (req, res, next) => {
 
         //2.  Create Sub here
         if (isNormal) {
-            let subscription = new Subscription({
+            subscription = new Subscription({
                 cartId: cartId,
                 userId: userId,
                 startDate: startDate,
@@ -114,8 +114,18 @@ exports.addToCart = async (req, res, next) => {
             await subscription.save();
         }
 
+        if (isAlternate) {
+            subscription = new Subscription({
+                cartId: cartId,
+                userId: userId,
+                startDate: startDate,
+                endDate: moment(startDate).add(15, 'd').toDate().toISOString()
+            });
+            await subscription.save();
+        }
+
         if (isCustom) {
-            let subscription = new Subscription({
+            subscription = new Subscription({
                 //cartId: cartId,
                 userId: userId,
                 customStartDate: customStartDate,
@@ -128,7 +138,7 @@ exports.addToCart = async (req, res, next) => {
             //const { userId, products, total, status, subscriptionId } = req.body;
             //Bill Created
             let bill = new Bill({
-                invoiceNumber:await nanoid(),
+                invoiceNumber: await nanoid(),
                 products: products,
                 userId: userId,
                 // subscriptionId: subscriptionId,
@@ -139,8 +149,9 @@ exports.addToCart = async (req, res, next) => {
             await bill.save();
 
             if (bill) {
-                //const bill = await Bill.findById({userId});
-                //const subscription = await Subscription.findOneAndUpdate({ userId: userId },{billId:bill._id})
+                /* const bill = await Bill.find({ invoiceNumber });
+                console.log(bill._id)
+                const subscription = await Subscription.findOneAndUpdate({ userId }, { billId: bill._id }) */
 
                 res.status(200).json({
                     cart,

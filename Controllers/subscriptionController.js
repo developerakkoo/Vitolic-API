@@ -72,7 +72,7 @@ exports.postSubscription = async (req, res, next) => {
 exports.getSubscription = async (req, res, next) => {
     try {
 
-        let subscription = await Subscription.find({});
+        let subscription = await Subscription.find({}).sort({ _id: -1 });
         if (subscription) {
             res.status(200).json({ success: true, subscription })
         }

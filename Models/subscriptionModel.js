@@ -14,6 +14,11 @@ const subscriptionSchema = new Schema({
         type: Boolean
 
     },
+
+    isAlternate: {
+        type: Boolean
+
+    },
     isCustom: {
         type: Boolean
     },
@@ -48,7 +53,10 @@ const subscriptionSchema = new Schema({
         //required: [true, 'Delivery Frequency is required']
     },
 
-})
+},
+    {
+        timestamps: true
+    })
 
 
 module.exports = mongoose.model('Subscription', subscriptionSchema);
