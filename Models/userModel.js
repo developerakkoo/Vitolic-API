@@ -25,7 +25,7 @@ const userSchema = new Schema({
 
   couponCode: {
     type: String, default: "NA"
-
+ 
   },
 
   resetPasswordToken: {

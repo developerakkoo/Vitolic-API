@@ -84,6 +84,7 @@ exports.addToCart = async (req, res, next) => {
         const { userId, products, total, status, address, subscriptionId } = req.body;
 
         console.log("ADD TO CART METHOD");
+        //Order Created
         let cart = new Cart({
             products: products,
             userId: userId,
@@ -92,29 +93,34 @@ exports.addToCart = async (req, res, next) => {
             address: address
         });
         await cart.save();
+        
+        
+        //2.  Create Sub here
+
+
 
         if (cart) {
             //const { userId, products, total, status, subscriptionId } = req.body;
-
+            //Bill Created
             let bill = new Bill({
                 products: products,
                 userId: userId,
-                subscriptionId: subscriptionId,
+                // subscriptionId: subscriptionId,
                 total: total,
                 status: status,
             });
             await bill.save();
 
             if (bill) {
+               
+
                 res.status(200).json({
+                    cart,
                     bill,
-                    message: 'bill added successfully'
+                    message: 'Cart added successfully'
                 })
             }
-            res.status(200).json({
-                cart,
-                message: 'Cart added successfully'
-            })
+            
         }
 
     } catch (error) {
