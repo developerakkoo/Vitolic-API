@@ -5,6 +5,8 @@ const Subscription = require('../Models/subscriptionModel');
 
 const Product = require('../Models/productModel');
 const Bill = require('../Models/billingModel');
+const { customAlphabet } = require('nanoid/async')
+const nanoid = customAlphabet('1234567890', 6);
 const moment = require('moment/moment');
 
 
@@ -125,6 +127,7 @@ exports.addToCart = async (req, res, next) => {
             //const { userId, products, total, status, subscriptionId } = req.body;
             //Bill Created
             let bill = new Bill({
+                invoiceNumber:await nanoid(),
                 products: products,
                 userId: userId,
                 // subscriptionId: subscriptionId,

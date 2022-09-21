@@ -34,7 +34,7 @@ exports.postBill = async (req, res, next) => {
 
 exports.getBill = async (req, res, next) => {
     try {
-        const bill = await Bill.find({});
+        const bill = await Bill.find({}).sort({ _id: -1 });
 
          if(bill){
              res.status(200).json({ status: true, message:'bill fetched successfully', bill: bill })
