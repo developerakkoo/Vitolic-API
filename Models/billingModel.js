@@ -23,7 +23,7 @@ const billingSchema = new Schema({
 
     }],
 
-    paymentStatus: { type: Boolean },
+    paymentStatus: { type: String },
 }, {
     timestamps: true
 });

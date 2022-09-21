@@ -2,7 +2,7 @@ const Cart = require('../Models/cartModel');
 const io = require('../socket');
 const User = require('../Models/userModel');
 const Subscription = require('../Models/subscriptionModel');
-
+const Address = require('../Models/addressModel');
 const Product = require('../Models/productModel');
 const Bill = require('../Models/billingModel');
 const { customAlphabet } = require('nanoid/async')
@@ -101,6 +101,7 @@ exports.addToCart = async (req, res, next) => {
 
         let cartId = await Cart.find({ userId }).populate("userId address");
         cartId = Cart._id;
+        let subscription;
 
         //2.  Create Sub here
         if (isNormal) {
@@ -115,7 +116,7 @@ exports.addToCart = async (req, res, next) => {
 
         if (isCustom) {
             let subscription = new Subscription({
-                cartId: cartId,
+                //cartId: cartId,
                 userId: userId,
                 customStartDate: customStartDate,
                 customEndDate: moment(customStartDate).add(30, 'd').toDate().toISOString()
@@ -132,14 +133,14 @@ exports.addToCart = async (req, res, next) => {
                 userId: userId,
                 // subscriptionId: subscriptionId,
                 amount: total,
-                status: status,
+                paymentStatus: status,
 
             });
             await bill.save();
 
             if (bill) {
-                const bill = await Bill.findById({userId});
-                const subscription = await Subscription.findOneAndUpdate({ userId: userId },{billId:bill._id})
+                //const bill = await Bill.findById({userId});
+                //const subscription = await Subscription.findOneAndUpdate({ userId: userId },{billId:bill._id})
 
                 res.status(200).json({
                     cart,

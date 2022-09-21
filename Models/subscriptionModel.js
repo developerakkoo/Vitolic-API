@@ -4,50 +4,50 @@ const Schema = mongoose.Schema;
 
 
 const subscriptionSchema = new Schema({
-    
-    userId:{ type: Schema.Types.ObjectId, ref: 'User'},
-    billId:{ type: Schema.Types.ObjectId, ref: 'Billing'},
-    cartId:{ type: Schema.Types.ObjectId, ref: 'Cart'},
 
-  
-    isNormal:{
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
+    billId: { type: Schema.Types.ObjectId, ref: 'Billing' },
+    cartId: { type: Schema.Types.ObjectId, ref: 'Cart' },
+
+
+    isNormal: {
         type: Boolean
 
     },
-    isCustom:{
+    isCustom: {
         type: Boolean
     },
 
     customStartDate: {
-        type: Date
+        type: String
     },
-    customEndDate:{
-        type: Date
-    },
-    
-    startDate:{
-        type: Date
-    },
-    endDate:{
-        type: Date
+    customEndDate: {
+        type: String
     },
 
-    days:[
+    startDate: {
+        type: String
+    },
+    endDate: {
+        type: String
+    },
+
+    days: [
         {
-           count:{
-            type: Number
-           },
-           name: {
-            type: String
-           }
+            count: {
+                type: Number
+            },
+            name: {
+                type: String
+            }
         }
     ],
     deliveryFrequency: {
         type: String,
-        enum:['DAILY', 'ALTERNATE', 'ONETIME']
+        enum: ['DAILY', 'ALTERNATE', 'ONETIME']
         //required: [true, 'Delivery Frequency is required']
     },
- 
+
 })
 
 
