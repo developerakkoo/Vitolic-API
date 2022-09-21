@@ -10,9 +10,14 @@ const subscriptionSchema = new Schema({
     cartId:{ type: Schema.Types.ObjectId, ref: 'Cart'},
 
   
+    isNormal:{
+        type: Boolean
+
+    },
     isCustom:{
         type: Boolean
     },
+
     customStartDate: {
         type: Date
     },
