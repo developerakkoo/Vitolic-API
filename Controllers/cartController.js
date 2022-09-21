@@ -2,6 +2,8 @@ const Cart = require('../Models/cartModel');
 const io = require('../socket');
 const User = require('../Models/userModel');
 const Product = require('../Models/productModel');
+const Bill = require('../Models/billingModel');
+
 
 exports.getCartByCartId = async (req, res, next) => {
     try {
@@ -79,7 +81,7 @@ exports.getCart = async (req, res, next) => {
 
 exports.addToCart = async (req, res, next) => {
     try {
-        const { userId, products, total, status, address } = req.body;
+        const { userId, products, total, status, address, subscriptionId } = req.body;
 
         console.log("ADD TO CART METHOD");
         let cart = new Cart({
@@ -92,6 +94,23 @@ exports.addToCart = async (req, res, next) => {
         await cart.save();
 
         if (cart) {
+            //const { userId, products, total, status, subscriptionId } = req.body;
+
+            let bill = new Bill({
+                products: products,
+                userId: userId,
+                subscriptionId: subscriptionId,
+                total: total,
+                status: status,
+            });
+            await bill.save();
+
+            if (bill) {
+                res.status(200).json({
+                    bill,
+                    message: 'bill added successfully'
+                })
+            }
             res.status(200).json({
                 cart,
                 message: 'Cart added successfully'
@@ -104,7 +123,6 @@ exports.addToCart = async (req, res, next) => {
             message: error.message
         })
     }
-
 }
 
 
