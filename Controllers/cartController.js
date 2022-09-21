@@ -94,7 +94,6 @@ exports.addToCart = async (req, res, next) => {
             total: total,
             status: status,
             address: address,
-            amount: total
         });
         await cart.save();
 
@@ -129,8 +128,9 @@ exports.addToCart = async (req, res, next) => {
                 products: products,
                 userId: userId,
                 // subscriptionId: subscriptionId,
-                total: total,
+                amount: total,
                 status: status,
+
             });
             await bill.save();
 
