@@ -1,8 +1,11 @@
 const Cart = require('../Models/cartModel');
 const io = require('../socket');
 const User = require('../Models/userModel');
+const Subscription = require('../Models/subscriptionModel');
+
 const Product = require('../Models/productModel');
 const Bill = require('../Models/billingModel');
+const moment = require('moment/moment');
 
 
 exports.getCartByCartId = async (req, res, next) => {
@@ -81,7 +84,7 @@ exports.getCart = async (req, res, next) => {
 
 exports.addToCart = async (req, res, next) => {
     try {
-        const { userId, products, total, status, address, subscriptionId } = req.body;
+        const { userId, products, total, status, address, isCustom, isNormal, startDate, customStartDate } = req.body;
 
         console.log("ADD TO CART METHOD");
         //Order Created
@@ -90,14 +93,34 @@ exports.addToCart = async (req, res, next) => {
             userId: userId,
             total: total,
             status: status,
-            address: address
+            address: address,
+            amount: total
         });
         await cart.save();
-        
-        
+
+        let cartId = await Cart.find({ userId }).populate("userId address");
+        cartId = Cart._id;
+
         //2.  Create Sub here
+        if (isNormal) {
+            let subscription = new Subscription({
+                cartId: cartId,
+                userId: userId,
+                startDate: startDate,
+                endDate: moment(startDate).add(30, 'd').toDate().toISOString()
+            });
+            await subscription.save();
+        }
 
-
+        if (isCustom) {
+            let subscription = new Subscription({
+                cartId: cartId,
+                userId: userId,
+                customStartDate: customStartDate,
+                customEndDate: moment(customStartDate).add(30, 'd').toDate().toISOString()
+            });
+            await subscription.save();
+        }
 
         if (cart) {
             //const { userId, products, total, status, subscriptionId } = req.body;
@@ -112,15 +135,17 @@ exports.addToCart = async (req, res, next) => {
             await bill.save();
 
             if (bill) {
-               
+                const bill = await Bill.findById({userId});
+                const subscription = await Subscription.findOneAndUpdate({ userId: userId },{billId:bill._id})
 
                 res.status(200).json({
                     cart,
                     bill,
+                    subscription,
                     message: 'Cart added successfully'
                 })
             }
-            
+
         }
 
     } catch (error) {
