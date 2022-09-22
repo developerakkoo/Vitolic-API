@@ -58,7 +58,7 @@ exports.getCartByUserId = async (req, res, next) => {
 exports.getCart = async (req, res, next) => {
     try {
 
-        const cart = await Cart.find({}).sort({ _id: -1 }).populate("userId address");
+        const cart = await Cart.find({}).sort({ createdAt: -1 }).populate("userId address");
         //let { isDelivered } = cart;
         //console.log(isDelivered)
         //let isDelivered = cart.isDelivered
@@ -86,7 +86,7 @@ exports.getCart = async (req, res, next) => {
 
 exports.addToCart = async (req, res, next) => {
     try {
-        const { userId, products, total, status, address, isCustom, isNormal, isAlternate, startDate, customStartDate } = req.body;
+        const { userId, products, total, status, address, isCustom, isNormal, isAlternate, startDate, customStartDate, count, name } = req.body;
 
         console.log("ADD TO CART METHOD");
         //Order Created
@@ -110,7 +110,8 @@ exports.addToCart = async (req, res, next) => {
                 cartId: cartId,
                 userId: userId,
                 startDate: startDate,
-                endDate: moment(startDate).add(30, 'd').toDate().toISOString()
+                endDate: moment(startDate).add(30, 'd').toDate().toISOString(),
+                deliveryFrequency: 'DAILY',
             });
             await subscription.save();
         }
@@ -120,17 +121,21 @@ exports.addToCart = async (req, res, next) => {
                 cartId: cartId,
                 userId: userId,
                 startDate: startDate,
-                endDate: moment(startDate).add(15, 'd').toDate().toISOString()
+                endDate: moment(startDate).add(15, 'd').toDate().toISOString(),
+                deliveryFrequency: 'ALTERNATE'
             });
             await subscription.save();
         }
 
         if (isCustom) {
             subscription = new Subscription({
-                //cartId: cartId,
+                cartId: cartId,
                 userId: userId,
+                count: count,
+                name: name,
                 customStartDate: customStartDate,
-                customEndDate: moment(customStartDate).add(30, 'd').toDate().toISOString()
+                customEndDate: moment(customStartDate).add(30, 'd').toDate().toISOString(),
+                deliveryFrequency: 'CUSTOM'
             });
             await subscription.save();
         }

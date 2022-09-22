@@ -49,7 +49,7 @@ const subscriptionSchema = new Schema({
     ],
     deliveryFrequency: {
         type: String,
-        enum: ['DAILY', 'ALTERNATE', 'ONETIME']
+        enum: ['DAILY', 'ALTERNATE', 'ONETIME', 'CUSTOM']
         //required: [true, 'Delivery Frequency is required']
     },
 
