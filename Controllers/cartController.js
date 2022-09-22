@@ -101,6 +101,7 @@ exports.addToCart = async (req, res, next) => {
 
         let cartId = await Cart.find({ userId }).populate("userId address");
         cartId = Cart._id;
+        console.log(cartId)
         let subscription;
 
         //2.  Create Sub here
@@ -134,6 +135,9 @@ exports.addToCart = async (req, res, next) => {
             await subscription.save();
         }
 
+        const subscription1 = await Subscription.findOneAndUpdate({ userId: userId }, { cartId: cart._id })
+        //console.log(subscription1)
+
         if (cart) {
             //const { userId, products, total, status, subscriptionId } = req.body;
             //Bill Created
@@ -147,11 +151,15 @@ exports.addToCart = async (req, res, next) => {
 
             });
             await bill.save();
+            const subscription = await Subscription.findOneAndUpdate({ userId: userId }, { billId: bill._id })
+            //console.log(subscription)
 
             if (bill) {
-                /* const bill = await Bill.find({ invoiceNumber });
-                console.log(bill._id)
-                const subscription = await Subscription.findOneAndUpdate({ userId }, { billId: bill._id }) */
+                /* let billid = await Bill.find({userId});
+                 let {_id}= billid
+                _id = await Bill._id;
+                console.log(_id) */
+
 
                 res.status(200).json({
                     cart,
