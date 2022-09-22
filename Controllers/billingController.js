@@ -58,7 +58,7 @@ exports.getBillById = async (req, res, next) => {
     try {
         const id = req.params.id;
 
-        const bill = await Bill.findById(id);
+        const bill = await Bill.findById(id).populate('userId');
 
         if (bill) {
             res.status(200).json({ bill, message: 'bill found' })
