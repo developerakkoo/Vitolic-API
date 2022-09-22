@@ -8,8 +8,9 @@ const subscriptionSchema = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: 'User' },
     billId: { type: Schema.Types.ObjectId, ref: 'Billing' },
     cartId: { type: Schema.Types.ObjectId, ref: 'Cart' },
+    productId: { type: String },
 
-
+    daysremaining: { type: String },
     isNormal: {
         type: Boolean
 
