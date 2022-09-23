@@ -7,7 +7,7 @@ const nanoid = customAlphabet('1234567890', 6);
 var moment = require('moment');
 
 exports.postSubscription = async (req, res, next) => {
-   
+
     const orderId = await nanoid();
     const userId = req.body.userId;
     const invoiceNumber = req.body.invoiceNumber;
@@ -39,17 +39,17 @@ exports.postSubscription = async (req, res, next) => {
         });
         io.getIO().emit('subscription:create', { action: 'created', subscription })
 
-        if(subscription){
+        if (subscription) {
             let bill = new Bill({
                 products: milk,
                 userId: userId,
                 subscriptionId: invoiceNumber,
-                orderId:orderId,
+                orderId: orderId,
                 //total: total,
                 //status: status,
             });
 
-             bill.save();
+            bill.save();
 
             if (bill) {
                 res.status(200).json({
@@ -74,6 +74,7 @@ exports.getSubscription = async (req, res, next) => {
 
         let subscription = await Subscription.find({}).sort({ createdAt: -1 });
         if (subscription) {
+
             res.status(200).json({ success: true, subscription })
         }
     } catch (error) {
@@ -99,7 +100,7 @@ exports.getSubscriptionByUserId = async (req, res, next) => {
     try {
         const id = req.params.id;
 
-        const subscription = await Subscription.find({ userId: id });
+        const subscription = await Subscription.find({ userId: id }).populate('userId cartId billId');
 
         if (subscription) {
             res.status(200).json({ success: true, subscription })
@@ -260,6 +261,24 @@ exports.customDate2 = async (req, res, next) => {
         //console.log(dateArray.length);
         if (user) {
             res.status(201).json({ status: 'success', totalDays, user, message: 'Dates updated successfully!' });
+
+        }
+
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
+}
+
+exports.pause = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const isPause = req.body.isPause;
+        const extend = req.body.extend;
+        const subscription = await Subscription.findOneAndUpdate({ userId: id }, req.body);
+
+        if (subscription) {
+            res.status(201).json({ status: 'success', daysExtendedfor:extend, subscription: subscription, message: 'Subscription paused successfully!' });
+            io.getIO.emit('subscriptionpause:update', { subscription: subscription });
 
         }
 

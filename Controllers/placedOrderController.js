@@ -1,5 +1,5 @@
 const PlacedOrder = require('../Models/placeOrderModel');
-const Cart = require('../Models/cartModel');
+const Cart = require('../Models/orderModel');
 const Razorpay = require('razorpay');
 const User = require('../Models/userModel');
 const io = require('./../socket');

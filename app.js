@@ -11,7 +11,7 @@ const morgan = require("morgan");
 const swaggerUi = require('swagger-ui-express');
 
 //modal
-const Cart = require("./Models/cartModel");
+const Cart = require("./Models/orderModel");
 const Product = require("./Models/productModel");
 const User = require("./Models/userModel");
 const PlaceOrder = require('./Models/placeOrderModel')
@@ -26,11 +26,11 @@ const userRoute = require("./Routes/userRoute");
 const userOrdersRoute = require("./Routes/userOrdersRoute");
 const userAuthRoute = require("./Routes/userAuthRoute");
 const placeRoute = require("./Routes/placeOrderRoute");
-const orderRoute = require("./Routes/orderRoute");
+const orderRoute = require("./Routes/paymentRoute");
 const addressRoute = require("./Routes/addressRoute");
 const boyRoute = require("./Routes/DeliveryBoyRoute");
 const slotRoute = require("./Routes/slotroute");
-const cartRoute = require("./Routes/cartRoute");
+const cartRoute = require("./Routes/orderRoute");
 const couponRoute = require("./Routes/cuponRoute");
 const pincodeRoute = require("./Routes/pincodeRoute");
 const bannerRoute = require("./Routes/bannerRoute");

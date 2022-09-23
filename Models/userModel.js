@@ -43,7 +43,7 @@ const userSchema = new Schema({
   isOnline: { type: Boolean, default: false },
 
 
-  sunday: { type: Number, default: 0 },
+  /* sunday: { type: Number, default: 0 },
 
   monday: { type: Number, default: 0 },
 
@@ -55,7 +55,7 @@ const userSchema = new Schema({
 
   friday: { type: Number, default: 0 },
 
-  saturday: { type: Number, default: 0 },
+  saturday: { type: Number, default: 0 }, */
 
 
 
@@ -82,7 +82,7 @@ const userSchema = new Schema({
   },
 
 
-  isMonth: { type: Boolean, default: false },
+  /* isMonth: { type: Boolean, default: false },
 
   isAlternate: { type: Boolean, default: false },
 
@@ -90,7 +90,7 @@ const userSchema = new Schema({
 
   endDate: { type: String, default: 'NA' },
 
-  dateArray: [],
+  dateArray: [], */
 
 }, {
   timestamps: true

@@ -7,7 +7,13 @@ exports.postAddress = async(req, res, next) => {
     try{
             const userId = req.body.userId;
             const googleAdd = req.body.googleadd;   
-            const useradd = req.body.useradd;
+            const addLine1 = req.body.addLine1;
+            const addLine2 = req.body.addLine2;
+            const state = req.body.state;
+            const city = req.body.city;
+            const landmark = req.body.landmark;
+            const society = req.body.society;
+            const pincode = req.body.pincode; 
             const coordinates = req.body.coordinates;
             
            

@@ -18,6 +18,14 @@ const router = express.Router();
  * 
  */
 router.get('/bill',  billingController.getBill);
+
+router.get('/bill/date',  billingController.getBillByDate);
+
+router.get('/bill/week',  billingController.getBillByWeek);
+
+router.get('/bill/month',  billingController.getBillByMonth);
+
+
 /**
  * @swagger
  * /billing/{id}:
@@ -32,6 +40,21 @@ router.get('/bill',  billingController.getBill);
  * 
  */
 router.get('/bill/:id',  billingController.getBillById);
+
+/**
+ * @swagger
+ * /bill/invoice/{id}:
+ *  get:
+ *      description: get  billing using id
+ *      tags:
+ *          - billing
+ * 
+ *      responses:
+ *         200:
+ *              description: Success  
+ * 
+ */
+ router.get('/bill/invoice/:id',  billingController.getBillByInvoice);
 
 
 //save a billing

@@ -37,7 +37,15 @@ const subscriptionSchema = new Schema({
     endDate: {
         type: String
     },
+    isPause: {
+        type: Boolean
 
+    },
+    isResume: {
+        type: Boolean
+
+    },
+    extend: { type: Number },
     days: [
         {
             count: {

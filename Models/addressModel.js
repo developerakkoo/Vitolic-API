@@ -10,10 +10,27 @@ const addressSchema = new Schema({
         required:[true, 'User is required for saving Address']
     },
 
-useradd:{
+addLine1:{
 	type:String
 },
-
+addLine2:{
+	type:String
+},
+state:{
+	type:String
+},
+city:{
+	type:String
+},
+landmark:{
+	type:String
+},
+society:{
+	type:String
+},
+pincode:{
+	type:String
+},
 coordinates:{
         type: [Number],
         required: true, 

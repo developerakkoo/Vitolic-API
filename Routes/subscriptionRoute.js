@@ -112,7 +112,6 @@ router.get('/subscription',  subscriptionController.getSubscription);
  * 
  */
  router.get('/subscription/user/:id',  subscriptionController.getSubscriptionByUserId);
-
  
 
 /**
