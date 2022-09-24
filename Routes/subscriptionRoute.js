@@ -131,6 +131,9 @@ router.get('/subscription',  subscriptionController.getSubscription);
  */
 router.put('/subscription/:id',  subscriptionController.updateSubscription);
 
+router.put('/subscription/pause/:id',  subscriptionController.pause);
+
+
 /**
  * @swagger
  * /subscription/{id}:
