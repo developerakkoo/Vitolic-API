@@ -4,40 +4,44 @@ const Schema = mongoose.Schema;
 
 const boySchema = new Schema({
 
-    fullName:{
+    fullName: {
         type: String,
-      
+
     },
-   
-    email:{
+
+    email: {
         type: String,
         required: [true, 'Email is required']
     },
 
-    password:{
+    password: {
         type: String,
         required: [true, 'Password is required']
     },
-    contactNumber:{
+    contactNumber: {
         type: String,
-        
+
     },
-   
-    cordinates:{
+
+    cordinates: {
         type: [Number]
     },
 
     resetPasswordToken: {
-      type: String
+        type: String
     },
-    
-    expiredPasswordToken:{
-    type: String,
+
+    expiredPasswordToken: {
+        type: String,
     },
-      
+
     isOnline: { type: Boolean, default: false },
- 
-    
+
+    landmark: {
+        type: String,
+    },
+
+    pincode: { type: Number },
 
 }, {
     timestamps: true

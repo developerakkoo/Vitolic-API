@@ -25,7 +25,7 @@ const userSchema = new Schema({
 
   couponCode: {
     type: String, default: "NA"
- 
+
   },
 
   resetPasswordToken: {
@@ -42,7 +42,8 @@ const userSchema = new Schema({
 
   isOnline: { type: Boolean, default: false },
 
-
+  firebaseToken: { type: String },
+  
   /* sunday: { type: Number, default: 0 },
 
   monday: { type: Number, default: 0 },
