@@ -36,14 +36,19 @@ const userSchema = new Schema({
     type: String,
   },
 
-  address: {
+  /* address: {
     type: String,
+  }, */
+
+  addressId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Address',
   },
 
   isOnline: { type: Boolean, default: false },
 
   firebaseToken: { type: String },
-  
+
   /* sunday: { type: Number, default: 0 },
 
   monday: { type: Number, default: 0 },

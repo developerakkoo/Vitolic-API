@@ -6,7 +6,6 @@ const io = require('./../socket');
 exports.postAddress = async(req, res, next) => {
     try{
             const userId = req.body.userId;
-            const googleAdd = req.body.googleadd;   
             const addLine1 = req.body.addLine1;
             const addLine2 = req.body.addLine2;
             const state = req.body.state;
