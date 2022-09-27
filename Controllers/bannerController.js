@@ -12,7 +12,7 @@ exports.createBanner = async (req, res, next) => {
     console.log(imageUrl);
 
     let banner = new Banner({
-        imageUrl: req.protocol + '://' + req.hostname + ":" + process.env.PORT + '/' + imageUrl
+        imageUrl: req.protocol + '://' + req.hostname + '/' + imageUrl
     })
 
     banner.save().then((result) => {
@@ -74,7 +74,7 @@ exports.updateBanner = async (req, res, next) => {
         console.log(imageUrl);
 
         let banner = await Banner.findByIdAndUpdate(req.params.id, {
-            imageUrl: req.protocol + '://' + req.hostname + ":" + process.env.PORT + '/' + imageUrl
+            imageUrl: req.protocol + '://' + req.hostname + '/' + imageUrl
         })
     } catch (error) {
         res.status(500).send(error.message);
