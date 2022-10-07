@@ -25,6 +25,7 @@ router.get('/bill/week',  billingController.getBillByWeek);
 
 router.get('/bill/month',  billingController.getBillByMonth);
 
+router.get('/bill/user/:id',  billingController.getBillByUserId);
 
 /**
  * @swagger

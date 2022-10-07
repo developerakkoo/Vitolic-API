@@ -69,6 +69,20 @@ exports.getBillById = async (req, res, next) => {
     }
 }
 
+exports.getBillByUserId = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+
+        const bill = await Bill.find({userId:id});
+
+        if (bill) {
+            res.status(200).json({ bill, message: 'bill found' })
+        }
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
+}
+
 exports.getBillByInvoice = async (req, res, next) => {
     try {
         const id = req.params.invoiceNumber;
