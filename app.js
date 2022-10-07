@@ -40,6 +40,8 @@ const refundRoute = require("./Routes/refundRoute");
 const subscriptionRoute = require("./Routes/subscriptionRoute");
 const petProductRoute = require("./Routes/petProductRoute");
 const billRoute = require("./Routes/billingRoute");
+const promoRoute = require("./Routes/promoRoute");
+
 //const categoryRoute = require("./Routes/categoryRoute");
 //Error Handlers
 const errorController = require("./Controllers/errorController");
@@ -173,6 +175,7 @@ app.use(bannerRoute);
 app.use(subAdminRoute);
 app.use(refundRoute);
 app.use(subscriptionRoute);
+app.use(promoRoute);
 // app.use(petProductRoute);
 //app.use(categoryRoute);
 app.use(globalErrorHandler);
