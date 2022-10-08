@@ -1,4 +1,5 @@
 const PlacedOrder = require('../Models/placeOrderModel');
+const Product = require('../Models/productModel');
 const Cart = require('../Models/orderModel');
 const Razorpay = require('razorpay');
 const User = require('../Models/userModel');
@@ -112,6 +113,8 @@ exports.placeOrder = async (req, res, next) => {
             res.status(200).json({ status: 'Coupon Code is not valid' });
         }
         order.save();
+
+        let product = await Product.findOneAndUpdate({ productId: Product._id }, { $inc: { stock: -quantity } });
 
         if (order) {
             res.status(200).json({ status: 'success', order });

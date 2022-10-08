@@ -171,7 +171,7 @@ exports.addToCart = async (req, res, next) => {
             const bill1 = await Bill.findOneAndUpdate({ userId: userId }, { subscriptionId: subscription._id, orderId: cart._id })
 
             //console.log(subscription)
-
+            let cartSub = await Cart.findOneAndUpdate({ userId: userId }, { subscription: subscription._id})
             if (bill) {
                 /* let billid = await Bill.find({userId});
                  let {_id}= billid
@@ -180,7 +180,7 @@ exports.addToCart = async (req, res, next) => {
 
 
                 res.status(200).json({
-                    cart,
+                    cartSub,
                     bill1,
                     subscription,
                     message: 'Cart added successfully'
@@ -239,12 +239,13 @@ exports.orderDelivered = async (req, res, next) => {
 
         let isDelivered = true;
         const cart1 = await Cart.findOneAndUpdate({ _id: cartId }, isDelivered, { $inc: { amount: -1 } });
-
+        const subscription = await Subscription.findOneAndUpdate({ _id: cartId },{ $inc: { daysRemaining: -1 } })
 
         if (cart1) {
             res.status(200).json({
                 message: 'Order Delivered',
-                cart
+                cart1,
+                subscription
             })
             io.getIO().emit('order:delivered', cartId);
 

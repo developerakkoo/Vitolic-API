@@ -28,6 +28,7 @@ const cartSchema = new Schema({
     }],
     userId:{ type: Schema.Types.ObjectId, ref: 'User'},
     address:{ type: Schema.Types.ObjectId, ref: 'Address'},
+    subscription:{ type: Schema.Types.ObjectId, ref: 'Subscription'},
 
     status:{ type: String},
 

@@ -37,15 +37,16 @@ const subscriptionSchema = new Schema({
     endDate: {
         type: String
     },
-    isPause: {
-        type: Boolean
+
+    isActive: {
+        type: Boolean, default: true
 
     },
-    isResume: {
-        type: Boolean
 
+    daysRemaining: {
+        type: Number
     },
-    extend: { type: Number },
+
     days: [
         {
             count: {
@@ -56,6 +57,7 @@ const subscriptionSchema = new Schema({
             }
         }
     ],
+
     deliveryFrequency: {
         type: String,
         enum: ['DAILY', 'ALTERNATE', 'ONETIME', 'CUSTOM']
