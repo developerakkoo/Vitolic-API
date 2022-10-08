@@ -278,6 +278,21 @@ exports.updateUserCoupon = async (req, res, next) => {
     }
 }
 
+exports.updateUserWallet = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        let walletCashbackAvailable = req.body.walletCashbackAvailable
+
+        const user = await User.findOneAndUpdate({ _id: id }, { $inc: { walletCashbackAvailable: walletCashbackAvailable } });
+
+        if (user) {
+            res.status(201).json({ status: 'success', user: user, message: 'Profile updated successfully!' });
+        }
+
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
+}
 
 exports.deleteUserProfile = async (req, res, next) => {
     try {
