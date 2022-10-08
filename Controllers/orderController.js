@@ -240,7 +240,7 @@ exports.orderDelivered = async (req, res, next) => {
 
         let isDelivered = true;
         const cart1 = await Cart.findOneAndUpdate({ _id: cartId }, isDelivered, { $inc: { amount: -1 } });
-        const subscription = await Subscription.findOneAndUpdate({ _id: cartId },{ $inc: { daysRemaining: -1 } })
+        const subscription = await Subscription.findOneAndUpdate({ cartId: cartId },{ $inc: { daysRemaining: -1 } })
 
         if (cart1) {
             res.status(200).json({
