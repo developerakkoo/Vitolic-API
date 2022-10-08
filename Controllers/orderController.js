@@ -87,7 +87,7 @@ exports.getCart = async (req, res, next) => {
 
 exports.addToCart = async (req, res, next) => {
     try {
-        const { userId, products, productId, total, status, address, isCustom, isNormal, isAlternate, startDate, days, count, name } = req.body;
+        const { userId, products, productId, total, status, address, isCustom, isNormal, isAlternate, startDate, days, count, name, daysRemaining } = req.body;
 
         console.log("ADD TO CART METHOD");
         //Order Created
@@ -113,6 +113,7 @@ exports.addToCart = async (req, res, next) => {
                 cartId: cartId,
                 userId: userId,
                 startDate: startDate,
+                daysRemaining:daysRemaining,
                 endDate: moment(startDate).add(30, 'd').toDate().toISOString(),
                 deliveryFrequency: deliveryFrequency,
             });
