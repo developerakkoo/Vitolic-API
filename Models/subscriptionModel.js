@@ -47,16 +47,7 @@ const subscriptionSchema = new Schema({
         type: Number
     },
 
-    days: [
-        {
-            count: {
-                type: Number
-            },
-            name: {
-                type: String
-            }
-        }
-    ],
+    days: [{}],
 
     deliveryFrequency: {
         type: String,

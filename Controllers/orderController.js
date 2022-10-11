@@ -13,7 +13,7 @@ const moment = require('moment/moment');
 exports.getCartByCartId = async (req, res, next) => {
     try {
 
-        const cart = await Cart.findById(req.params.id).populate("userId address");
+        const cart = await Cart.findById(req.params.id).populate("userId address subscription");
 
         if (cart) {
             res.status(200).json({
@@ -36,7 +36,7 @@ exports.getCartByCartId = async (req, res, next) => {
 exports.getCartByUserId = async (req, res, next) => {
     try {
 
-        const cart = await Cart.find({ userId: req.params.id }).populate("userId address");
+        const cart = await Cart.find({ userId: req.params.id }).populate("userId address subscription");
 
         if (cart) {
             res.status(200).json({
@@ -58,7 +58,7 @@ exports.getCartByUserId = async (req, res, next) => {
 exports.getCart = async (req, res, next) => {
     try {
 
-        const cart = await Cart.find({}).sort({ createdAt: -1 }).populate("userId address");
+        const cart = await Cart.find({}).sort({ createdAt: -1 }).populate("userId address subscription");
 
         //let { isDelivered } = cart;
         //console.log(isDelivered)
@@ -88,7 +88,7 @@ exports.getCart = async (req, res, next) => {
 exports.addToCart = async (req, res, next) => {
     try {
         const { userId, products, productId, total, status, address, isCustom, isNormal, isAlternate, startDate, days, count, name, daysRemaining } = req.body;
-
+        let dates = days.split(",")
         console.log("ADD TO CART METHOD");
         //Order Created
         let cart = new Cart({
@@ -99,7 +99,7 @@ exports.addToCart = async (req, res, next) => {
             address: address,
         });
         await cart.save();
-
+        console.log(status)
         let cartId = await Cart.find({ userId }).populate("userId address");
         cartId = Cart._id;
         //console.log(cartId)
@@ -113,7 +113,7 @@ exports.addToCart = async (req, res, next) => {
                 cartId: cartId,
                 userId: userId,
                 startDate: startDate,
-                daysRemaining:daysRemaining,
+                daysRemaining: daysRemaining,
                 endDate: moment(startDate).add(30, 'd').toDate().toISOString(),
                 deliveryFrequency: deliveryFrequency,
             });
@@ -141,7 +141,7 @@ exports.addToCart = async (req, res, next) => {
                 productId: productId,
                 cartId: cartId,
                 userId: userId,
-                days: { $push: { $days: [{ count: Number, name: String }] } },
+                days: dates,
                 //days: ,
                 //name: name,
                 startDate: startDate,
@@ -172,7 +172,7 @@ exports.addToCart = async (req, res, next) => {
             const bill1 = await Bill.findOneAndUpdate({ userId: userId }, { subscriptionId: subscription._id, orderId: cart._id })
 
             //console.log(subscription)
-            let cartSub = await Cart.findOneAndUpdate({ userId: userId }, { subscription: subscription._id})
+            let cartSub = await Cart.findOneAndUpdate({ userId: userId }, { subscription: subscription._id })
             if (bill) {
                 /* let billid = await Bill.find({userId});
                  let {_id}= billid
@@ -240,7 +240,7 @@ exports.orderDelivered = async (req, res, next) => {
 
         let isDelivered = true;
         const cart1 = await Cart.findOneAndUpdate({ _id: cartId }, isDelivered, { $inc: { amount: -1 } });
-        const subscription = await Subscription.findOneAndUpdate({ cartId: cartId },{ $inc: { daysRemaining: -1 } })
+        const subscription = await Subscription.findOneAndUpdate({ cartId: cartId }, { $inc: { daysRemaining: -1 } })
 
         if (cart1) {
             res.status(200).json({
