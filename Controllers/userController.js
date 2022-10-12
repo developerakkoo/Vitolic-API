@@ -281,9 +281,9 @@ exports.updateUserCoupon = async (req, res, next) => {
 exports.updateUserWallet = async (req, res, next) => {
     try {
         const id = req.params.id;
-        let walletCashbackAvailable = req.body.walletCashbackAvailable
+        let rechargeAmount = req.body.rechargeAmount
 
-        const user = await User.findOneAndUpdate({ _id: id }, { $sum: { walletCashbackAvailable: walletCashbackAvailable } });
+        const user = await User.findOneAndUpdate({ _id: id }, { $inc: { walletCashbackAvailable: rechargeAmount } });
 
         if (user) {
             res.status(201).json({ status: 'success', user: user, message: 'Profile updated successfully!' });
