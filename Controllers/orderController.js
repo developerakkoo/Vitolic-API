@@ -89,7 +89,7 @@ exports.getCart = async (req, res, next) => {
 exports.addToCart = async (req, res, next) => {
     try {
         const { userId, products, productId, total, status, address, isCustom, isNormal, isAlternate, startDate, endDate, days, count, name, daysRemaining } = req.body;
-        let dates = days.split(",")
+        
         console.log("ADD TO CART METHOD");
         //Order Created
         let cart = new Cart({
@@ -143,7 +143,7 @@ exports.addToCart = async (req, res, next) => {
                 productId: productId,
                 cartId: cartId,
                 userId: userId,
-                days: dates,
+                days: days,
                 //days: ,
                 //name: name,
                 startDate: startDate,
