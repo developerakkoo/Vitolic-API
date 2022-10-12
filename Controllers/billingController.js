@@ -34,7 +34,7 @@ exports.postBill = async (req, res, next) => {
 
 exports.getBill = async (req, res, next) => {
     try {
-        const bill = await Bill.find({}).sort({ createdAt: -1 });
+        const bill = await Bill.find({}).sort({ createdAt: -1 }).populate('userId subscriptionId orderId');
 
         if (bill) {
 
@@ -73,7 +73,7 @@ exports.getBillByUserId = async (req, res, next) => {
     try {
         const id = req.params.id;
 
-        const bill = await Bill.find({userId:id}).sort({ createdAt: -1 });
+        const bill = await Bill.find({userId:id}).sort({ createdAt: -1 }).populate('userId subscriptionId orderId');
 
         if (bill) {
             res.status(200).json({ bill, message: 'bill found' })

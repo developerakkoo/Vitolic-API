@@ -90,11 +90,11 @@ exports.getCart = async (req, res, next) => {
 exports.addToCart = async (req, res, next) => {
     try {
         const { userId, products, productId, total, status, address, isCustom, isNormal, isAlternate, startDate, endDate, days, count, name, daysRemaining } = req.body;
-        
+
         console.log("ADD TO CART METHOD");
         //Order Created
         let cart = new Cart({
-            orderId:await nanoid(),
+            orderId: await nanoid(),
             products: products,
             userId: userId,
             total: total,
@@ -156,7 +156,6 @@ exports.addToCart = async (req, res, next) => {
             await subscription.save();
         }
 
-        const subscription1 = await Subscription.findOneAndUpdate({ userId: userId }, { cartId: cart._id })
         //console.log(subscription1)
 
         if (cart) {
@@ -172,7 +171,9 @@ exports.addToCart = async (req, res, next) => {
 
             });
             await bill.save();
-            const subscription = await Subscription.findOneAndUpdate({ userId: userId }, { billId: bill._id })
+
+            //const subscription1 = await Subscription.findOneAndUpdate({ userId: userId }, )
+            const subscription = await Subscription.findOneAndUpdate({ userId: userId }, { billId: bill._id },{ cartId: cart._id })
             const bill1 = await Bill.findOneAndUpdate({ userId: userId }, { subscriptionId: subscription._id, orderId: cart._id })
 
             //console.log(subscription)
