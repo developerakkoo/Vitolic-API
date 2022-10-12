@@ -37,16 +37,17 @@ exports.getCartByCartId = async (req, res, next) => {
 exports.getCartByUserId = async (req, res, next) => {
     try {
 
-        const cart = await Cart.find({ userId: req.params.id }).sort({'cart.updatedAt': -1 }).populate("userId address subscription");
+        const cart = await Cart.find({ userId: req.params.id }).sort({ createdAt: -1 }).populate("userId address subscription");
 
         if (cart) {
+
             res.status(200).json({
                 status: true,
                 count: cart.length,
 
                 cart
             })
-        } else { console.log("not found") }
+        }
 
     } catch (error) {
         res.status(500).json({

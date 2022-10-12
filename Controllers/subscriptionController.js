@@ -100,7 +100,7 @@ exports.getSubscriptionByUserId = async (req, res, next) => {
     try {
         const id = req.params.id;
 
-        const subscription = await Subscription.find({ userId: id }).populate('userId cartId billId');
+        const subscription = await Subscription.find({ userId: id }).sort({ createdAt: -1 }).populate('userId cartId billId');
 
         if (subscription) {
             res.status(200).json({ success: true, subscription })
