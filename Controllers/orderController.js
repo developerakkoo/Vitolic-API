@@ -8,6 +8,7 @@ const Bill = require('../Models/billingModel');
 const { customAlphabet } = require('nanoid/async')
 const nanoid = customAlphabet('1234567890', 6);
 const moment = require('moment/moment');
+const { endDate } = require('./subscriptionController');
 
 
 exports.getCartByCartId = async (req, res, next) => {
@@ -87,7 +88,7 @@ exports.getCart = async (req, res, next) => {
 
 exports.addToCart = async (req, res, next) => {
     try {
-        const { userId, products, productId, total, status, address, isCustom, isNormal, isAlternate, startDate, days, count, name, daysRemaining } = req.body;
+        const { userId, products, productId, total, status, address, isCustom, isNormal, isAlternate, startDate, endDate, days, count, name, daysRemaining } = req.body;
         let dates = days.split(",")
         console.log("ADD TO CART METHOD");
         //Order Created
@@ -99,6 +100,7 @@ exports.addToCart = async (req, res, next) => {
             address: address,
         });
         await cart.save();
+
         console.log(status)
         let cartId = await Cart.find({ userId }).populate("userId address");
         cartId = Cart._id;
@@ -128,7 +130,7 @@ exports.addToCart = async (req, res, next) => {
                 cartId: cartId,
                 userId: userId,
                 startDate: startDate,
-                endDate: moment(startDate).add(15, 'd').toDate().toISOString(),
+                endDate: endDate,
                 deliveryFrequency: deliveryFrequency,
             });
             await subscription.save();
@@ -145,7 +147,7 @@ exports.addToCart = async (req, res, next) => {
                 //days: ,
                 //name: name,
                 startDate: startDate,
-                endDate: moment(startDate).add(30, 'd').toDate().toISOString(),
+                endDate: endDate,
                 deliveryFrequency: deliveryFrequency,
             });
             console.log(count);

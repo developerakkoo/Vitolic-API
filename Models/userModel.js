@@ -36,9 +36,9 @@ const userSchema = new Schema({
     type: String,
   },
 
-  /* address: {
+  address: {
     type: String,
-  }, */
+  },
 
   addressId: {
     type: Schema.Types.ObjectId,
@@ -48,22 +48,6 @@ const userSchema = new Schema({
   isOnline: { type: Boolean, default: false },
 
   firebaseToken: { type: String },
-
-  /* sunday: { type: Number, default: 0 },
-
-  monday: { type: Number, default: 0 },
-
-  tuesday: { type: Number, default: 0 },
-
-  wednesday: { type: Number, default: 0 },
-
-  thursday: { type: Number, default: 0 },
-
-  friday: { type: Number, default: 0 },
-
-  saturday: { type: Number, default: 0 }, */
-
-
 
   cart: {
     items: [
@@ -86,17 +70,6 @@ const userSchema = new Schema({
 
 
   },
-
-
-  /* isMonth: { type: Boolean, default: false },
-
-  isAlternate: { type: Boolean, default: false },
-
-  startDate: { type: String, default: 'NA' },
-
-  endDate: { type: String, default: 'NA' },
-
-  dateArray: [], */
 
 }, {
   timestamps: true
