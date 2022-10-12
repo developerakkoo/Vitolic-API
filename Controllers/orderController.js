@@ -37,7 +37,7 @@ exports.getCartByCartId = async (req, res, next) => {
 exports.getCartByUserId = async (req, res, next) => {
     try {
 
-        const cart = await Cart.find({ userId: req.params.id }).populate("userId address subscription");
+        const cart = await Cart.find({ userId: req.params.id }).sort({'cart.updatedAt': -1 }).populate("userId address subscription");
 
         if (cart) {
             res.status(200).json({
@@ -93,6 +93,7 @@ exports.addToCart = async (req, res, next) => {
         console.log("ADD TO CART METHOD");
         //Order Created
         let cart = new Cart({
+            orderId:await nanoid(),
             products: products,
             userId: userId,
             total: total,

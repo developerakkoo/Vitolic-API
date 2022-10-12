@@ -4,18 +4,18 @@ const Schema = mongoose.Schema;
 
 
 const itemSchema = new Schema({
-    products:[{
-        
+    products: [{
+
     }],
-    userId:{ type: Schema.Types.ObjectId, ref: 'User'},
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
 
 
 
-    total:{
+    total: {
         type: Number,
         required: true
     }
-},{
+}, {
     timestamps: true
 })
 
@@ -23,24 +23,24 @@ module.exports = mongoose.model("Item", itemSchema);
 
 
 const cartSchema = new Schema({
-    products:[{
-        
+    products: [{
+
     }],
-    userId:{ type: Schema.Types.ObjectId, ref: 'User'},
-    address:{ type: Schema.Types.ObjectId, ref: 'Address'},
-    subscription:{ type: Schema.Types.ObjectId, ref: 'Subscription'},
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
+    address: { type: Schema.Types.ObjectId, ref: 'Address' },
+    subscription: { type: Schema.Types.ObjectId, ref: 'Subscription' },
+    orderId: { type: Number },
+    status: { type: String },
 
-    status:{ type: String},
-
-    total:{
+    total: {
         type: Number,
         required: true
     },
-    isDelivered:{
+    isDelivered: {
         type: Boolean,
         default: false
     }
-},{
+}, {
     timestamps: true
 });
 
