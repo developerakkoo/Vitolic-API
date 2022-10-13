@@ -3,7 +3,7 @@ const User = require('../Models/userModel');
 const Bill = require('../Models/billingModel');
 const { customAlphabet } = require('nanoid/async')
 const nanoid = customAlphabet('1234567890', 6);
-
+const io = require('../socket');
 var moment = require('moment');
 
 exports.postSubscription = async (req, res, next) => {
