@@ -275,13 +275,13 @@ exports.pause = async (req, res, next) => {
         const id = req.params.id;
         const isActive = req.body.isActive;
         
-        if (isActive == "false") {
+        if (isActive == false) {
             const subscription = await Subscription.findByIdAndUpdate(id, req.body);
             res.status(201).json({ status: 'success', subscription, message: 'Subscription paused successfully!' });
             io.getIO.emit('sub:pause', { subscription: subscription });
         }
 
-        else if (isActive == "true") {
+        else if (isActive == true) {
             const subscription = await Subscription.findByIdAndUpdate({ _id: id }, req.body);
             res.status(201).json({ status: 'success', subscription, message: 'Subscription resumed successfully!' });
             io.getIO.emit('sub:resume', { subscription: subscription });
