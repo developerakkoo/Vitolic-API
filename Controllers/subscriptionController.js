@@ -277,11 +277,11 @@ exports.pause = async (req, res, next) => {
         const subscription = await Subscription.findOneAndUpdate({ _id: id }, req.body);
 
         if (subscription) {
-            if (isPause) {
+            if (!isPause) {
                 res.status(201).json({ status: 'success', subscription, message: 'Subscription paused successfully!' });
                 io.getIO.emit('sub:pause', { subscription: subscription });
             }
-            else if (!isPause) {
+            else if (isPause) {
                 res.status(201).json({ status: 'success', subscription, message: 'Subscription resumed successfully!' });
                 io.getIO.emit('sub:resume', { subscription: subscription });
             }
