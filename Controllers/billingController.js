@@ -73,7 +73,7 @@ exports.getBillByUserId = async (req, res, next) => {
     try {
         const id = req.params.id;
 
-        const bill = await Bill.find({userId:id}).sort({ createdAt: -1 }).populate('userId subscriptionId orderId');
+        const bill = await Bill.find({userId:id}).sort({ createdAt: -1 }).populate('userId subscriptionId cartId');
 
         if (bill) {
             res.status(200).json({ bill, message: 'bill found' })
