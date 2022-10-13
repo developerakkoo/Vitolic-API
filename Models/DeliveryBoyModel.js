@@ -37,11 +37,9 @@ const boySchema = new Schema({
 
     isOnline: { type: Boolean, default: false },
 
-    landmark: {
-        type: String,
-    },
+    boyLandmark: {type: String},
 
-    pincode: { type: Number },
+    boyPincode: { type: Number },
 
 }, {
     timestamps: true

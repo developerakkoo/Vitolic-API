@@ -1,9 +1,13 @@
 const Boy = require('../Models/DeliveryBoyModel');
 const Slot = require('../Models/slotModel');
 const User = require('../Models/userModel');
+const Cart = require('../Models/orderModel');
+const Address = require('../Models/addressModel');
+
 const PlacedOrder = require('../Models/placeOrderModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { AddressContext } = require('twilio/lib/rest/api/v2010/account/address');
 
 
 
@@ -59,8 +63,8 @@ exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     const cordinates = req.body.cordinates;
-    const landmark = req.body.landmark;
-    const pincode = req.body.pincode;
+    const boyLandmark = req.body.boyLandmark;
+    const boyPincode = req.body.boyPincode;
 
     Boy.findOne({ email: email })
         .then(user => {
@@ -78,9 +82,9 @@ exports.postSignup = (req, res, next) => {
                         password: hashedPasswords,
                         fullName: fullName,
                         contactNumber: contactNumber,
-                        cordinates:cordinates,
-                        landmark:landmark,
-                        pincode:pincode,
+                        cordinates: cordinates,
+                        boyLandmark: boyLandmark,
+                        boyPincode: boyPincode,
                     })
 
                     return user.save();
@@ -188,6 +192,120 @@ exports.getBoyAndAssignOrder = async (req, res, next) => {
 
 
     } catch (error) {
+        res.status(500).json({ error: err.message, message: 'Something went wrong!' })
+
+    }
+}
+
+exports.getOrders = async (req, res, next) => {
+    try {
+
+        let boys = await Boy.find({}, "boyLandmark").sort({ createdAt: -1 });
+        //let [ _id]  = boys;
+        //console.log(_id)
+        let deliveryLandmark = [];
+        let orderLandmark = [];
+
+        if (boys) {
+            for (i = 0; i < boys.length; i++) {
+                let { boyLandmark } = boys[i]
+                deliveryLandmark.push(boyLandmark)
+                //console.log(boyLandmark)
+            }
+            let orders = await Cart.find({}, "address").sort({ createdAt: -1 });
+
+            //console.log(address)
+            for (i = 0; i < orders.length; i++) {
+                let { address } = orders[i];
+                if (address) {
+                    const add = await Address.findById({ _id: address });
+                    let { landmark } = add;
+                    orderLandmark.push(landmark)
+
+                    //console.log(landmark)
+                }
+                // console.log(address)
+            }
+
+            //if(boyLandmark==landmark)console.log(landmark)
+        }
+        //console.log(deliveryLandmark, orderLandmark)
+        const result = orderLandmark.map(order => {
+            const addressItem = deliveryLandmark.find(boy => boy === order)
+            
+            order.boy = addressItem 
+            ? addressItem.boy
+            : null
+            
+            return order
+          })
+          
+          console.log(result)
+   
+        /* for (var i = 0; i < deliveryLandmark.length; i++)
+            if (deliveryLandmark[i] == orderLandmark[i])
+                console.log(orderLandmark) */
+        /* for (i = 0; i < deliveryLandmark.length; i++) {
+            for (j = 0; j < orderLandmark; j++) {
+                if (deliveryLandmark[i] == orderLandmark[j]) {
+                    console.log(orderLandmark)
+                }
+            }
+        } */
+        /* if (deliveryLandmark == orderLandmark) {
+            console.log("hello")
+        } */
+        //console.log(orders)
+        /* let {address:{landmark,pincode}}=orders;
+        console.log(landmark,pincode)
+         orders = await Cart.find({},"landmark").sort({ createdAt: -1 }); */
+
+        /* orders.foreach(element => console.log(element))
+        let [address] = orders;
+        let { landmark } = address
+        console.log(landmark); */
+        //console.log(orders);
+        /* const result = orders.map(order => {
+            const addressItem = boys.find(boy => boy.boyLandmark === order.landmark)
+            
+            order.boy = addressItem 
+            ? addressItem.boy
+            : null
+            
+            return order
+          })
+          
+          console.log(result) */
+        /* 
+                let op = boy.map((e,i)=>{
+                    let temp = orders.find(element=> element.landmark === e.boyLandmark)
+                    if(temp.orders) {
+                      e.orders = temp.orders;
+                    }
+                    return e;
+                  })
+                  console.log(op);
+         */
+        /* let [boyPincode, boyLandmark] = boy;
+        console.log(boyPincode, boyLandmark)
+        let [pincode, landmark] = orders;
+        let userpin = orders.pincode;
+        let usermark = orders.landmark;
+        console.log(pincode, landmark)
+ */
+        /* for (i = 0; i < orders.length; i++) {
+            console.log(orders[i])
+        } */
+        //console.log(orders.landmark[i])
+
+        if (boys) {
+            res.status(200).json({
+                message: 'Orders retreived Successfully',
+                boys,
+
+            })
+        }
+    } catch (err) {
         res.status(500).json({ error: err.message, message: 'Something went wrong!' })
 
     }

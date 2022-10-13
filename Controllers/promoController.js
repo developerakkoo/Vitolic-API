@@ -27,6 +27,21 @@ exports.getPromo = async (req, res, next) => {
     }
 }
 
+exports.getPromoByUserId = async (req, res, next) => {
+    try {
+        let userId = req.params.userId
+        let promo = await Promo.findById(userId);
+
+        if (promo) {
+            res.status(200).json({ success: true, promo })
+
+        }
+
+    } catch (error) {
+        res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
+    }
+}
+
 exports.updatePromo = async (req, res, next) => {
     try {
         const id = req.params.id;

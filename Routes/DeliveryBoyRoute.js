@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const boyController = require('../Controllers/DeliveryBoyController');
 
+router.get('/boy/orders',  boyController.getOrders);
 
 /**
  * @swagger
@@ -97,6 +98,7 @@ router.post('/boy/register',  boyController.postSignup);
  *  
  * 
  */
+    
 router.put('/boy/:id',  boyController.updateBoyById);
 /**
  * @swagger
@@ -130,6 +132,8 @@ router.get('/boy/:id',  boyController.getBoyById);
  * 
  */
 router.get('/boy',  boyController.getBoys);
+
+
 /**
  * @swagger
  * /boy/assign/{id}/{orderId}/{slotId}:

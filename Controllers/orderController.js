@@ -103,10 +103,9 @@ exports.addToCart = async (req, res, next) => {
         });
         await cart.save();
 
-        console.log(status)
-        let cartId = await Cart.find({ userId }).populate("userId address");
+        /* let cartId = await Cart.find({ userId }).populate("userId address");
         cartId = Cart._id;
-        //console.log(cartId)
+        //console.log(cartId) */
         let subscription;
         let deliveryFrequency;
         //2.  Create Sub here
@@ -114,7 +113,6 @@ exports.addToCart = async (req, res, next) => {
             deliveryFrequency = 'DAILY';
             subscription = new Subscription({
                 productId: productId,
-                cartId: cartId,
                 userId: userId,
                 startDate: startDate,
                 daysRemaining: daysRemaining,
@@ -129,7 +127,6 @@ exports.addToCart = async (req, res, next) => {
 
             subscription = new Subscription({
                 productId: productId,
-                cartId: cartId,
                 userId: userId,
                 startDate: startDate,
                 endDate: endDate,
@@ -143,7 +140,6 @@ exports.addToCart = async (req, res, next) => {
 
             subscription = new Subscription({
                 productId: productId,
-                cartId: cartId,
                 userId: userId,
                 days: days,
                 //days: ,
@@ -170,28 +166,43 @@ exports.addToCart = async (req, res, next) => {
                 paymentStatus: status,
 
             });
-            await bill.save();
-
-            //const subscription1 = await Subscription.findOneAndUpdate({ userId: userId }, )
-            const subscription = await Subscription.findOneAndUpdate({ userId: userId }, { billId: bill._id },{ cartId: cart._id })
-            const bill1 = await Bill.findOneAndUpdate({ userId: userId }, { subscriptionId: subscription._id, orderId: cart._id })
-
-            //console.log(subscription)
-            let cartSub = await Cart.findOneAndUpdate({ userId: userId }, { subscription: subscription._id })
-            if (bill) {
-                /* let billid = await Bill.find({userId});
-                 let {_id}= billid
-                _id = await Bill._id;
-                console.log(_id) */
-
-
-                res.status(200).json({
-                    cartSub,
-                    bill1,
-                    subscription,
-                    message: 'Cart added successfully'
+            await bill.save()
+                .then((subscription) => {
+                    subscription = Subscription.findByIdAndUpdate({ userId: userId }, { billId: Bill._id }, { cartId: Cart._id })
                 })
-            }
+                .then((bill) => {
+                    bill = Bill.findByIdAndUpdate({ userId: userId }, { subscriptionId: Subscription._id, orderId: Cart._id })
+                })
+                .then((cart) => {
+                    cart = Cart.findByIdAndUpdate({ userId: userId }, { subscription: Subscription._id })
+                    console.log(cart)
+                })
+                .then(
+                    res.status(200).json({
+                        cart,
+                        bill,
+                        subscription,
+                        message: 'Cart added successfully'
+                    })
+                )
+            /* .subscription.findOneAndUpdate({ userId: userId }, { billId: bill._id }, { cartId: cart._id })
+             .then().Bill.findOneAndUpdate({ userId: userId }, { subscriptionId: subscription._id, orderId: cart._id })
+             .then().Cart.findOneAndUpdate({ userId: userId }, { subscription: subscription._id }) */
+
+
+            /* let billid = await Bill.find({userId});
+             let {_id}= billid
+            _id = await Bill._id;
+            console.log(_id) */
+
+
+            /* res.status(200).json({
+                cart,
+                bill,
+                subscription,
+                message: 'Cart added successfully'
+            }) */
+
 
         }
 
