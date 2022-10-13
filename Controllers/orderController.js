@@ -168,27 +168,12 @@ exports.addToCart = async (req, res, next) => {
                     endDate: endDate,
                     deliveryFrequency: deliveryFrequency,
                 });
-
                 await subscription.save();
             }
 
             let subscriptionId = subscription._id;
-            //console.log(subscription1)
 
-
-            /* .then((bill) => {
-                bill = Bill.findOneAndUpdate({_id:billId}, { subscriptionId: subscriptionId })
-            }) */
-
-
-            /* let subscription1 = Subscription.findByIdAndUpdate(subscriptionId, { billId: billId, cartId: cartId })
-            console.log("hello " + billId, cartId)
-            console.log(subscription1);
- */
-            /* .then((cart) => {
-                cart = Cart.findByIdAndUpdate(cartId, { subscription: subscriptionId, billId: billId })
-                console.log(billId,subscriptionId)
-            }) */
+            const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: total } });
 
             if (subscription) {
                 res.status(200).json({
@@ -198,25 +183,6 @@ exports.addToCart = async (req, res, next) => {
                     message: 'Cart added successfully'
                 })
             }
-            /* .subscription.findOneAndUpdate({ userId: userId }, { billId: bill._id }, { cartId: cart._id })
-             .then().Bill.findOneAndUpdate({ userId: userId }, { subscriptionId: subscription._id, orderId: cart._id })
-             .then().Cart.findOneAndUpdate({ userId: userId }, { subscription: subscription._id }) */
-
-
-            /* let billid = await Bill.find({userId});
-             let {_id}= billid
-            _id = await Bill._id;
-            console.log(_id) */
-
-
-            /* res.status(200).json({
-                cart,
-                bill,
-                subscription,
-                message: 'Cart added successfully'
-            }) */
-
-
         }
 
     } catch (error) {
