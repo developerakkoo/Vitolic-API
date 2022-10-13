@@ -42,7 +42,10 @@ const subscriptionSchema = new Schema({
         type: Boolean, default: true
 
     },
+    isPause: {
+        type: Boolean
 
+    },
     daysRemaining: {
         type: Number
     },
