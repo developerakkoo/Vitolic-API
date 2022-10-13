@@ -117,8 +117,9 @@ exports.updateSubscription = async (req, res, next) => {
         let subscription = await Subscription.findOneAndUpdate({ _id: id }, req.body);
 
         if (subscription) {
-            res.status(200).json({ success: true, message: 'Subscription updated successfully', subscription })
             io.getIO().emit('subscription:get', { action: 'updated', subscription })
+
+            res.status(200).json({ success: true, message: 'Subscription updated successfully', subscription })
         }
     } catch (error) {
         res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
@@ -279,15 +280,13 @@ exports.pause = async (req, res, next) => {
         if (isActive == false) {
             const subscription = await Subscription.findByIdAndUpdate(id, req.body);
             res.status(201).json({ status: 'success', subscription, message: 'Subscription paused successfully!' });
-            io.getIO().emit('subscription:get', { action: 'updated', subscription })
-            //io.getIO.emit('sub:pause', { subscription: subscription });
+            io.getIO.emit('sub:pause', { subscription: subscription });
         }
 
         else if (isActive == true) {
             const subscription = await Subscription.findByIdAndUpdate(id, req.body);
             res.status(201).json({ status: 'success', subscription, message: 'Subscription resumed successfully!' });
-            io.getIO().emit('subscription:get', { action: 'updated', subscription })
-            //io.getIO.emit('sub:resume', { subscription: subscription });
+            io.getIO.emit('sub:resume', { subscription: subscription });
         }
 
     } catch (error) {
