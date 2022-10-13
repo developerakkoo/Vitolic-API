@@ -15,7 +15,7 @@ const billingSchema = new Schema({
 
     subscriptionId: { type: String },
 
-    orderId: { type: String },
+    cartId: { type: Schema.Types.ObjectId, ref: 'Cart' },
 
     amount: { type: Number, },
 

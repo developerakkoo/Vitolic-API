@@ -31,7 +31,7 @@ const cartSchema = new Schema({
     subscription: { type: Schema.Types.ObjectId, ref: 'Subscription' },
     orderId: { type: Number },
     status: { type: String },
-
+    billId:{ type: Schema.Types.ObjectId, ref: 'Billing' },
     total: {
         type: Number,
         required: true

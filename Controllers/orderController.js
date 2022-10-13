@@ -103,88 +103,101 @@ exports.addToCart = async (req, res, next) => {
         });
         await cart.save();
 
-        /* let cartId = await Cart.find({ userId }).populate("userId address");
-        cartId = Cart._id;
-        //console.log(cartId) */
-        let subscription;
-        let deliveryFrequency;
-        //2.  Create Sub here
-        if (isNormal) {
-            deliveryFrequency = 'DAILY';
-            subscription = new Subscription({
-                productId: productId,
-                userId: userId,
-                startDate: startDate,
-                daysRemaining: daysRemaining,
-                endDate: moment(startDate).add(30, 'd').toDate().toISOString(),
-                deliveryFrequency: deliveryFrequency,
-            });
-            await subscription.save();
-        }
-
-        if (isAlternate) {
-            deliveryFrequency = 'ALTERNATE';
-
-            subscription = new Subscription({
-                productId: productId,
-                userId: userId,
-                startDate: startDate,
-                endDate: endDate,
-                deliveryFrequency: deliveryFrequency,
-            });
-            await subscription.save();
-        }
-
-        if (isCustom) {
-            deliveryFrequency = 'CUSTOM';
-
-            subscription = new Subscription({
-                productId: productId,
-                userId: userId,
-                days: days,
-                //days: ,
-                //name: name,
-                startDate: startDate,
-                endDate: endDate,
-                deliveryFrequency: deliveryFrequency,
-            });
-            console.log(count);
-            await subscription.save();
-        }
-
-        //console.log(subscription1)
+        let cartId = cart._id
+        console.log(cartId)
 
         if (cart) {
-            //const { userId, products, total, status, subscriptionId } = req.body;
             //Bill Created
             let bill = new Bill({
                 invoiceNumber: await nanoid(),
                 products: products,
                 userId: userId,
-                //subscriptionId: subscriptionId,
+                cartId: cartId,
                 amount: total,
                 paymentStatus: status,
 
             });
             await bill.save()
-                .then((subscription) => {
-                    subscription = Subscription.findByIdAndUpdate({ userId: userId }, { billId: Bill._id }, { cartId: Cart._id })
+            let billId = bill._id;
+
+            let subscription;
+            let deliveryFrequency;
+            //2.  Create Sub here
+            if (isNormal) {
+                deliveryFrequency = 'DAILY';
+                subscription = new Subscription({
+                    productId: productId,
+                    userId: userId,
+                    cartId: cartId,
+                    billId: billId,
+                    startDate: startDate,
+                    daysRemaining: daysRemaining,
+                    endDate: moment(startDate).add(30, 'd').toDate().toISOString(),
+                    deliveryFrequency: deliveryFrequency,
+                });
+                await subscription.save();
+            }
+
+            if (isAlternate) {
+                deliveryFrequency = 'ALTERNATE';
+
+                subscription = new Subscription({
+                    productId: productId,
+                    userId: userId,
+                    cartId: cartId,
+                    billId: billId,
+                    startDate: startDate,
+                    endDate: endDate,
+                    deliveryFrequency: deliveryFrequency,
+                });
+                await subscription.save();
+            }
+
+            if (isCustom) {
+                deliveryFrequency = 'CUSTOM';
+
+                subscription = new Subscription({
+                    productId: productId,
+                    userId: userId,
+                    cartId: cartId,
+                    billId: billId,
+                    days: days,
+                    //days: ,
+                    //name: name,
+                    startDate: startDate,
+                    endDate: endDate,
+                    deliveryFrequency: deliveryFrequency,
+                });
+
+                await subscription.save();
+            }
+
+            let subscriptionId = subscription._id;
+            //console.log(subscription1)
+
+
+            /* .then((bill) => {
+                bill = Bill.findOneAndUpdate({_id:billId}, { subscriptionId: subscriptionId })
+            }) */
+
+
+            /* let subscription1 = Subscription.findByIdAndUpdate(subscriptionId, { billId: billId, cartId: cartId })
+            console.log("hello " + billId, cartId)
+            console.log(subscription1);
+ */
+            /* .then((cart) => {
+                cart = Cart.findByIdAndUpdate(cartId, { subscription: subscriptionId, billId: billId })
+                console.log(billId,subscriptionId)
+            }) */
+
+            if (subscription) {
+                res.status(200).json({
+                    cart,
+                    bill,
+                    subscription,
+                    message: 'Cart added successfully'
                 })
-                .then((bill) => {
-                    bill = Bill.findByIdAndUpdate({ userId: userId }, { subscriptionId: Subscription._id, orderId: Cart._id })
-                })
-                .then((cart) => {
-                    cart = Cart.findByIdAndUpdate({ userId: userId }, { subscription: Subscription._id })
-                    console.log(cart)
-                })
-                .then(
-                    res.status(200).json({
-                        cart,
-                        bill,
-                        subscription,
-                        message: 'Cart added successfully'
-                    })
-                )
+            }
             /* .subscription.findOneAndUpdate({ userId: userId }, { billId: bill._id }, { cartId: cart._id })
              .then().Bill.findOneAndUpdate({ userId: userId }, { subscriptionId: subscription._id, orderId: cart._id })
              .then().Cart.findOneAndUpdate({ userId: userId }, { subscription: subscription._id }) */
