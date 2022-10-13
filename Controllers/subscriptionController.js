@@ -118,6 +118,7 @@ exports.updateSubscription = async (req, res, next) => {
 
         if (subscription) {
             res.status(200).json({ success: true, message: 'Subscription updated successfully', subscription })
+            io.getIO().emit('subscription:get', { action: 'updated', subscription })
         }
     } catch (error) {
         res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
