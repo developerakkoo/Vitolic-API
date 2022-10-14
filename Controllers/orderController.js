@@ -231,11 +231,14 @@ exports.deleteCart = async (req, res, next) => {
 exports.orderDelivered = async (req, res, next) => {
     try {
         const cartId = req.params.id
+        const userId = req.body.userId
         const cart = await Cart.findById({ _id: cartId });
-
+        const price = req.body.price;
         let isDelivered = true;
-        const cart1 = await Cart.findOneAndUpdate({ _id: cartId }, isDelivered, { $inc: { amount: -1 } });
+        const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: -price } });
+        const cart1 = await Cart.findOneAndUpdate({ _id: cartId }, { isDelivered, $inc: { amount: -1 } });
         const subscription = await Subscription.findOneAndUpdate({ cartId: cartId }, { $inc: { daysRemaining: -1 } })
+        console.log("hello" + cart.discountedPrice, cart1.amount)
 
         if (cart1) {
             res.status(200).json({
