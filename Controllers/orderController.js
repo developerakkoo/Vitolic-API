@@ -235,7 +235,9 @@ exports.orderDelivered = async (req, res, next) => {
         const cart = await Cart.findById({ _id: cartId });
         const price = req.body.price;
         let isDelivered = true;
+        
         const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: -price } });
+        console.log(cart.products[0])
         const cart1 = await Cart.findOneAndUpdate({ _id: cartId }, { isDelivered, $inc: { amount: -1 } });
         const subscription = await Subscription.findOneAndUpdate({ cartId: cartId }, { $inc: { daysRemaining: -1 } })
         console.log("hello" + cart.discountedPrice, cart1.amount)
@@ -244,7 +246,7 @@ exports.orderDelivered = async (req, res, next) => {
             res.status(200).json({
                 message: 'Order Delivered',
                 cart1,
-                subscription
+                subscription,user
             })
             io.getIO().emit('order:delivered', cartId);
 
