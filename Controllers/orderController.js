@@ -90,29 +90,74 @@ exports.getCart = async (req, res, next) => {
 exports.addToCart = async (req, res, next) => {
     try {
         const { userId, products, productId, total, status, address, isCustom, isNormal, isAlternate, startDate, endDate, days, count, name, daysRemaining } = req.body;
+        let noofdays = [];
+        if (days != null) noofdays = days.split(",")
+
+        console.log(noofdays.length)
+        let normaldays = [];
+
+        let carts = [];
+        console.log(noofdays)
+        //console.log(normaldays.length)
 
         console.log("ADD TO CART METHOD");
-        //Order Created
-        let cart = new Cart({
-            orderId: await nanoid(),
-            products: products,
-            userId: userId,
-            total: total,
-            status: status,
-            address: address,
-        });
-        await cart.save();
+        console.log(isCustom)
+        if (isCustom) {
+            for (i = 0; i < noofdays.length; i++) {
+                //Order Created
+                let cart = new Cart({
+                    orderId: await nanoid(),
+                    products: products,
+                    userId: userId,
+                    date: noofdays[i],
+                    total: total,
+                    status: status,
+                    address: address,
+                });
+                await cart.save();
 
-        let cartId = cart._id
-        console.log(cartId)
+                let cartId = cart._id
+                carts.push(cartId);
+                console.log(cartId)
 
-        if (cart) {
+            }
+            console.log(noofdays.length)
+        }
+        else if(isNormal || isAlternate){
+            for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
+                normaldays.push(m.format('DD/MM/YYYY'));
+            }
+            for (j = 0; j < normaldays.length; j++) {
+
+                //for (i = 0; i < noofdays.length; i++) {
+                //Order Created
+                let cart = new Cart({
+                    orderId: await nanoid(),
+                    products: products,
+                    userId: userId,
+                    date: normaldays[j],
+                    total: total,
+                    status: status,
+                    address: address,
+                });
+                await cart.save();
+
+                let cartId = cart._id
+                carts.push(cartId);
+                console.log(cartId)
+
+                // }
+            }
+        }
+        console.log(carts.length)
+
+        if (carts) {
             //Bill Created
             let bill = new Bill({
                 invoiceNumber: await nanoid(),
                 products: products,
                 userId: userId,
-                cartId: cartId,
+                cartId: carts,
                 amount: total,
                 paymentStatus: status,
 
@@ -128,7 +173,7 @@ exports.addToCart = async (req, res, next) => {
                 subscription = new Subscription({
                     productId: productId,
                     userId: userId,
-                    cartId: cartId,
+                    cartId: carts,
                     billId: billId,
                     startDate: startDate,
                     daysRemaining: daysRemaining,
@@ -144,7 +189,7 @@ exports.addToCart = async (req, res, next) => {
                 subscription = new Subscription({
                     productId: productId,
                     userId: userId,
-                    cartId: cartId,
+                    cartId: carts,
                     billId: billId,
                     startDate: startDate,
                     endDate: endDate,
@@ -159,7 +204,7 @@ exports.addToCart = async (req, res, next) => {
                 subscription = new Subscription({
                     productId: productId,
                     userId: userId,
-                    cartId: cartId,
+                    cartId: carts,
                     billId: billId,
                     days: days,
                     //days: ,
@@ -177,7 +222,7 @@ exports.addToCart = async (req, res, next) => {
 
             if (subscription) {
                 res.status(200).json({
-                    cart,
+                    carts,
                     bill,
                     subscription,
                     message: 'Cart added successfully'
@@ -230,23 +275,22 @@ exports.deleteCart = async (req, res, next) => {
 
 exports.orderDelivered = async (req, res, next) => {
     try {
-        const cartId = req.params.id
-        const userId = req.body.userId
+        const cartId = req.params.id;
+        const userId = req.body.userId;
         const cart = await Cart.findById({ _id: cartId });
         const price = req.body.price;
         let isDelivered = true;
-        
+
         const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: -price } });
         console.log(cart.products[0])
-        const cart1 = await Cart.findOneAndUpdate({ _id: cartId }, { isDelivered, $inc: { amount: -1 } });
+        const cart1 = await Cart.findByIdAndUpdate({ _id: cartId }, { isDelivered });
         const subscription = await Subscription.findOneAndUpdate({ cartId: cartId }, { $inc: { daysRemaining: -1 } })
-        console.log("hello" + cart.discountedPrice, cart1.amount)
 
         if (cart1) {
             res.status(200).json({
                 message: 'Order Delivered',
                 cart1,
-                subscription,user
+                subscription, user
             })
             io.getIO().emit('order:delivered', cartId);
 
