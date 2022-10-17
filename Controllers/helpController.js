@@ -37,6 +37,19 @@ exports.getHelpByUserId = async(req, res, next) =>{
     }
 }
 
+exports.updateHelp = async(req, res, next) =>{
+    try {
+        let help = await help.findOneAndUpdate({_id: req.params.id},req.body);
+
+        if(help){
+            res.status(200).json({success: true, help,
+                message: "help updated"})
+        }
+        
+    } catch (error) {
+        res.status(500).json({message: error.message, devMessage:"Something went wrong!"});
+    }
+}
 
 exports.deleteHelp = async(req, res, next) =>{
     try {

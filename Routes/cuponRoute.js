@@ -38,7 +38,7 @@ const coupon = require('../Controllers/couponController');
 router.post('/coupon',  coupon.createCoupon);
 /**
  * @swagger
- * /banner:
+ * /coupon:
  *  get:
  *      description: get all coupons
  *      tags:
@@ -55,7 +55,7 @@ router.post('/coupon',  coupon.createCoupon);
 router.get('/coupon',  coupon.getCoupons);
 /**
  * @swagger
- * /banner/{id}:
+ * /coupon/{id}:
  *  get:
  *      description: get coupon using id
  *      tags:
@@ -70,9 +70,28 @@ router.get('/coupon',  coupon.getCoupons);
  * 
  */
 router.get('/coupon/:id',  coupon.getCouponById);
+
 /**
  * @swagger
- * /banner/{id}:
+ * /coupon/{id}:
+ *  put:
+ *      description: update coupon using id
+ *      tags:
+ *          - coupon
+ * 
+ *
+ *      responses:
+ *         200:
+ *              description: Success
+ *  
+ *  
+ * 
+ */
+ router.put('/coupon/:id',  coupon.updateCoupon);
+
+/**
+ * @swagger
+ * /coupon/{id}:
  *  delete:
  *      description: delete coupon using id
  *      tags:

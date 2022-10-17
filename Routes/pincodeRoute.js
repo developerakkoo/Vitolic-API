@@ -53,6 +53,24 @@ router.get('/pincode',  pincode.getPincodes);
 /**
  * @swagger
  * /pincode/{id}:
+ *  get:
+ *      description: get pincode by id 
+ *      tags:
+ *          - pincode
+ * 
+ *     
+ *
+ *      responses:
+ *         200:
+ *              description: Success
+ *  
+ *  
+ * 
+ */
+ router.get('/pincode/:id',  pincode.getPincodeById);
+/**
+ * @swagger
+ * /pincode/{id}:
  *  put:
  *      description: update pincode using id 
  *      tags:

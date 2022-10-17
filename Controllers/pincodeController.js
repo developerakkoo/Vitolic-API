@@ -23,19 +23,30 @@ exports.getPincodes = async (req, res, next) => {
         let pincode = await Pincode.find({});
 
         if (pincode) {
-            res.status(200).json({ success: true, count:pincode.length, pincode })
+            res.status(200).json({ success: true, count: pincode.length, pincode })
         }
     } catch (error) {
         res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
     }
 }
 
+exports.getPincodeById = async (req, res, next) => {
+    try {
 
+        const id = req.params.id;
+        let pincode = await Pincode.findById(id);
 
+        if (pincode) {
+            res.status(200).json({ success: true, count: pincode.length, pincode })
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
+    }
+}
 
 exports.updatePincode = async (req, res, next) => {
     try {
-        const id=req.params.id;
+        const id = req.params.id;
         //const pincode = req.body.pincode;
 
         let pincodes = await Pincode.findOneAndUpdate(id);

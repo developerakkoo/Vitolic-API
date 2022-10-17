@@ -75,6 +75,25 @@ router.post('/help',  help.createHelp);
 /**
  * @swagger
  * /help/{id}:
+ *  put:
+ *      description: update help using id
+ *      tags:
+ *          - help
+ * 
+ *     
+ *
+ *      responses:
+ *         200:
+ *              description: Success
+ *  
+ *  
+ * 
+ */
+ router.put('/help/:id',  help.updateHelp);
+
+/**
+ * @swagger
+ * /help/{id}:
  *  delete:
  *      description: delete help using id
  *      tags:

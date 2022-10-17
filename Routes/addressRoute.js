@@ -19,6 +19,23 @@ const router = express.Router();
  * 
  */
 router.get('/address/:userId',  addressController.getAddressByUserId);
+
+
+/**
+ * @swagger
+ * /address/{addressId}:
+ *  get:
+ *      description: get address using addressid
+ *      tags:
+ *          - Address
+ *      responses:
+ *         200:
+ *              description: Success
+ *  
+ *  
+ * 
+ */
+ router.get('/address/:userId',  addressController.getAddressById);
 /**
  * @swagger
  * /address:

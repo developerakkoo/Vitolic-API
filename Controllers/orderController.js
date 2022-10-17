@@ -89,7 +89,7 @@ exports.getCart = async (req, res, next) => {
 
 exports.addToCart = async (req, res, next) => {
     try {
-        const { userId, products, productId, total, status, address, isCustom, isNormal, isAlternate, startDate, endDate, days, count, name, daysRemaining } = req.body;
+        const { userId, products, productId, total, status, address, isCustom, isNormal, isAlternate, startDate, endDate, days, count, name, daysRemaining, isOneTime } = req.body;
         let noofdays = [];
         if (days != null) noofdays = days.split(",")
 
@@ -123,7 +123,7 @@ exports.addToCart = async (req, res, next) => {
             }
             console.log(noofdays.length)
         }
-        else if(isNormal || isAlternate){
+        else if (isNormal || isAlternate) {
             for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
                 normaldays.push(m.format('DD/MM/YYYY'));
             }
@@ -149,8 +149,27 @@ exports.addToCart = async (req, res, next) => {
                 // }
             }
         }
-        console.log(carts.length)
+        //console.log(carts.length)
 
+        else if (isOneTime) {
+
+            //Order Created
+            let cart = new Cart({
+                orderId: await nanoid(),
+                products: products,
+                userId: userId,
+                date: moment(),
+                total: total,
+                status: status,
+                address: address,
+            });
+            await cart.save();
+
+            let cartId = cart._id
+            carts.push(cartId);
+            console.log(cartId)
+
+        }
         if (carts) {
             //Bill Created
             let bill = new Bill({

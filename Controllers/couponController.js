@@ -40,6 +40,20 @@ exports.getCouponById = async(req, res, next) =>{
     }
 }
 
+exports.updateCoupon = async(req, res, next) =>{
+    try {
+        const id= req.params.id;
+        let coupon = await coupon.findByIdAndUpdate(id,req.body);
+
+        if(coupon){
+            res.status(200).json({success: true, message:"Updated Coupon"})
+
+        }
+        
+    } catch (error) {
+        res.status(500).json({message: error.message, devMessage:"Something went wrong!"});
+    }
+}
 
 exports.deleteCoupon = async(req, res, next) =>{
     try {

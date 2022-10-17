@@ -36,6 +36,29 @@ exports.postAddress = async(req, res, next) => {
 }
 
 
+exports.getAddressById = async(req, res, next) => {
+    try{
+        const id = req.params.id;//passing id instead of userId works
+
+        const add = await Address.findById(id);//passing id
+
+        if(add){
+            res.status(200).json({
+                add,
+               
+                message: 'Address Found'
+            })
+        }
+        console.log(add);
+    }
+    catch(err){
+        res.status(500).json({
+            status: false,
+            message: err.message
+        });
+    }
+}
+
 exports.getAddressByUserId = async(req, res, next) => {
     try{
         const userId = req.params.userId;//passing id instead of userId works
