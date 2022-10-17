@@ -293,3 +293,28 @@ exports.pause = async (req, res, next) => {
         res.status(500).json({ error, message: 'Something went wrong!' });
     }
 }
+
+exports.vacation = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        console.log("hello"+id)
+        const onVacation = req.body.onVacation;
+        const vacationStart = req.body.vacationStart;
+
+        const vacationEnd = req.body.vacationEnd;
+        console.log(vacationEnd)
+
+        //const df = vacationStart.diff(vacationEnd, 'days') 
+        //const newEndDate = moment().add(df, 'd').toDate();
+        const subscription = await Subscription.findOneAndUpdate({_id:id}, {onVacation,vacationStart,vacationEnd});
+        //console.log(df+"hello")
+
+        if (subscription) {
+            res.status(201).json({ status: 'success', subscription, message: 'Subscription paused successfully!' });
+            //io.getIO.emit('sub:pause', { subscription: subscription });
+        } 
+
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
+}

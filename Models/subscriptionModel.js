@@ -23,7 +23,18 @@ const subscriptionSchema = new Schema({
     isCustom: {
         type: Boolean
     },
-
+    onVacation: {
+        type: Boolean
+    },
+    vacationStart: {
+        type: String
+    },
+    vacationEnd: {
+        type: String
+    },
+    newEndDate: {
+        type: String
+    },
     customStartDate: {
         type: String
     },
