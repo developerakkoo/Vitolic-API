@@ -41,6 +41,7 @@ const subscriptionRoute = require("./Routes/subscriptionRoute");
 const petProductRoute = require("./Routes/petProductRoute");
 const billRoute = require("./Routes/billingRoute");
 const promoRoute = require("./Routes/promoRoute");
+const cityRoute = require("./Routes/cityRoute");
 
 //const categoryRoute = require("./Routes/categoryRoute");
 //Error Handlers
@@ -176,6 +177,8 @@ app.use(subAdminRoute);
 app.use(refundRoute);
 app.use(subscriptionRoute);
 app.use(promoRoute);
+app.use(cityRoute);
+
 // app.use(petProductRoute);
 //app.use(categoryRoute);
 app.use(globalErrorHandler);

@@ -14,7 +14,6 @@ exports.createCity = async (req, res, next) => {
 
 exports.getCity = async (req, res, next) => {
     try {
-        city
 
         let city = await City.find({});
         if (city) {
