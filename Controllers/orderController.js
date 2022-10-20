@@ -158,16 +158,19 @@ exports.addToCart = async (req, res, next) => {
                 orderId: await nanoid(),
                 products: products,
                 userId: userId,
-                date: moment(),
+                date: moment().toISOString(),
                 total: total,
                 status: status,
                 address: address,
             });
             await cart.save();
-
-            let cartId = cart._id
+            res.status(200).json({
+                cart,
+                message: 'Cart added successfully'
+            })
+            /* let cartId = cart._id
             carts.push(cartId);
-            console.log(cartId)
+            console.log(cartId) */
 
         }
         if (carts) {
