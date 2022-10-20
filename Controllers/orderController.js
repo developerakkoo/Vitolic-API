@@ -168,9 +168,9 @@ exports.addToCart = async (req, res, next) => {
                 cart,
                 message: 'Cart added successfully'
             })
-            /* let cartId = cart._id
+            let cartId = cart._id
             carts.push(cartId);
-            console.log(cartId) */
+            console.log(cartId)
 
         }
         if (carts) {
