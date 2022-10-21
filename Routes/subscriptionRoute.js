@@ -133,6 +133,8 @@ router.put('/subscription/:id',  subscriptionController.updateSubscription);
 
 router.put('/subscription/pause/:id',  subscriptionController.pause);
 router.put('/subscription/vacation/:id',  subscriptionController.vacation);
+router.put('/subscription/terminate/:id',  subscriptionController.terminate);
+
 
 
 /**

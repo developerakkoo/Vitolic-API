@@ -125,11 +125,11 @@ exports.addToCart = async (req, res, next) => {
         }
         else if (isNormal || isAlternate) {
             for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
-                normaldays.push(m.format('DD/MM/YYYY'));
+                normaldays.push(m.format('DD-MM-YYYY'));
             }
             for (j = 0; j < normaldays.length; j++) {
 
-                //for (i = 0; i < noofdays.length; i++) {
+                //for (i = 0; i < noofdays.length; i++){
                 //Order Created
                 let cart = new Cart({
                     orderId: await nanoid(),
@@ -164,6 +164,8 @@ exports.addToCart = async (req, res, next) => {
                 address: address,
             });
             await cart.save();
+            const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: total } });
+
             res.status(200).json({
                 cart,
                 message: 'Cart added successfully'
@@ -200,6 +202,7 @@ exports.addToCart = async (req, res, next) => {
                     startDate: startDate,
                     daysRemaining: daysRemaining,
                     endDate: moment(startDate).add(30, 'd').toDate().toISOString(),
+                    days:normaldays,
                     deliveryFrequency: deliveryFrequency,
                 });
                 await subscription.save();
@@ -215,6 +218,7 @@ exports.addToCart = async (req, res, next) => {
                     billId: billId,
                     startDate: startDate,
                     endDate: endDate,
+                    days:normaldays,
                     deliveryFrequency: deliveryFrequency,
                 });
                 await subscription.save();
@@ -240,7 +244,7 @@ exports.addToCart = async (req, res, next) => {
 
             let subscriptionId = subscription._id;
 
-            const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: total } });
+            const user = await Subscription.findByIdAndUpdate(subscriptionId, { $inc: { subscriptionWallet: total } });
 
             if (subscription) {
                 res.status(200).json({

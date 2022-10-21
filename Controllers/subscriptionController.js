@@ -276,16 +276,53 @@ exports.pause = async (req, res, next) => {
     try {
         const id = req.params.id;
         const isActive = req.body.isActive;
-
+        /* let pauseDate, resumeDate;
+        pauseDate = new Date(Date.now()).toISOString().split("T")[0]
+        resumeDate = new Date('2022-10-30').toISOString().split("T")[0]; */
+        /* let pauseDate, resumeDate;
+        pauseDate = moment()
+        resumeDate = moment().add(2, 'd')
+        console.log(resumeDate + "h")
+        const df = pauseDate.diff(resumeDate, 'days')
+        console.log(df + "hello")
+        var date1 = moment('2016-10-08 10:29:23');
+        var date2 = moment('2016-10-08 11:06:55');
+        var diff = date2.diff(date1); */
+        /* const diffTime = Math.abs(resumeDate - pauseDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        console.log(diffDays + " days");
+        console.log(diffTime + " milliseconds"); */
+        var now = moment(new Date()); //todays date
+        var end = moment("2022-12-1"); // another date
+        var duration = moment.duration(now.diff(end));
+        var days = duration.asDays();
+        console.log(days)
         if (isActive == false) {
-            const subscription = await Subscription.findByIdAndUpdate(id, req.body);
+            //pauseDate = new Date(Date.now()).toISOString().split("T")[0]
+            let pauseDate = moment().toISOString().split("T")[0];
+            //let endDate = moment().add(20, 'd').toISOString().split("T")[0]
+            console.log(pauseDate)
+            const subscription = await Subscription.findByIdAndUpdate(id, { isActive, pauseDate: moment().toISOString().split("T")[0] });
             res.status(201).json({ status: 'success', subscription, message: 'Subscription paused successfully!' });
             io.getIO.emit('sub:pause', { subscription: subscription });
         }
 
         else if (isActive == true) {
-            const subscription = await Subscription.findByIdAndUpdate(id, req.body);
-            res.status(201).json({ status: 'success', subscription, message: 'Subscription resumed successfully!' });
+            //resumeDate = new Date('2022-10-30').toISOString().split("T")[0];
+            let resumeDate = moment().add(2, 'd')
+            console.log(resumeDate)
+            const subscription = await Subscription.findByIdAndUpdate(id, { isActive, resumeDate:moment().add(2, 'd').toISOString().split("T")[0] });
+            let p = subscription.pauseDate;
+            console.log(p + "puase")
+            const final = resumeDate.diff(p, 'd')
+            console.log(final + "hekk")
+            let date3 = subscription.endDate
+            console.log(date3)
+            let endDate = moment(date3).add(final + 1, 'd').toISOString().split("T")[0]
+            console.log(endDate)
+            const subscription1 = await Subscription.findByIdAndUpdate(id, { endDate: endDate });
+
+            res.status(201).json({ status: 'success', subscription1, message: 'Subscription resumed successfully!' });
             io.getIO.emit('sub:resume', { subscription: subscription });
         }
 
@@ -294,10 +331,27 @@ exports.pause = async (req, res, next) => {
     }
 }
 
+
+exports.terminate = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const terminate = req.body.terminate;
+        const userId = req.body.userId
+        let subscription = await Subscription.findByIDAndUpdate(id, req.body);
+        let balance = subscription.subscriptionWallet;
+        if (terminate) {
+            const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: balance } });
+            res.status(200).json({ status: true, message: 'Subscription terminated successfully', subscription: subscription, user })
+        }
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
+}
+
 exports.vacation = async (req, res, next) => {
     try {
         const id = req.params.id;
-        console.log("hello"+id)
+        console.log("hello" + id)
         const onVacation = req.body.onVacation;
         const vacationStart = req.body.vacationStart;
 
@@ -306,13 +360,13 @@ exports.vacation = async (req, res, next) => {
 
         //const df = vacationStart.diff(vacationEnd, 'days') 
         //const newEndDate = moment().add(df, 'd').toDate();
-        const subscription = await Subscription.findOneAndUpdate({_id:id}, {onVacation,vacationStart,vacationEnd});
+        const subscription = await Subscription.findOneAndUpdate({ _id: id }, { onVacation, vacationStart, vacationEnd });
         //console.log(df+"hello")
 
         if (subscription) {
             res.status(201).json({ status: 'success', subscription, message: 'Subscription paused successfully!' });
             //io.getIO.emit('sub:pause', { subscription: subscription });
-        } 
+        }
 
     } catch (error) {
         res.status(500).json({ error, message: 'Something went wrong!' });

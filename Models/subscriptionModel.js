@@ -32,6 +32,12 @@ const subscriptionSchema = new Schema({
     vacationEnd: {
         type: String
     },
+    resumeDate: {
+        type: String
+    },
+    pauseDate: {
+        type: String
+    },
     newEndDate: {
         type: String
     },
@@ -41,23 +47,30 @@ const subscriptionSchema = new Schema({
     customEndDate: {
         type: String
     },
-
+    productPurchasePrice: {
+        type: Number
+    },
     startDate: {
         type: String
     },
     endDate: {
         type: String
     },
-
+    subscriptionWallet: {
+        type: Number,
+        default: 0
+    },
     isActive: {
         type: Boolean, default: true
-
+    },
+    terminate: {
+        type: Boolean,
     },
     daysRemaining: {
         type: Number
     },
 
-    days: [{}],
+    days: [],
 
     deliveryFrequency: {
         type: String,
