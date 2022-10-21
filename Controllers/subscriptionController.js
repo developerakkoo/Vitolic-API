@@ -311,7 +311,7 @@ exports.pause = async (req, res, next) => {
             //resumeDate = new Date('2022-10-30').toISOString().split("T")[0];
             let resumeDate = moment().add(2, 'd')
             console.log(resumeDate)
-            const subscription = await Subscription.findByIdAndUpdate(id, { isActive, resumeDate:moment().add(2, 'd').toISOString().split("T")[0] });
+            const subscription = await Subscription.findByIdAndUpdate(id, { isActive, resumeDate: moment().add(2, 'd').toISOString().split("T")[0] });
             let p = subscription.pauseDate;
             console.log(p + "puase")
             const final = resumeDate.diff(p, 'd')
@@ -336,11 +336,14 @@ exports.terminate = async (req, res, next) => {
     try {
         const id = req.params.id;
         const terminate = req.body.terminate;
-        const userId = req.body.userId
-        let subscription = await Subscription.findByIDAndUpdate(id, req.body);
+        const userId = req.body.userId;
+        console.log("hello")
+        let subscription = await Subscription.findByIdAndUpdate(id, req.body);
         let balance = subscription.subscriptionWallet;
+        console.log(balance)
         if (terminate) {
             const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: balance } });
+            let subscription = await Subscription.findByIdAndUpdate(id, {subscriptionWallet:0});
             res.status(200).json({ status: true, message: 'Subscription terminated successfully', subscription: subscription, user })
         }
     } catch (error) {
