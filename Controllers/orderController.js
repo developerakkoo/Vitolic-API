@@ -90,26 +90,26 @@ exports.getCart = async (req, res, next) => {
 exports.addToCart = async (req, res, next) => {
     try {
         const { userId, products, productId, total, status, address, isCustom, isNormal, isAlternate, startDate, endDate, days, count, name, daysRemaining, isOneTime } = req.body;
-        let noofdays = [];
-        if (days != null) noofdays = days.split(",")
+        //let noofdays = [];
+        //if (days != null) noofdays = days.split(",")
 
-        console.log(noofdays.length)
+        //console.log(noofdays.length)
         let normaldays = [];
 
         let carts = [];
-        console.log(noofdays)
+        //console.log(noofdays)
         //console.log(normaldays.length)
 
         console.log("ADD TO CART METHOD");
         console.log(isCustom)
         if (isCustom) {
-            for (i = 0; i < noofdays.length; i++) {
+            for (i = 0; i < days.length; i++) {
                 //Order Created
                 let cart = new Cart({
                     orderId: await nanoid(),
                     products: products,
                     userId: userId,
-                    date: noofdays[i],
+                    date: days[i],
                     total: total,
                     status: status,
                     address: address,
@@ -121,7 +121,7 @@ exports.addToCart = async (req, res, next) => {
                 console.log(cartId)
 
             }
-            console.log(noofdays.length)
+            console.log(days.length)
         }
         else if (isNormal || isAlternate) {
             for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
