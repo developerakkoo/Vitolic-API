@@ -63,7 +63,7 @@ const router = express.Router();
  * 
  */
 router.get('/cart/featured',  cartController.featured);
-
+router.get('/cart/date',  cartController.getCartByDate);
 /**
  * @swagger
  * /cart:

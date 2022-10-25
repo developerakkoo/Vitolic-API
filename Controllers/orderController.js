@@ -11,6 +11,30 @@ const moment = require('moment/moment');
 const { endDate } = require('./subscriptionController');
 
 
+exports.getCartByDate = async (req, res, next) => {
+    try {
+        let nextDay=moment().add(1,'d').format('DD-MM-YYYY');
+        console.log(nextDay)
+        const cart = await Cart.find({date:nextDay}).sort({ createdAt: -1 }).populate("userId address subscription");
+
+        if (cart) {
+            res.status(200).json({
+                status: true,
+                count: cart.length,
+
+                cart
+            })
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+
+}
+
 exports.getCartByCartId = async (req, res, next) => {
     try {
 
