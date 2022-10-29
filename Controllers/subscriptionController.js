@@ -5,6 +5,7 @@ const { customAlphabet } = require('nanoid/async')
 const nanoid = customAlphabet('1234567890', 6);
 const io = require('../socket');
 var moment = require('moment');
+const Cart = require('../Models/orderModel');
 
 exports.postSubscription = async (req, res, next) => {
 
@@ -340,10 +341,18 @@ exports.terminate = async (req, res, next) => {
         console.log("hello")
         let subscription = await Subscription.findByIdAndUpdate(id, req.body);
         let balance = subscription.subscriptionWallet;
+        let date = subscription.days;
+        let currentDate = moment().format('DD-MM-YYYY');
+
+        for (i = 0; i < date.length; i++) {
+            if (currentDate == date[i]) {
+                console.log(currentDate + "hi")
+            }
+        }
         console.log(balance)
         if (terminate) {
             const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: balance } });
-            let subscription = await Subscription.findByIdAndUpdate(id, {subscriptionWallet:0});
+            let subscription = await Subscription.findByIdAndUpdate(id, { subscriptionWallet: 0 });
             res.status(200).json({ status: true, message: 'Subscription terminated successfully', subscription: subscription, user })
         }
     } catch (error) {
@@ -371,6 +380,89 @@ exports.vacation = async (req, res, next) => {
             //io.getIO.emit('sub:pause', { subscription: subscription });
         }
 
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
+}
+
+exports.upgradeAlt = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const deliveryFrequency = "DAILY";
+        const startDate = req.body.startDate;
+        const endDate = req.body.endDate;
+        let normaldays = [];
+
+        const subscription = await Subscription.findByIdAndUpdate(id, { deliveryFrequency, startDate, endDate });
+        //Delete old orders and create new orders of remaining days
+        const order = await Cart.find({})
+        for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
+            normaldays.push(m.format('DD-MM-YYYY'));
+        }
+        for (j = 0; j < normaldays.length; j++) {
+
+            //for (i = 0; i < noofdays.length; i++){
+            //Order Created
+            let cart = new Cart({
+                orderId: await nanoid(),
+                products: products,
+                userId: userId,
+                date: normaldays[j],
+                total: total,
+                status: status,
+                address: address,
+            });
+            await cart.save();
+
+            // }
+        }
+
+
+        if (subscription) {
+            res.status(201).json({ status: 'success', subscription, message: 'Subscription paused successfully!' });
+        }
+
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
+}
+
+exports.upgradeCustom = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const deliveryFrequency = "DAILY";
+        const startDate = req.body.startDate;
+        const endDate = req.body.endDate;
+        let normaldays = [];
+
+        const subscription = await Subscription.findByIdAndUpdate(id, { deliveryFrequency, startDate, endDate });
+        //Delete old orders and create new orders of remaining days
+        const order = await Cart.find({})
+        for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
+            normaldays.push(m.format('DD-MM-YYYY'));
+        }
+        for (j = 0; j < normaldays.length; j++) {
+
+            //for (i = 0; i < noofdays.length; i++){
+            //Order Created
+            let cart = new Cart({
+                orderId: await nanoid(),
+                products: products,
+                userId: userId,
+                date: normaldays[j],
+                total: total,
+                status: status,
+                address: address,
+            });
+            await cart.save();
+
+            // }
+        }
+
+
+        if (subscription) {
+            res.status(201).json({ status: 'success', subscription, message: 'Subscription paused successfully!' });
+        }
     } catch (error) {
         res.status(500).json({ error, message: 'Something went wrong!' });
     }
