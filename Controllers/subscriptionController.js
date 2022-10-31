@@ -1,5 +1,6 @@
 const Subscription = require('./../Models/subscriptionModel');
 const User = require('../Models/userModel');
+const Cart = require('../Models/orderModel');
 const Bill = require('../Models/billingModel');
 const { customAlphabet } = require('nanoid/async')
 const nanoid = customAlphabet('1234567890', 6);
@@ -360,6 +361,159 @@ exports.terminate = async (req, res, next) => {
     }
 }
 
+exports.altToDaily = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const userId = req.body.userId;
+        const mainOrderId = req.body.mainOrderId;
+        const deliveryFrequency = "DAILY";
+        const startDate = req.body.startDate;
+        console.log(startDate + "hello")
+        const endDate = req.body.endDate;
+        let carts = [];
+        let normaldays = [];
+        const subscription = await Subscription.findByIdAndUpdate(id, { deliveryFrequency, startDate, endDate });
+        //console.log(subscription)
+        if (subscription) {
+            let currentDate = moment().add(1, 'd').format('DD-MM-YYYY')
+            console.log(currentDate)
+            //Delete old orders and create new orders of remaining days
+            const order = await Cart.deleteMany({ mainOrderId: mainOrderId, orderDate: { "$gte": currentDate, "$lte": endDate } })
+            console.log(mainOrderId)
+            console.log("orders deleted")
+
+            const mainOrder = await Cart.findOne({ _id: mainOrderId });
+            console.log(mainOrder)
+            //let days = cart.orderDays;
+            //let userId = cart.userId;
+            let products = mainOrder.products;
+            let total = mainOrder.total;
+            let address = mainOrder.address;
+            let status = mainOrder.status;
+
+            let terminate = mainOrder.terminate;
+            let pause = mainOrder.isPause;
+            if (terminate == false && pause == false) {
+                {
+                    for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
+                        normaldays.push(m.format('DD-MM-YYYY'));
+                    }
+                    for (j = 0; j < normaldays.length; j++) {
+                        console.log(normaldays)
+
+                        //for (i = 0; i < noofdays.length; i++){
+                        //Order Created
+                        let cart = new Cart({
+                            orderId: await nanoid(),
+                            products: products,
+                            userId: userId,
+                            orderDate: normaldays[j],
+                            total: total,
+                            mainOrderId,
+                            status: status,
+                            address: address,
+                        });
+                        await cart.save();
+
+                        let cartId = cart._id
+                        carts.push(cartId);
+                        console.log(cartId)
+
+                        // }
+                    }
+                }
+            }
+
+               
+            if (carts) {
+                res.status(201).json({ status: 'success', cart, message: 'Subscription upgraded to daily successfully!' });
+            }
+        }
+
+
+
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
+}
+
+
+exports.customToDaily = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const userId = req.body.userId;
+        const mainOrderId = req.body.mainOrderId;
+        const deliveryFrequency = "DAILY";
+        const startDate = req.body.startDate;
+        console.log(startDate + "hello")
+        const endDate = req.body.endDate;
+        let carts = [];
+        let normaldays = [];
+        const subscription = await Subscription.findByIdAndUpdate(id, { deliveryFrequency, startDate, endDate });
+        //console.log(subscription)
+        if (subscription) {
+            let currentDate = moment().add(1, 'd').format('DD-MM-YYYY')
+            console.log(currentDate)
+            //Delete old orders and create new orders of remaining days
+            const order = await Cart.deleteMany({ mainOrderId: mainOrderId, orderDate: { "$gte": currentDate, "$lte": endDate } })
+            console.log(mainOrderId)
+            console.log("orders deleted")
+
+            const mainOrder = await Cart.findOne({ _id: mainOrderId });
+            console.log(mainOrder)
+            //let days = cart.orderDays;
+            //let userId = cart.userId;
+            let products = mainOrder.products;
+            let total = mainOrder.total;
+            let address = mainOrder.address;
+            let status = mainOrder.status;
+
+            let terminate = mainOrder.terminate;
+            let pause = mainOrder.isPause;
+            if (terminate == false && pause == false) {
+                {
+                    for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
+                        normaldays.push(m.format('DD-MM-YYYY'));
+                    }
+                    for (j = 0; j < normaldays.length; j++) {
+                        console.log(normaldays)
+
+                        //for (i = 0; i < noofdays.length; i++){
+                        //Order Created
+                        let cart = new Cart({
+                            orderId: await nanoid(),
+                            products: products,
+                            userId: userId,
+                            orderDate: normaldays[j],
+                            total: total,
+                            mainOrderId,
+                            status: status,
+                            address: address,
+                        });
+                        await cart.save();
+
+                        let cartId = cart._id
+                        carts.push(cartId);
+                        console.log(cartId)
+
+                        // }
+                    }
+                }
+
+              
+            }
+           
+            if (carts) {
+                res.status(201).json({ status: 'success', cart, message: 'Subscription upgraded to daily successfully!' });
+            }
+        }
+
+
+
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
+}
 exports.vacation = async (req, res, next) => {
     try {
         const id = req.params.id;

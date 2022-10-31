@@ -200,6 +200,9 @@ exports.createUser = async (req, res, next) => {
 
 exports.getAllUsers = async (req, res, next) => {
     try {
+
+        //const users= await User.deleteMany({})
+
         const users = await User.find({}).populate('products');
 
         if (users) {
@@ -233,7 +236,7 @@ exports.getUserProfile = async (req, res, next) => {
     try {
         const userId = req.params.userId;
 
-        const user = await User.findById(userId).populate('cart.items.productId');
+        const user = await User.findById(userId).populate('cart.items.productId addressId');
         if (user) {
             res.status(200).json({ user, message: 'User Profile Found!' })
         }

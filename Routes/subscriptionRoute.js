@@ -134,8 +134,9 @@ router.put('/subscription/:id',  subscriptionController.updateSubscription);
 router.put('/subscription/pause/:id',  subscriptionController.pause);
 router.put('/subscription/vacation/:id',  subscriptionController.vacation);
 router.put('/subscription/terminate/:id',  subscriptionController.terminate);
-router.put('/subscription/upgradealt/:id',  subscriptionController.upgradeAlt);
-router.put('/subscription/upgradecustom/:id',  subscriptionController.upgradeCustom);
+router.put('/subscription/alt/:id',  subscriptionController.altToDaily);
+router.put('/subscription/custom/:id',  subscriptionController.customToDaily);
+
 
 
 

@@ -38,9 +38,9 @@ exports.postAddress = async(req, res, next) => {
 
 exports.getAddressById = async(req, res, next) => {
     try{
-        const id = req.params.id;//passing id instead of userId works
+        const id = req.params.id;
 
-        const add = await Address.findById(id);//passing id
+        const add = await Address.findById(id);
 
         if(add){
             res.status(200).json({
@@ -61,9 +61,9 @@ exports.getAddressById = async(req, res, next) => {
 
 exports.getAddressByUserId = async(req, res, next) => {
     try{
-        const userId = req.params.userId;//passing id instead of userId works
+        const userId = req.params.userId;
 
-        const add = await Address.find({userId: userId});//passing id instead of userId works
+        const add = await Address.find({userId: userId});
 
         if(add){
             res.status(200).json({

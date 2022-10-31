@@ -10,6 +10,29 @@ const nanoid = customAlphabet('1234567890', 6);
 const moment = require('moment/moment');
 const { endDate } = require('./subscriptionController');
 
+exports.getCartByDate = async (req, res, next) => {
+    try {
+        let nextDay=moment().add(1,'d').format('DD-MM-YYYY');
+        console.log(nextDay)
+        const cart = await Cart.find({date:nextDay}).sort({ createdAt: -1 }).populate("userId address subscription");
+
+        if (cart) {
+            res.status(200).json({
+                status: true,
+                count: cart.length,
+
+                cart
+            })
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+
+}
 
 exports.getCartByDate = async (req, res, next) => {
     try {
@@ -127,31 +150,34 @@ exports.addToCart = async (req, res, next) => {
         console.log("ADD TO CART METHOD");
         console.log(isCustom)
         if (isCustom) {
-            for (i = 0; i < days.length; i++) {
+            //for (i = 0; i < days.length; i++) {
                 //Order Created
                 let cart = new Cart({
                     orderId: await nanoid(),
                     products: products,
                     userId: userId,
-                    date: days[i],
+                    //orderDate: days,
+                    orderDays: days,
                     total: total,
                     status: status,
                     address: address,
                 });
                 await cart.save();
 
+                //use cron job to create next order automatically
+
                 let cartId = cart._id
                 carts.push(cartId);
                 console.log(cartId)
 
-            }
+            //}
             console.log(days.length)
         }
         else if (isNormal || isAlternate) {
             for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
                 normaldays.push(m.format('DD-MM-YYYY'));
             }
-            for (j = 0; j < normaldays.length; j++) {
+            //for (j = 0; j < normaldays.length; j++) {
 
                 //for (i = 0; i < noofdays.length; i++){
                 //Order Created
@@ -159,7 +185,8 @@ exports.addToCart = async (req, res, next) => {
                     orderId: await nanoid(),
                     products: products,
                     userId: userId,
-                    date: normaldays[j],
+                    //orderDate: normaldays[j],
+                    orderDays: normaldays,
                     total: total,
                     status: status,
                     address: address,
@@ -170,9 +197,9 @@ exports.addToCart = async (req, res, next) => {
                 carts.push(cartId);
                 console.log(cartId)
 
-                // }
             }
-        }
+        //}
+        // }
         //console.log(carts.length)
 
         else if (isOneTime) {
@@ -182,7 +209,7 @@ exports.addToCart = async (req, res, next) => {
                 orderId: await nanoid(),
                 products: products,
                 userId: userId,
-                date: moment().toISOString(),
+                orderDate: moment().format('DD-MM-YYYY'),
                 total: total,
                 status: status,
                 address: address,
@@ -226,7 +253,7 @@ exports.addToCart = async (req, res, next) => {
                     startDate: startDate,
                     daysRemaining: daysRemaining,
                     endDate: moment(startDate).add(30, 'd').toDate().toISOString(),
-                    days:normaldays,
+                    days: normaldays,
                     deliveryFrequency: deliveryFrequency,
                 });
                 await subscription.save();
@@ -242,7 +269,7 @@ exports.addToCart = async (req, res, next) => {
                     billId: billId,
                     startDate: startDate,
                     endDate: endDate,
-                    days:normaldays,
+                    days: normaldays,
                     deliveryFrequency: deliveryFrequency,
                 });
                 await subscription.save();
@@ -288,6 +315,50 @@ exports.addToCart = async (req, res, next) => {
     }
 }
 
+exports.addOrder = async (req, res, next) => {
+    try {
+        console.log("hello")
+        const id=req.params.id
+        const cart = await Cart.findById(id);
+        let days = cart.orderDays;
+        let userId = cart.userId;
+        let products = cart.products;
+        let total = cart.total;
+        let address = cart.address;
+        let currentDate = moment().format('DD-MM-YYYY')
+        console.log(currentDate)
+        let terminate = cart.terminate;
+        let pause = cart.isPause;
+        if (terminate == false && pause == false) {
+            for (i = 0; i < days.length; i++) {
+                //if (days[i] == currentDate) {
+                    //Order Created
+                    let cart = new Cart({
+                        orderId: await nanoid(),
+                        products: products,
+                        userId: userId,
+                        orderDate: days[i],
+                        total: total,
+                        address: address,
+                        mainOrderId:id
+                    });
+                    await cart.save();
+                    //use cron job to create next order automatically
+               // }
+            }
+            
+            res.status(200).json({
+                cart,
+                message: 'Cart added successfully'
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error.message
+        })
+    }
+}
 
 
 exports.updateCart = async (req, res, next) => {

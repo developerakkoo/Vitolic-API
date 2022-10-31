@@ -40,8 +40,17 @@ const cartSchema = new Schema({
         type: Boolean,
         default: false
     },
-    date: { type: String }
-
+    orderDate: { type: String },
+    orderDays:[],
+    terminate:{
+        type: Boolean,
+        default: false
+    },
+    isPause: {
+        type: Boolean,
+        default: false
+    },
+    mainOrderId:{ type: String },
 }, {
     timestamps: true
 });
