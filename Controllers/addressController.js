@@ -3,6 +3,7 @@ const User = require('./../Models/userModel');
 
 const io = require('./../socket');
 
+
 exports.postAddress = async(req, res, next) => {
     try{
             const userId = req.body.userId;
