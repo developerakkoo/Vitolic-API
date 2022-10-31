@@ -4,6 +4,7 @@ const cartController = require('../Controllers/orderController');
 
 const router = express.Router();
 
+router.put('/cart/order/:id', cartController.addOrder);
 
 /**
  * @swagger
@@ -42,8 +43,9 @@ const router = express.Router();
  *  
  * 
  */
- router.post('/cart',  cartController.addToCart);
+router.post('/cart', cartController.addToCart);
 
+router.get('/cart/date', cartController.getCartByDate);
 
 /**
  * @swagger
@@ -62,7 +64,7 @@ const router = express.Router();
  *  
  * 
  */
-router.get('/cart/featured',  cartController.featured);
+router.get('/cart/featured', cartController.featured);
 
 /**
  * @swagger
@@ -101,7 +103,7 @@ router.get('/cart/featured',  cartController.featured);
  *  
  * 
  */
-router.post('/cart',  cartController.addToCart);
+router.post('/cart', cartController.addToCart);
 
 /**
  * @swagger
@@ -120,9 +122,9 @@ router.post('/cart',  cartController.addToCart);
  *  
  * 
  */
-router.get('/cart/:id',  cartController.getCartByCartId);
+router.get('/cart/:id', cartController.getCartByCartId);
 
-router.get('/cart/user/:id',  cartController.getCartByUserId);
+router.get('/cart/user/:id', cartController.getCartByUserId);
 
 /**
  * @swagger
@@ -141,7 +143,7 @@ router.get('/cart/user/:id',  cartController.getCartByUserId);
  *  
  * 
  */
-router.get('/cart',  cartController.getCart);
+router.get('/cart', cartController.getCart);
 /**
  * @swagger
  * /deliver/{id}:

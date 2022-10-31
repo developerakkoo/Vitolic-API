@@ -18,7 +18,7 @@ const router = express.Router();
  *  
  * 
  */
-router.get('/address/:userId',  addressController.getAddressByUserId);
+router.get('/address/user/:userId',  addressController.getAddressByUserId);
 
 
 /**
@@ -35,7 +35,7 @@ router.get('/address/:userId',  addressController.getAddressByUserId);
  *  
  * 
  */
- router.get('/address/:userId',  addressController.getAddressById);
+ router.get('/address/:id',  addressController.getAddressById);
 /**
  * @swagger
  * /address:
