@@ -322,6 +322,7 @@ exports.addOrder = async (req, res, next) => {
                     //use cron job to create next order automatically
                // }
             }
+            
             res.status(200).json({
                 cart,
                 message: 'Cart added successfully'
