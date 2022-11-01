@@ -83,6 +83,20 @@ exports.getSubscription = async (req, res, next) => {
     }
 }
 
+exports.getSubscriptionByCartId = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+
+        let subscription = await Subscription.find({cartId:id}).populate('userId billId cartId');
+        if (subscription) {
+
+            res.status(200).json({ success: true, subscription })
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
+    }
+}
+
 exports.getSubscriptionById = async (req, res, next) => {
     try {
         const id = req.params.id;

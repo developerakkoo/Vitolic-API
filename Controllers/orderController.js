@@ -143,7 +143,7 @@ exports.addToCart = async (req, res, next) => {
         //console.log(noofdays.length)
         let normaldays = [];
 
-        let carts = [];
+        let cartId;
         //console.log(noofdays)
         //console.log(normaldays.length)
 
@@ -166,9 +166,9 @@ exports.addToCart = async (req, res, next) => {
 
                 //use cron job to create next order automatically
 
-                let cartId = cart._id
-                carts.push(cartId);
-                console.log(cartId)
+                 cartId = cart._id
+                /* carts.push(cartId);
+                console.log(cartId) */
 
             //}
             console.log(days.length)
@@ -193,9 +193,9 @@ exports.addToCart = async (req, res, next) => {
                 });
                 await cart.save();
 
-                let cartId = cart._id
-                carts.push(cartId);
-                console.log(cartId)
+                 cartId = cart._id
+                /* carts.push(cartId);
+                console.log(cartId) */
 
             }
         //}
@@ -221,18 +221,18 @@ exports.addToCart = async (req, res, next) => {
                 cart,
                 message: 'Cart added successfully'
             })
-            let cartId = cart._id
-            carts.push(cartId);
-            console.log(cartId)
+             cartId = cart._id
+            /* carts.push(cartId);
+            console.log(cartId) */
 
         }
-        if (carts) {
+        if (cartId) {
             //Bill Created
             let bill = new Bill({
                 invoiceNumber: await nanoid(),
                 products: products,
                 userId: userId,
-                cartId: carts,
+                cartId: cartId,
                 amount: total,
                 paymentStatus: status,
 
@@ -248,7 +248,7 @@ exports.addToCart = async (req, res, next) => {
                 subscription = new Subscription({
                     productId: productId,
                     userId: userId,
-                    cartId: carts,
+                    cartId: cartId,
                     billId: billId,
                     startDate: startDate,
                     daysRemaining: daysRemaining,
@@ -265,7 +265,7 @@ exports.addToCart = async (req, res, next) => {
                 subscription = new Subscription({
                     productId: productId,
                     userId: userId,
-                    cartId: carts,
+                    cartId: cartId,
                     billId: billId,
                     startDate: startDate,
                     endDate: endDate,
@@ -281,7 +281,7 @@ exports.addToCart = async (req, res, next) => {
                 subscription = new Subscription({
                     productId: productId,
                     userId: userId,
-                    cartId: carts,
+                    cartId: cartId,
                     billId: billId,
                     days: days,
                     //days: ,
@@ -299,7 +299,7 @@ exports.addToCart = async (req, res, next) => {
 
             if (subscription) {
                 res.status(200).json({
-                    carts,
+                    cart,
                     bill,
                     subscription,
                     message: 'Cart added successfully'

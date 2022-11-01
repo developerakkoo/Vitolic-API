@@ -13,9 +13,9 @@ const billingSchema = new Schema({
 
     userId: { type: Schema.Types.ObjectId, ref: 'User' },
 
-    subscriptionId: { type: String },
+    subscriptionId: { type: Schema.Types.ObjectId, ref: 'Subscription' },
 
-    cartId: [],
+    cartId: { type: Schema.Types.ObjectId, ref: 'Cart' },
 
     amount: { type: Number, },
 

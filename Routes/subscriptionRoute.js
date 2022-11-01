@@ -112,6 +112,7 @@ router.get('/subscription',  subscriptionController.getSubscription);
  * 
  */
  router.get('/subscription/user/:id',  subscriptionController.getSubscriptionByUserId);
+ router.get('/subscription/cart/:id',  subscriptionController.getSubscriptionByCartId);
  
 
 /**
