@@ -12,9 +12,9 @@ const { endDate } = require('./subscriptionController');
 
 exports.getCartByDate = async (req, res, next) => {
     try {
-        let nextDay=moment().add(1,'d').format('DD-MM-YYYY');
+        let nextDay = moment().add(1, 'd').format('DD-MM-YYYY');
         console.log(nextDay)
-        const cart = await Cart.find({date:nextDay}).sort({ createdAt: -1 }).populate("userId address subscription");
+        const cart = await Cart.find({ date: nextDay }).sort({ createdAt: -1 }).populate("userId address subscription");
 
         if (cart) {
             res.status(200).json({
@@ -34,7 +34,7 @@ exports.getCartByDate = async (req, res, next) => {
 
 }
 
-exports.getCartByDate = async (req, res, next) => {
+/* exports.getCartByDate = async (req, res, next) => {
     try {
         let nextDay=moment().add(1,'d').format('DD-MM-YYYY');
         console.log(nextDay)
@@ -56,12 +56,12 @@ exports.getCartByDate = async (req, res, next) => {
         })
     }
 
-}
+} */
 
 exports.getCartByCartId = async (req, res, next) => {
     try {
 
-        const cart = await Cart.findById(req.params.id).populate("userId address subscription");
+        const cart = await Cart.findById(req.params.id).populate("userId address subscription product");
 
         if (cart) {
             res.status(200).json({
@@ -136,7 +136,7 @@ exports.getCart = async (req, res, next) => {
 
 exports.addToCart = async (req, res, next) => {
     try {
-        const { userId, products, productId, total, status, address, isCustom, isNormal, isAlternate, startDate, endDate, days, count, name, daysRemaining, isOneTime } = req.body;
+        const { userId, products, productId, total, status, address, emailAddress, mobileNumber, isCustom, isNormal, isAlternate, startDate, endDate, days, count, name, daysRemaining, isOneTime } = req.body;
         //let noofdays = [];
         //if (days != null) noofdays = days.split(",")
 
@@ -151,24 +151,24 @@ exports.addToCart = async (req, res, next) => {
         console.log(isCustom)
         if (isCustom) {
             //for (i = 0; i < days.length; i++) {
-                //Order Created
-                let cart = new Cart({
-                    orderId: await nanoid(),
-                    products: products,
-                    userId: userId,
-                    //orderDate: days,
-                    orderDays: days,
-                    total: total,
-                    status: status,
-                    address: address,
-                });
-                await cart.save();
+            //Order Created
+            let cart = new Cart({
+                orderId: await nanoid(),
+                products: products,
+                userId: userId,
+                //orderDate: days,
+                orderDays: days,
+                total: total,
+                status: status,
+                address: address,
+            });
+            await cart.save();
 
-                //use cron job to create next order automatically
+            //use cron job to create next order automatically
 
-                 cartId = cart._id
-                /* carts.push(cartId);
-                console.log(cartId) */
+            cartId = cart._id
+            /* carts.push(cartId);
+            console.log(cartId) */
 
             //}
             console.log(days.length)
@@ -179,25 +179,25 @@ exports.addToCart = async (req, res, next) => {
             }
             //for (j = 0; j < normaldays.length; j++) {
 
-                //for (i = 0; i < noofdays.length; i++){
-                //Order Created
-                let cart = new Cart({
-                    orderId: await nanoid(),
-                    products: products,
-                    userId: userId,
-                    //orderDate: normaldays[j],
-                    orderDays: normaldays,
-                    total: total,
-                    status: status,
-                    address: address,
-                });
-                await cart.save();
+            //for (i = 0; i < noofdays.length; i++){
+            //Order Created
+            let cart = new Cart({
+                orderId: await nanoid(),
+                products: products,
+                userId: userId,
+                //orderDate: normaldays[j],
+                orderDays: normaldays,
+                total: total,
+                status: status,
+                address: address,
+            });
+            await cart.save();
 
-                 cartId = cart._id
-                /* carts.push(cartId);
-                console.log(cartId) */
+            cartId = cart._id
+            /* carts.push(cartId);
+            console.log(cartId) */
 
-            }
+        }
         //}
         // }
         //console.log(carts.length)
@@ -221,7 +221,7 @@ exports.addToCart = async (req, res, next) => {
                 cart,
                 message: 'Cart added successfully'
             })
-             cartId = cart._id
+            cartId = cart._id
             /* carts.push(cartId);
             console.log(cartId) */
 
@@ -250,6 +250,9 @@ exports.addToCart = async (req, res, next) => {
                     userId: userId,
                     cartId: cartId,
                     billId: billId,
+                    addressId: address,
+                    mobileNumber: mobileNumber,
+                    emailAddress: emailAddress,
                     startDate: startDate,
                     daysRemaining: daysRemaining,
                     endDate: moment(startDate).add(30, 'd').toDate().toISOString(),
@@ -267,6 +270,9 @@ exports.addToCart = async (req, res, next) => {
                     userId: userId,
                     cartId: cartId,
                     billId: billId,
+                    addressId: address,
+                    mobileNumber: mobileNumber,
+                    emailAddress: emailAddress,
                     startDate: startDate,
                     endDate: endDate,
                     days: normaldays,
@@ -283,9 +289,10 @@ exports.addToCart = async (req, res, next) => {
                     userId: userId,
                     cartId: cartId,
                     billId: billId,
+                    addressId: address,
+                    mobileNumber: mobileNumber,
+                    emailAddress: emailAddress,
                     days: days,
-                    //days: ,
-                    //name: name,
                     startDate: startDate,
                     endDate: endDate,
                     deliveryFrequency: deliveryFrequency,
@@ -318,7 +325,7 @@ exports.addToCart = async (req, res, next) => {
 exports.addOrder = async (req, res, next) => {
     try {
         console.log("hello")
-        const id=req.params.id
+        const id = req.params.id
         const cart = await Cart.findById(id);
         let days = cart.orderDays;
         let userId = cart.userId;
@@ -332,21 +339,21 @@ exports.addOrder = async (req, res, next) => {
         if (terminate == false && pause == false) {
             for (i = 0; i < days.length; i++) {
                 //if (days[i] == currentDate) {
-                    //Order Created
-                    let cart = new Cart({
-                        orderId: await nanoid(),
-                        products: products,
-                        userId: userId,
-                        orderDate: days[i],
-                        total: total,
-                        address: address,
-                        mainOrderId:id
-                    });
-                    await cart.save();
-                    //use cron job to create next order automatically
-               // }
+                //Order Created
+                let cart = new Cart({
+                    orderId: await nanoid(),
+                    products: products,
+                    userId: userId,
+                    orderDate: days[i],
+                    total: total,
+                    address: address,
+                    mainOrderId: id
+                });
+                await cart.save();
+                //use cron job to create next order automatically
+                // }
             }
-            
+
             res.status(200).json({
                 cart,
                 message: 'Cart added successfully'
@@ -402,6 +409,7 @@ exports.orderDelivered = async (req, res, next) => {
         const price = req.body.price;
         let isDelivered = true;
 
+        //change walletcashbackavailable to subscriptionwallet
         const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: -price } });
         console.log(cart.products[0])
         const cart1 = await Cart.findByIdAndUpdate({ _id: cartId }, { isDelivered });

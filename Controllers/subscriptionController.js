@@ -87,7 +87,7 @@ exports.getSubscriptionByCartId = async (req, res, next) => {
     try {
         const id = req.params.id;
 
-        let subscription = await Subscription.find({cartId:id}).populate('userId billId cartId');
+        let subscription = await Subscription.find({cartId:id}).populate('userId billId cartId ');
         if (subscription) {
 
             res.status(200).json({ success: true, subscription })
@@ -101,7 +101,7 @@ exports.getSubscriptionById = async (req, res, next) => {
     try {
         const id = req.params.id;
 
-        const subscription = await Subscription.findById(id).populate('userId billId cartId');
+        const subscription = await Subscription.findById(id).populate('productId userId billId cartId');
 
         if (subscription) {
             res.status(200).json({ success: true, subscription })
@@ -115,7 +115,7 @@ exports.getSubscriptionByUserId = async (req, res, next) => {
     try {
         const id = req.params.id;
 
-        const subscription = await Subscription.find({ userId: id }).sort({ createdAt: -1 }).populate('userId cartId billId');
+        const subscription = await Subscription.find({ userId: id }).sort({ createdAt: -1 }).populate('productId userId cartId billId');
 
         if (subscription) {
             res.status(200).json({ success: true, subscription })
@@ -129,10 +129,10 @@ exports.getSubscriptionByUserId = async (req, res, next) => {
 exports.updateSubscription = async (req, res, next) => {
     try {
         const id = req.params.id;
-        let subscription = await Subscription.findOneAndUpdate({ _id: id }, req.body);
+        let subscription = await Subscription.findByIdAndUpdate(id, req.body);
 
         if (subscription) {
-            io.getIO().emit('subscription:get', { action: 'updated', subscription })
+            io.getIO().emit('subscription:put', { action: 'updated', subscription })
 
             res.status(200).json({ success: true, message: 'Subscription updated successfully', subscription })
         }
@@ -552,7 +552,7 @@ exports.vacation = async (req, res, next) => {
     }
 }
 
-exports.upgradeAlt = async (req, res, next) => {
+/* exports.upgradeAlt = async (req, res, next) => {
     try {
         const id = req.params.id;
         const deliveryFrequency = "DAILY";
@@ -592,7 +592,8 @@ exports.upgradeAlt = async (req, res, next) => {
     } catch (error) {
         res.status(500).json({ error, message: 'Something went wrong!' });
     }
-}
+} */
+/* 
 
 exports.upgradeCustom = async (req, res, next) => {
     try {
@@ -630,6 +631,31 @@ exports.upgradeCustom = async (req, res, next) => {
         if (subscription) {
             res.status(201).json({ status: 'success', subscription, message: 'Subscription paused successfully!' });
         }
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
+} */
+
+exports.vacation = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        console.log("hello" + id)
+        const onVacation = req.body.onVacation;
+        const vacationStart = req.body.vacationStart;
+
+        const vacationEnd = req.body.vacationEnd;
+        console.log(vacationEnd)
+
+        //const df = vacationStart.diff(vacationEnd, 'days') 
+        //const newEndDate = moment().add(df, 'd').toDate();
+        const subscription = await Subscription.findOneAndUpdate({ _id: id }, { onVacation, vacationStart, vacationEnd });
+        //console.log(df+"hello")
+
+        if (subscription) {
+            res.status(201).json({ status: 'success', subscription, message: 'Subscription paused successfully!' });
+            //io.getIO.emit('sub:pause', { subscription: subscription });
+        }
+
     } catch (error) {
         res.status(500).json({ error, message: 'Something went wrong!' });
     }

@@ -318,8 +318,6 @@ exports.deleteUserProfile = async (req, res, next) => {
 
 
 
-
-
 //Excel 
 /* exports.usersExcel = () => {
     mongodb.connect(
