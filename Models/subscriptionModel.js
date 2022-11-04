@@ -12,7 +12,9 @@ const subscriptionSchema = new Schema({
     addressId: { type: Schema.Types.ObjectId, ref: 'Address'  },
     mobileNumber: { type: Number },
     emailAddress: { type: String },
-
+    discountedPrice: { type: Number },
+    quantity: { type: Number },
+    
     daysremaining: { type: String },
     isNormal: {
         type: Boolean
@@ -80,7 +82,10 @@ const subscriptionSchema = new Schema({
         enum: ['DAILY', 'ALTERNATE', 'ONETIME', 'CUSTOM']
         //required: [true, 'Delivery Frequency is required']
     },
-
+    imageUrl:{
+        type: String,
+        default: 'https://image.shutterstock.com/image-illustration/default-white-background-template-without-600w-1971913538.jpg'
+    },
 },
     {
         timestamps: true

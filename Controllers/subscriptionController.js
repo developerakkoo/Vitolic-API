@@ -87,7 +87,7 @@ exports.getSubscriptionByCartId = async (req, res, next) => {
     try {
         const id = req.params.id;
 
-        let subscription = await Subscription.find({cartId:id}).populate('userId billId cartId ');
+        let subscription = await Subscription.find({ cartId: id }).populate('userId billId cartId ');
         if (subscription) {
 
             res.status(200).json({ success: true, subscription })
@@ -437,7 +437,7 @@ exports.altToDaily = async (req, res, next) => {
                 }
             }
 
-               
+
             if (carts) {
                 res.status(201).json({ status: 'success', cart, message: 'Subscription upgraded to daily successfully!' });
             }
@@ -513,9 +513,9 @@ exports.customToDaily = async (req, res, next) => {
                     }
                 }
 
-              
+
             }
-           
+
             if (carts) {
                 res.status(201).json({ status: 'success', cart, message: 'Subscription upgraded to daily successfully!' });
             }
@@ -636,27 +636,69 @@ exports.upgradeCustom = async (req, res, next) => {
     }
 } */
 
-exports.vacation = async (req, res, next) => {
+exports.increaseDate = async (req, res, next) => {
     try {
         const id = req.params.id;
-        console.log("hello" + id)
-        const onVacation = req.body.onVacation;
-        const vacationStart = req.body.vacationStart;
+        const endDate = req.body.endDate;
+        const quantity = req.body.quantity;
+        const total = req.body.total;
+        let subscriptionOld = await Subscription.findById(id);
+        let userId = subscriptionOld.userId;
+        let cartId = subscriptionOld.cartId;
+        let status = "Successful";
+        let oldEndDate = subscriptionOld.endDate;
+        let normaldays = [];
+        let subscription = await Subscription.findByIdAndUpdate(id, { endDate, inc: { quantity: quantity, subscriptionWallet: total } });
+        //let subscription = await Subscription.findByIdAndUpdate(id, { endDate, inc: { quantity: quantity, daysRemaining: quantity } });
+        console.log(subscription)
+        if (subscription) {
+            for (var m = moment(oldEndDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
+                normaldays.push(m.format('DD-MM-YYYY'));
+            }
+            console.log(normaldays)
+            for (j = 0; j < normaldays.length; j++) {
+                //Order Created
+                
+                let cart = new Cart({
+                    orderId: await nanoid(),
+                    products: products,
+                    userId: userId,
+                    orderDate: normaldays[j],
+                    total: total,
+                    status: status,
+                    address: address,
+                });
+                await cart.save();
+                const addDays = await Cart.findByIdAndUpdate(cartId, { $push: { orderDays: normaldays } });
 
-        const vacationEnd = req.body.vacationEnd;
-        console.log(vacationEnd)
+            }
+            let subscription1 = await Subscription.findByIdAndUpdate(id, { $push: { days: normaldays } });
 
-        //const df = vacationStart.diff(vacationEnd, 'days') 
-        //const newEndDate = moment().add(df, 'd').toDate();
-        const subscription = await Subscription.findOneAndUpdate({ _id: id }, { onVacation, vacationStart, vacationEnd });
-        //console.log(df+"hello")
+            io.getIO().emit('subscription:put', { action: 'updated', subscription })
+
+            res.status(200).json({ success: true, message: 'Subscription date extended successfully', subscription })
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
+    }
+}
+
+exports.decreaseDate = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const endDate = req.body.endDate;
+        const quantity = req.body.quantity;
+        let subscriptionOld = await Subscription.findById(id);
+        let oldEndDate = subscriptionOld.endDate;
+
+        let subscription = await Subscription.findByIdAndUpdate(id, { endDate, inc: { quantity: quantity } });
 
         if (subscription) {
-            res.status(201).json({ status: 'success', subscription, message: 'Subscription paused successfully!' });
-            //io.getIO.emit('sub:pause', { subscription: subscription });
-        }
+            io.getIO().emit('subscription:put', { action: 'updated', subscription })
 
+            res.status(200).json({ success: true, message: 'Subscription updated successfully', subscription })
+        }
     } catch (error) {
-        res.status(500).json({ error, message: 'Something went wrong!' });
+        res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
     }
 }

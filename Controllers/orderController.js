@@ -139,13 +139,15 @@ exports.addToCart = async (req, res, next) => {
         const { userId, products, productId, total, status, address, emailAddress, mobileNumber, isCustom, isNormal, isAlternate, startDate, endDate, days, count, name, daysRemaining, isOneTime } = req.body;
         //let noofdays = [];
         //if (days != null) noofdays = days.split(",")
+        const product = await Product.findById(productId);
 
         //console.log(noofdays.length)
         let normaldays = [];
-
+        let productPrice = product.discountedPrice;
+        let productQuantity = product.amount;
+        let productImgUrl = product.imageUrl;
+        console.log()
         let cartId;
-        //console.log(noofdays)
-        //console.log(normaldays.length)
 
         console.log("ADD TO CART METHOD");
         console.log(isCustom)
@@ -247,6 +249,9 @@ exports.addToCart = async (req, res, next) => {
                 deliveryFrequency = 'DAILY';
                 subscription = new Subscription({
                     productId: productId,
+                    quantity:productQuantity,
+                    discountedPrice:productPrice,
+                    imageUrl:productImgUrl,
                     userId: userId,
                     cartId: cartId,
                     billId: billId,
@@ -267,6 +272,9 @@ exports.addToCart = async (req, res, next) => {
 
                 subscription = new Subscription({
                     productId: productId,
+                    quantity:productQuantity,
+                    discountedPrice:productPrice,
+                    imageUrl:productImgUrl,
                     userId: userId,
                     cartId: cartId,
                     billId: billId,
@@ -286,6 +294,9 @@ exports.addToCart = async (req, res, next) => {
 
                 subscription = new Subscription({
                     productId: productId,
+                    quantity:productQuantity,
+                    discountedPrice:productPrice,
+                    imageUrl:productImgUrl,
                     userId: userId,
                     cartId: cartId,
                     billId: billId,
