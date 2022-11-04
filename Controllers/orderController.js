@@ -306,7 +306,7 @@ exports.addToCart = async (req, res, next) => {
 
             if (subscription) {
                 res.status(200).json({
-                    cart,
+                    cartId,
                     bill,
                     subscription,
                     message: 'Cart added successfully'
