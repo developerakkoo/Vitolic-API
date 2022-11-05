@@ -188,7 +188,7 @@ exports.addToCart = async (req, res, next) => {
                 products: products,
                 userId: userId,
                 //orderDate: normaldays[j],
-                orderDays: normaldays,
+                orderDays: days,
                 total: total,
                 status: status,
                 address: address,
@@ -261,7 +261,7 @@ exports.addToCart = async (req, res, next) => {
                     startDate: startDate,
                     daysRemaining: daysRemaining,
                     endDate: moment(startDate).add(30, 'd').toDate().toISOString(),
-                    days: normaldays,
+                    days: days,
                     deliveryFrequency: deliveryFrequency,
                 });
                 await subscription.save();
@@ -283,7 +283,7 @@ exports.addToCart = async (req, res, next) => {
                     emailAddress: emailAddress,
                     startDate: startDate,
                     endDate: endDate,
-                    days: normaldays,
+                    days: days,
                     deliveryFrequency: deliveryFrequency,
                 });
                 await subscription.save();
