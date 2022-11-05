@@ -75,7 +75,7 @@ const subscriptionSchema = new Schema({
         type: Number
     },
 
-    days: [],
+    days:  { type : Array , "default" : [] },
 
     deliveryFrequency: {
         type: String,
