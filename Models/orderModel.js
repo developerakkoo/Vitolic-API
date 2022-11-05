@@ -41,7 +41,7 @@ const cartSchema = new Schema({
         default: false
     },
     orderDate: { type: String },
-    orderDays:[],
+    orderDays: { type : Array , "default" : [] },
     terminate:{
         type: Boolean,
         default: false
