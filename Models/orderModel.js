@@ -36,13 +36,17 @@ const cartSchema = new Schema({
         type: Number,
         required: true
     },
+    quantity: {
+        type: Number,
+        required: true
+    },
     isDelivered: {
         type: Boolean,
         default: false
     },
     orderDate: { type: String },
-    orderDays: { type : Array , "default" : [] },
-    terminate:{
+    orderDays: { type: Array, "default": [] },
+    terminate: {
         type: Boolean,
         default: false
     },
@@ -50,7 +54,7 @@ const cartSchema = new Schema({
         type: Boolean,
         default: false
     },
-    mainOrderId:{ type: String },
+    mainOrderId: { type: String },
 }, {
     timestamps: true
 });

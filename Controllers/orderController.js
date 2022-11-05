@@ -136,7 +136,7 @@ exports.getCart = async (req, res, next) => {
 
 exports.addToCart = async (req, res, next) => {
     try {
-        const { userId, products, productId, total, status, address, emailAddress, mobileNumber, isCustom, isNormal, isAlternate, startDate, endDate, days, count, name, daysRemaining, isOneTime } = req.body;
+        const { userId, products, productId, total, quantity, status, address, emailAddress, mobileNumber, isCustom, isNormal, isAlternate, startDate, endDate, days, daysRemaining, isOneTime } = req.body;
         //let noofdays = [];
         //if (days != null) noofdays = days.split(",")
         const product = await Product.findById(productId);
@@ -144,9 +144,9 @@ exports.addToCart = async (req, res, next) => {
         //console.log(noofdays.length)
         let normaldays = [];
         let productPrice = product.discountedPrice;
-        let productQuantity = product.amount;
+        console.log(productPrice)
         let productImgUrl = product.imageUrl;
-        console.log()
+        console.log(productImgUrl)
         let cartId;
 
         console.log("ADD TO CART METHOD");
@@ -160,6 +160,7 @@ exports.addToCart = async (req, res, next) => {
                 userId: userId,
                 //orderDate: days,
                 orderDays: days,
+                quantity: quantity,
                 total: total,
                 status: status,
                 address: address,
@@ -189,6 +190,7 @@ exports.addToCart = async (req, res, next) => {
                 userId: userId,
                 //orderDate: normaldays[j],
                 orderDays: days,
+                quantity: quantity,
                 total: total,
                 status: status,
                 address: address,
@@ -212,6 +214,7 @@ exports.addToCart = async (req, res, next) => {
                 products: products,
                 userId: userId,
                 orderDate: moment().format('DD-MM-YYYY'),
+                quantity: quantity,
                 total: total,
                 status: status,
                 address: address,
@@ -249,9 +252,9 @@ exports.addToCart = async (req, res, next) => {
                 deliveryFrequency = 'DAILY';
                 subscription = new Subscription({
                     productId: productId,
-                    quantity:productQuantity,
-                    discountedPrice:productPrice,
-                    imageUrl:productImgUrl,
+                    quantity: quantity,
+                    discountedPrice: productPrice,
+                    imageUrl: productImgUrl,
                     userId: userId,
                     cartId: cartId,
                     billId: billId,
@@ -272,9 +275,9 @@ exports.addToCart = async (req, res, next) => {
 
                 subscription = new Subscription({
                     productId: productId,
-                    quantity:productQuantity,
-                    discountedPrice:productPrice,
-                    imageUrl:productImgUrl,
+                    quantity:quantity,
+                    discountedPrice: productPrice,
+                    imageUrl: productImgUrl,
                     userId: userId,
                     cartId: cartId,
                     billId: billId,
@@ -294,9 +297,9 @@ exports.addToCart = async (req, res, next) => {
 
                 subscription = new Subscription({
                     productId: productId,
-                    quantity:productQuantity,
-                    discountedPrice:productPrice,
-                    imageUrl:productImgUrl,
+                    quantity:quantity,
+                    discountedPrice: productPrice,
+                    imageUrl: productImgUrl,
                     userId: userId,
                     cartId: cartId,
                     billId: billId,

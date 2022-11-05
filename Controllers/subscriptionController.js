@@ -525,16 +525,43 @@ exports.customToDaily = async (req, res, next) => {
 
 exports.dailyToAlt = async (req, res, next) => {
     try {
+        console.log("hello")
         const id = req.params.id;
         const userId = req.body.userId;
         const mainOrderId = req.body.mainOrderId;
+        console.log(mainOrderId)
         const deliveryFrequency = "ALTERNATE";
-        const startDate = req.body.startDate;
-        console.log(startDate + "hello")
-        const endDate = req.body.endDate;
         let carts = [];
-        let normaldays = [];
-        const subscription = await Subscription.findByIdAndUpdate(id, { deliveryFrequency, startDate, endDate });
+        //let normaldays = [];
+        let subscriptionOld = await Subscription.findById(id);
+        console.log(subscriptionOld + "hello")
+        let oldDays=[]
+        oldDays = subscriptionOld.days;
+        let endDate = subscriptionOld.endDate;
+
+
+        console.log(oldDays + "olddays")
+        let currentDate = moment().format('DD-MM-YYYY')
+        let index = oldDays.indexOf(currentDate);
+        console.log(index + "index")
+
+        var x = [];
+        /*      for (var i = 0; i < oldDays.length; i = i + 1) {
+                 x.push(oldDays[i]);
+             }
+             console.log(x); */
+        oldDays.splice(i + 1, index + 1);
+
+        for (var i = 0; i < oldDays.length; i++)
+            if (i % 2 == 1)
+                x.push(oldDays[i]);
+        console.log(x  + "removed days " + x.length);
+        console.log(oldDays + "remaining")
+        let difference = oldDays.filter(y => !x.includes(y));
+        console.log(difference+"diff")
+
+        //need to push difference days into subscription days after deleteing dates from index of current date + 1 
+        const subscription = await Subscription.findByIdAndUpdate(id, { deliveryFrequency });
         //console.log(subscription)
         if (subscription) {
             let currentDate = moment().add(1, 'd').format('DD-MM-YYYY')
@@ -557,11 +584,10 @@ exports.dailyToAlt = async (req, res, next) => {
             let pause = mainOrder.isPause;
             if (terminate == false && pause == false) {
                 {
-                    for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
+                    /* for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
                         normaldays.push(m.format('DD-MM-YYYY'));
-                    }
-                    for (j = 0; j < normaldays.length; j++) {
-                        console.log(normaldays)
+                    } */
+                    for (j = 0; j < difference.length; j++) {
 
                         //for (i = 0; i < noofdays.length; i++){
                         //Order Created
@@ -569,7 +595,7 @@ exports.dailyToAlt = async (req, res, next) => {
                             orderId: await nanoid(),
                             products: products,
                             userId: userId,
-                            orderDate: normaldays[j],
+                            orderDate: difference[j],
                             total: total,
                             mainOrderId,
                             status: status,
@@ -585,9 +611,10 @@ exports.dailyToAlt = async (req, res, next) => {
                     }
                 }
             }
+            //console.log(normaldays)
 
             if (carts) {
-                res.status(201).json({ status: 'success', cart, message: 'Subscription upgraded to daily successfully!' });
+                res.status(201).json({ status: 'success', carts, message: 'Subscription upgraded to daily successfully!' });
             }
         }
     } catch (error) {
@@ -595,30 +622,77 @@ exports.dailyToAlt = async (req, res, next) => {
     }
 }
 
-exports.vacation = async (req, res, next) => {
+
+exports.increaseDate = async (req, res, next) => {
     try {
         const id = req.params.id;
-        console.log("hello" + id)
-        const onVacation = req.body.onVacation;
-        const vacationStart = req.body.vacationStart;
-
-        const vacationEnd = req.body.vacationEnd;
-        console.log(vacationEnd)
-
-        //const df = vacationStart.diff(vacationEnd, 'days') 
-        //const newEndDate = moment().add(df, 'd').toDate();
-        const subscription = await Subscription.findOneAndUpdate({ _id: id }, { onVacation, vacationStart, vacationEnd });
-        //console.log(df+"hello")
-
+        const endDate = req.body.endDate;
+        const quantity = req.body.quantity;
+        const total = req.body.total;
+        let subscriptionOld = await Subscription.findById(id);
+        let userId = subscriptionOld.userId;
+        console.log(userId + "userId")
+        let cartId = subscriptionOld.cartId;
+        console.log(cartId + "cartId")
+        let status = "Successful";
+        let oldEndDate = subscriptionOld.endDate;
+        console.log(oldEndDate + "olddate")
+        let normaldays = [];
+        let subscription = await Subscription.findByIdAndUpdate(id, { endDate: endDate, inc: { quantity: quantity, subscriptionWallet: total } });
+        //let subscription = await Subscription.findByIdAndUpdate(id, { endDate, inc: { quantity: quantity, daysRemaining: quantity } });
         if (subscription) {
-            res.status(201).json({ status: 'success', subscription, message: 'Subscription paused successfully!' });
-            //io.getIO.emit('sub:pause', { subscription: subscription });
-        }
+            for (var m = moment(oldEndDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
+                normaldays.push(m.format('DD-MM-YYYY'));
+            }
+            for (j = 0; j < normaldays.length; j++) {
+                //Order Created
 
+                let cart = new Cart({
+                    orderId: await nanoid(),
+                    products: products,
+                    userId: userId,
+                    orderDate: normaldays[j],
+                    total: total,
+                    status: status,
+                    address: address,
+                });
+                await cart.save();
+                const addDays = await Cart.findByIdAndUpdate(cartId, { $push: { orderDays: normaldays } });
+                let subscription1 = await Subscription.findByIdAndUpdate(id, { $push: { days: normaldays } });
+
+            }
+            console.log(normaldays)
+
+            io.getIO().emit('subscription:put', { action: 'updated', subscription })
+
+            res.status(200).json({ success: true, message: 'Subscription date extended successfully', subscription })
+        }
     } catch (error) {
-        res.status(500).json({ error, message: 'Something went wrong!' });
+        res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
     }
 }
+
+exports.decreaseDate = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const endDate = req.body.endDate;
+        const quantity = req.body.quantity;
+        let subscriptionOld = await Subscription.findById(id);
+        let oldEndDate = subscriptionOld.endDate;
+
+        let subscription = await Subscription.findByIdAndUpdate(id, { endDate, inc: { quantity: quantity } });
+
+        if (subscription) {
+            io.getIO().emit('subscription:put', { action: 'updated', subscription })
+
+            res.status(200).json({ success: true, message: 'Subscription updated successfully', subscription })
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
+    }
+}
+
+
 
 /* exports.upgradeAlt = async (req, res, next) => {
     try {
@@ -703,70 +777,27 @@ exports.upgradeCustom = async (req, res, next) => {
         res.status(500).json({ error, message: 'Something went wrong!' });
     }
 } */
-
-exports.increaseDate = async (req, res, next) => {
+exports.vacation = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const endDate = req.body.endDate;
-        const quantity = req.body.quantity;
-        const total = req.body.total;
-        let subscriptionOld = await Subscription.findById(id);
-        let userId = subscriptionOld.userId;
-        let cartId = subscriptionOld.cartId;
-        let status = "Successful";
-        let oldEndDate = subscriptionOld.endDate;
-        let normaldays = [];
-        let subscription = await Subscription.findByIdAndUpdate(id, { endDate, inc: { quantity: quantity, subscriptionWallet: total } });
-        //let subscription = await Subscription.findByIdAndUpdate(id, { endDate, inc: { quantity: quantity, daysRemaining: quantity } });
-        console.log(subscription)
-        if (subscription) {
-            for (var m = moment(oldEndDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
-                normaldays.push(m.format('DD-MM-YYYY'));
-            }
-            console.log(normaldays)
-            for (j = 0; j < normaldays.length; j++) {
-                //Order Created
-                
-                let cart = new Cart({
-                    orderId: await nanoid(),
-                    products: products,
-                    userId: userId,
-                    orderDate: normaldays[j],
-                    total: total,
-                    status: status,
-                    address: address,
-                });
-                await cart.save();
-                const addDays = await Cart.findByIdAndUpdate(cartId, { $push: { orderDays: normaldays } });
+        console.log("hello" + id)
+        const onVacation = req.body.onVacation;
+        const vacationStart = req.body.vacationStart;
 
-            }
-            let subscription1 = await Subscription.findByIdAndUpdate(id, { $push: { days: normaldays } });
+        const vacationEnd = req.body.vacationEnd;
+        console.log(vacationEnd)
 
-            io.getIO().emit('subscription:put', { action: 'updated', subscription })
-
-            res.status(200).json({ success: true, message: 'Subscription date extended successfully', subscription })
-        }
-    } catch (error) {
-        res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
-    }
-}
-
-exports.decreaseDate = async (req, res, next) => {
-    try {
-        const id = req.params.id;
-        const endDate = req.body.endDate;
-        const quantity = req.body.quantity;
-        let subscriptionOld = await Subscription.findById(id);
-        let oldEndDate = subscriptionOld.endDate;
-
-        let subscription = await Subscription.findByIdAndUpdate(id, { endDate, inc: { quantity: quantity } });
+        //const df = vacationStart.diff(vacationEnd, 'days') 
+        //const newEndDate = moment().add(df, 'd').toDate();
+        const subscription = await Subscription.findOneAndUpdate({ _id: id }, { onVacation, vacationStart, vacationEnd });
+        //console.log(df+"hello")
 
         if (subscription) {
-            io.getIO().emit('subscription:put', { action: 'updated', subscription })
-
-            res.status(200).json({ success: true, message: 'Subscription updated successfully', subscription })
+            res.status(201).json({ status: 'success', subscription, message: 'Subscription paused successfully!' });
+            //io.getIO.emit('sub:pause', { subscription: subscription });
         }
+
     } catch (error) {
-        res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
+        res.status(500).json({ error, message: 'Something went wrong!' });
     }
 }
