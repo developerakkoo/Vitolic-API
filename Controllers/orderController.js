@@ -129,8 +129,8 @@ exports.getCart = async (req, res, next) => {
 exports.addToCart = async (req, res, next) => {
     try {
         const { userId, products, productId, total, status, address, emailAddress, mobileNumber, isCustom, isNormal, isAlternate, startDate, days, daysRemaining, isOneTime } = req.body;
-        let noofdays = [];
-        if (days != null) noofdays = days.split(",")
+      /*   let noofdays = [];
+        if (days != null) noofdays = days.split(",") */
         const product = await Product.findById(productId);
         let endDate = moment(startDate).add(30, 'd').format('DD-MM-YYYY')
         //console.log(noofdays.length)
@@ -257,7 +257,7 @@ exports.addToCart = async (req, res, next) => {
                     startDate: startDate,
                     daysRemaining: daysRemaining,
                     endDate: moment(startDate).add(30, 'd').toDate().toISOString(),
-                    days: days,
+                    days: normaldays,
                     deliveryFrequency: deliveryFrequency,
                 });
                 await subscription.save();
@@ -279,7 +279,7 @@ exports.addToCart = async (req, res, next) => {
                     emailAddress: emailAddress,
                     startDate: startDate,
                     endDate: endDate,
-                    days: days,
+                    days: normaldays,
                     deliveryFrequency: deliveryFrequency,
                 });
                 await subscription.save();
