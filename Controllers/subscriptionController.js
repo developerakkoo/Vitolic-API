@@ -530,6 +530,11 @@ exports.dailyToAlt = async (req, res, next) => {
         const userId = req.body.userId;
         const mainOrderId = req.body.mainOrderId;
         console.log(mainOrderId)
+        //taking below as new input from user 
+        const quantity = req.body.quantity;
+        const startDate = req.body.startDate;
+        const endDate = req.body.endDate;
+
         const deliveryFrequency = "ALTERNATE";
         let carts = [];
         //let normaldays = [];
@@ -537,7 +542,7 @@ exports.dailyToAlt = async (req, res, next) => {
         console.log(subscriptionOld + "hello")
         let oldDays=[]
         oldDays = subscriptionOld.days;
-        let endDate = subscriptionOld.endDate;
+        //let endDate = subscriptionOld.endDate;
 
 
         console.log(oldDays + "olddays")

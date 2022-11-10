@@ -128,13 +128,17 @@ exports.getCart = async (req, res, next) => {
 
 exports.addToCart = async (req, res, next) => {
     try {
-        const { userId, products, productId, total, status, address, emailAddress, mobileNumber, isCustom, isNormal, isAlternate, startDate, days, daysRemaining, isOneTime } = req.body;
-      /*   let noofdays = [];
-        if (days != null) noofdays = days.split(",") */
+        let { userId, products, productId, total, status, address, emailAddress, mobileNumber, isCustom, isNormal, isAlternate, startDate, days, daysRemaining, isOneTime } = req.body;
+        /*   let noofdays = [];
+          if (days != null) noofdays = days.split(",") */
         const product = await Product.findById(productId);
-        let endDate = moment(startDate).add(30, 'd').format('DD-MM-YYYY')
+        startDate = moment(startDate).format('DD-MM-YYYY')
+        let endDate = moment(startDate).add(29, 'd')
+        console.log(endDate)
         //console.log(noofdays.length)
         let normaldays = [];
+        let altDays;
+
         let productPrice = product.discountedPrice;
         console.log(productPrice)
         let productImgUrl = product.imageUrl;
@@ -168,12 +172,13 @@ exports.addToCart = async (req, res, next) => {
             //}
             console.log(days.length)
         }
-        else if (isNormal || isAlternate) {
+        else if (isNormal) {
             for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
                 normaldays.push(m.format('DD-MM-YYYY'));
             }
-            console.log(normaldays)
+            console.log(normaldays + "days")
             //for (j = 0; j < normaldays.length; j++) {
+            console.log(normaldays.length)
 
             //for (i = 0; i < noofdays.length; i++){
             //Order Created
@@ -198,7 +203,45 @@ exports.addToCart = async (req, res, next) => {
         //}
         // }
         //console.log(carts.length)
+        else if (isAlternate) {
+            console.log(startDate + "datestart")
+            console.log(isAlternate)
+            for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
+                normaldays.push(m.format('DD-MM-YYYY'));
+            }
+            console.log(normaldays + " days")
+            console.log(normaldays.length)
+            //console.log
+  
+             altDays = normaldays.filter(function(v, i) {
+                // check the index is odd
+                return i % 2 == 0;
+              });
+              
+              console.log(altDays);
+            //for (j = 0; j < normaldays.length; j++) {
 
+            console.log(altDays.length+"alternatedays")
+            //for (i = 0; i < noofdays.length; i++){
+            //Order Created
+            let cart = new Cart({
+                orderId: await nanoid(),
+                products: products,
+                userId: userId,
+                //orderDate: normaldays[j],
+                orderDays: altDays,
+                //quantity: quantity,
+                total: total,
+                status: status,
+                address: address,
+            });
+            await cart.save();
+
+            cartId = cart._id
+            /* carts.push(cartId);
+            console.log(cartId) */
+
+        }
         else if (isOneTime) {
 
             //Order Created
@@ -279,7 +322,7 @@ exports.addToCart = async (req, res, next) => {
                     emailAddress: emailAddress,
                     startDate: startDate,
                     endDate: endDate,
-                    days: normaldays,
+                    days: altDays,
                     deliveryFrequency: deliveryFrequency,
                 });
                 await subscription.save();
