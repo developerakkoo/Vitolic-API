@@ -107,14 +107,7 @@ exports.getCartByUserId = async (req, res, next) => {
 exports.getCart = async (req, res, next) => {
     try {
 
-        const cart = await Cart.find({}).sort({ createdAt: -1 }).populate("userId address subscription");
-
-        //let { isDelivered } = cart;
-        //console.log(isDelivered)
-        //let isDelivered = cart.isDelivered
-        for (i = 0; i < cart.length; i++) {
-
-            if (cart[i].isDelivered == false) {
+        const cart = await Cart.find({isDelivered: false}).sort({ createdAt: -1 }).populate("userId address subscription");
 
                 res.status(200).json({
                     status: true,
@@ -122,8 +115,7 @@ exports.getCart = async (req, res, next) => {
 
                     cart
                 })
-            }
-        }
+       
     } catch (error) {
         res.status(500).json({
             status: false,
