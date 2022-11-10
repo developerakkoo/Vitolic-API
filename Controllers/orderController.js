@@ -129,8 +129,8 @@ exports.getCart = async (req, res, next) => {
 exports.addToCart = async (req, res, next) => {
     try {
         const { userId, products, productId, total, quantity, status, address, emailAddress, mobileNumber, isCustom, isNormal, isAlternate, startDate, endDate, days, daysRemaining, isOneTime } = req.body;
-        //let noofdays = [];
-        //if (days != null) noofdays = days.split(",")
+        let noofdays = [];
+        if (days != null) noofdays = days.split(",")
         const product = await Product.findById(productId);
 
         //console.log(noofdays.length)
@@ -181,7 +181,7 @@ exports.addToCart = async (req, res, next) => {
                 products: products,
                 userId: userId,
                 //orderDate: normaldays[j],
-                orderDays: days,
+                orderDays: noofdays,
                 quantity: quantity,
                 total: total,
                 status: status,
