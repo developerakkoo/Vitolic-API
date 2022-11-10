@@ -172,6 +172,7 @@ exports.addToCart = async (req, res, next) => {
             for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
                 normaldays.push(m.format('DD-MM-YYYY'));
             }
+            console.log(normaldays)
             //for (j = 0; j < normaldays.length; j++) {
 
             //for (i = 0; i < noofdays.length; i++){
@@ -181,7 +182,7 @@ exports.addToCart = async (req, res, next) => {
                 products: products,
                 userId: userId,
                 //orderDate: normaldays[j],
-                orderDays: noofdays,
+                orderDays: normaldays,
                 quantity: quantity,
                 total: total,
                 status: status,
