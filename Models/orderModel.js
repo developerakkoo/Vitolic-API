@@ -38,7 +38,6 @@ const cartSchema = new Schema({
     },
     quantity: {
         type: Number,
-        required: true
     },
     isDelivered: {
         type: Boolean,

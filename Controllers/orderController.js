@@ -107,15 +107,15 @@ exports.getCartByUserId = async (req, res, next) => {
 exports.getCart = async (req, res, next) => {
     try {
 
-        const cart = await Cart.find({isDelivered: false}).sort({ createdAt: -1 }).populate("userId address subscription");
+        const cart = await Cart.find({ isDelivered: false }).sort({ createdAt: -1 }).populate("userId address subscription");
 
-                res.status(200).json({
-                    status: true,
-                    count: cart.length,
+        res.status(200).json({
+            status: true,
+            count: cart.length,
 
-                    cart
-                })
-       
+            cart
+        })
+
     } catch (error) {
         res.status(500).json({
             status: false,
@@ -128,11 +128,11 @@ exports.getCart = async (req, res, next) => {
 
 exports.addToCart = async (req, res, next) => {
     try {
-        const { userId, products, productId, total, status, address, emailAddress, mobileNumber, isCustom, isNormal, isAlternate, startDate, endDate, days, daysRemaining, isOneTime } = req.body;
+        const { userId, products, productId, total, status, address, emailAddress, mobileNumber, isCustom, isNormal, isAlternate, startDate, days, daysRemaining, isOneTime } = req.body;
         let noofdays = [];
         if (days != null) noofdays = days.split(",")
         const product = await Product.findById(productId);
-
+        let endDate = moment(startDate).add(30, 'd').format('DD-MM-YYYY')
         //console.log(noofdays.length)
         let normaldays = [];
         let productPrice = product.discountedPrice;
