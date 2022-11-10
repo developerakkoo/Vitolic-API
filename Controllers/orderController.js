@@ -152,7 +152,7 @@ exports.addToCart = async (req, res, next) => {
                 userId: userId,
                 //orderDate: days,
                 orderDays: days,
-                quantity: quantity,
+                //quantity: quantity,
                 total: total,
                 status: status,
                 address: address,
@@ -183,7 +183,7 @@ exports.addToCart = async (req, res, next) => {
                 userId: userId,
                 //orderDate: normaldays[j],
                 orderDays: normaldays,
-                quantity: quantity,
+                //quantity: quantity,
                 total: total,
                 status: status,
                 address: address,
@@ -207,7 +207,7 @@ exports.addToCart = async (req, res, next) => {
                 products: products,
                 userId: userId,
                 orderDate: moment().format('DD-MM-YYYY'),
-                quantity: quantity,
+                //quantity: quantity,
                 total: total,
                 status: status,
                 address: address,
@@ -245,7 +245,7 @@ exports.addToCart = async (req, res, next) => {
                 deliveryFrequency = 'DAILY';
                 subscription = new Subscription({
                     productId: productId,
-                    quantity: quantity,
+                    //quantity: quantity,
                     discountedPrice: productPrice,
                     imageUrl: productImgUrl,
                     userId: userId,
@@ -268,7 +268,7 @@ exports.addToCart = async (req, res, next) => {
 
                 subscription = new Subscription({
                     productId: productId,
-                    quantity:quantity,
+                    //quantity:quantity,
                     discountedPrice: productPrice,
                     imageUrl: productImgUrl,
                     userId: userId,
@@ -290,7 +290,7 @@ exports.addToCart = async (req, res, next) => {
 
                 subscription = new Subscription({
                     productId: productId,
-                    quantity:quantity,
+                    //quantity:quantity,
                     discountedPrice: productPrice,
                     imageUrl: productImgUrl,
                     userId: userId,
