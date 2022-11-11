@@ -356,7 +356,7 @@ exports.terminate = async (req, res, next) => {
         let subscription = await Subscription.findByIdAndUpdate(id, req.body);
         let balance = subscription.subscriptionWallet;
         let date = subscription.days;
-        let currentDate = moment().format('DD-MM-YYYY');
+        let currentDate = moment().format('YYYY-MM-DD');
 
         for (i = 0; i < date.length; i++) {
             if (currentDate == date[i]) {
@@ -388,7 +388,7 @@ exports.altToDaily = async (req, res, next) => {
         const subscription = await Subscription.findByIdAndUpdate(id, { deliveryFrequency, startDate, endDate });
         //console.log(subscription)
         if (subscription) {
-            let currentDate = moment().add(1, 'd').format('DD-MM-YYYY')
+            let currentDate = moment().add(1, 'd').format('YYYY-MM-DD')
             console.log(currentDate)
             //Delete old orders and create new orders of remaining days
             const order = await Cart.deleteMany({ mainOrderId: mainOrderId, orderDate: { "$gte": currentDate, "$lte": endDate } })
@@ -409,7 +409,7 @@ exports.altToDaily = async (req, res, next) => {
             if (terminate == false && pause == false) {
                 {
                     for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
-                        normaldays.push(m.format('DD-MM-YYYY'));
+                        normaldays.push(m.format('YYYY-MM-DD'));
                     }
                     for (j = 0; j < normaldays.length; j++) {
                         console.log(normaldays)
@@ -465,7 +465,7 @@ exports.customToDaily = async (req, res, next) => {
         const subscription = await Subscription.findByIdAndUpdate(id, { deliveryFrequency, startDate, endDate });
         //console.log(subscription)
         if (subscription) {
-            let currentDate = moment().add(1, 'd').format('DD-MM-YYYY')
+            let currentDate = moment().add(1, 'd').format('YYYY-MM-DD')
             console.log(currentDate)
             //Delete old orders and create new orders of remaining days
             const order = await Cart.deleteMany({ mainOrderId: mainOrderId, orderDate: { "$gte": currentDate, "$lte": endDate } })
@@ -486,7 +486,7 @@ exports.customToDaily = async (req, res, next) => {
             if (terminate == false && pause == false) {
                 {
                     for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
-                        normaldays.push(m.format('DD-MM-YYYY'));
+                        normaldays.push(m.format('YYYY-MM-DD'));
                     }
                     for (j = 0; j < normaldays.length; j++) {
                         console.log(normaldays)
@@ -546,7 +546,7 @@ exports.dailyToAlt = async (req, res, next) => {
 
 
         console.log(oldDays + "olddays")
-        let currentDate = moment().format('DD-MM-YYYY')
+        let currentDate = moment().format('YYYY-MM-DD')
         let index = oldDays.indexOf(currentDate);
         console.log(index + "index")
 
@@ -569,7 +569,7 @@ exports.dailyToAlt = async (req, res, next) => {
         const subscription = await Subscription.findByIdAndUpdate(id, { deliveryFrequency });
         //console.log(subscription)
         if (subscription) {
-            let currentDate = moment().add(1, 'd').format('DD-MM-YYYY')
+            let currentDate = moment().add(1, 'd').format('YYYY-MM-DD')
             console.log(currentDate)
             //Delete old orders and create new orders of remaining days
             const order = await Cart.deleteMany({ mainOrderId: mainOrderId, orderDate: { "$gte": currentDate, "$lte": endDate } })
@@ -590,7 +590,7 @@ exports.dailyToAlt = async (req, res, next) => {
             if (terminate == false && pause == false) {
                 {
                     /* for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
-                        normaldays.push(m.format('DD-MM-YYYY'));
+                        normaldays.push(m.format('YYYY-MM-DD'));
                     } */
                     for (j = 0; j < difference.length; j++) {
 
@@ -647,7 +647,7 @@ exports.increaseDate = async (req, res, next) => {
         //let subscription = await Subscription.findByIdAndUpdate(id, { endDate, inc: { quantity: quantity, daysRemaining: quantity } });
         if (subscription) {
             for (var m = moment(oldEndDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
-                normaldays.push(m.format('DD-MM-YYYY'));
+                normaldays.push(m.format('YYYY-MM-DD'));
             }
             for (j = 0; j < normaldays.length; j++) {
                 //Order Created
@@ -711,7 +711,7 @@ exports.decreaseDate = async (req, res, next) => {
         //Delete old orders and create new orders of remaining days
         const order = await Cart.find({})
         for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
-            normaldays.push(m.format('DD-MM-YYYY'));
+            normaldays.push(m.format('YYYY-MM-DD'));
         }
         for (j = 0; j < normaldays.length; j++) {
 
@@ -754,7 +754,7 @@ exports.upgradeCustom = async (req, res, next) => {
         //Delete old orders and create new orders of remaining days
         const order = await Cart.find({})
         for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
-            normaldays.push(m.format('DD-MM-YYYY'));
+            normaldays.push(m.format('YYYY-MM-DD'));
         }
         for (j = 0; j < normaldays.length; j++) {
 

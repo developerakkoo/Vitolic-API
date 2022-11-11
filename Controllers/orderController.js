@@ -132,7 +132,7 @@ exports.addToCart = async (req, res, next) => {
         /*   let noofdays = [];
           if (days != null) noofdays = days.split(",") */
         const product = await Product.findById(productId);
-        startDate = moment(startDate).format('DD-MM-YYYY')
+        startDate = moment(startDate).format('YYYY-MM-DD')
         let endDate = moment(startDate).add(29, 'd')
         console.log(endDate)
         //console.log(noofdays.length)
@@ -174,7 +174,7 @@ exports.addToCart = async (req, res, next) => {
         }
         else if (isNormal) {
             for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
-                normaldays.push(m.format('DD-MM-YYYY'));
+                normaldays.push(m.format('YYYY-MM-DD'));
             }
             console.log(normaldays + "days")
             //for (j = 0; j < normaldays.length; j++) {
@@ -207,7 +207,7 @@ exports.addToCart = async (req, res, next) => {
             console.log(startDate + "datestart")
             console.log(isAlternate)
             for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
-                normaldays.push(m.format('DD-MM-YYYY'));
+                normaldays.push(m.format('YYYY-MM-DD'));
             }
             console.log(normaldays + " days")
             console.log(normaldays.length)
@@ -249,7 +249,7 @@ exports.addToCart = async (req, res, next) => {
                 orderId: await nanoid(),
                 products: products,
                 userId: userId,
-                orderDate: moment().format('DD-MM-YYYY'),
+                orderDate: moment().format('YYYY-MM-DD'),
                 //quantity: quantity,
                 total: total,
                 status: status,
@@ -382,7 +382,7 @@ exports.addOrder = async (req, res, next) => {
         let products = cart.products;
         let total = cart.total;
         let address = cart.address;
-        let currentDate = moment().format('DD-MM-YYYY')
+        let currentDate = moment().format('YYYY-MM-DD')
         console.log(currentDate)
         let terminate = cart.terminate;
         let pause = cart.isPause;
