@@ -138,8 +138,9 @@ router.put('/subscription/terminate/:id',  subscriptionController.terminate);
 router.put('/subscription/daily/:id',  subscriptionController.altToDaily);
 router.put('/subscription/custom/:id',  subscriptionController.customToDaily);
 router.put('/subscription/alt/:id',  subscriptionController.dailyToAlt);
-router.put('/subscription/increase/:id',  subscriptionController.increaseDate);
+router.put('/subscription/increase/:id',  subscriptionController.increaseQuantity);
 
+router.put('/subscription/decrease/:id',  subscriptionController.decreaseQuantity);
 
 
 

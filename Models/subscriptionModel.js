@@ -8,12 +8,12 @@ const subscriptionSchema = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: 'User' },
     billId: { type: Schema.Types.ObjectId, ref: 'Billing' },
     cartId: { type: Schema.Types.ObjectId, ref: 'Cart' },
-    productId: { type: Schema.Types.ObjectId, ref: 'Product'  },
-    addressId: { type: Schema.Types.ObjectId, ref: 'Address'  },
+    productId: { type: Schema.Types.ObjectId, ref: 'Product' },
+    addressId: { type: Schema.Types.ObjectId, ref: 'Address' },
     mobileNumber: { type: Number },
     emailAddress: { type: String },
     discountedPrice: { type: Number },
-    quantity: { type: Number },
+    deliveryQuantity: { type: Number, min: 1 },
     daysremaining: { type: String },
     isNormal: {
         type: Boolean
@@ -74,14 +74,14 @@ const subscriptionSchema = new Schema({
         type: Number
     },
 
-    days:  { type : Array , "default" : [] },
+    days: { type: Array, "default": [] },
 
     deliveryFrequency: {
         type: String,
         enum: ['DAILY', 'ALTERNATE', 'ONETIME', 'CUSTOM']
         //required: [true, 'Delivery Frequency is required']
     },
-    imageUrl:{
+    imageUrl: {
         type: String,
         default: 'https://image.shutterstock.com/image-illustration/default-white-background-template-without-600w-1971913538.jpg'
     },

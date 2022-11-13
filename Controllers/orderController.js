@@ -128,7 +128,7 @@ exports.getCart = async (req, res, next) => {
 
 exports.addToCart = async (req, res, next) => {
     try {
-        let { userId, products, productId, total, status, address, emailAddress, mobileNumber, isCustom, isNormal, isAlternate, startDate, days, daysRemaining, isOneTime } = req.body;
+        let { userId, products, productId, total, status, address, emailAddress, mobileNumber, isCustom, isNormal, isAlternate, startDate, days, daysRemaining, isOneTime, deliveryQuantity } = req.body;
         /*   let noofdays = [];
           if (days != null) noofdays = days.split(",") */
         const product = await Product.findById(productId);
@@ -289,6 +289,7 @@ exports.addToCart = async (req, res, next) => {
                 subscription = new Subscription({
                     productId: productId,
                     //quantity: quantity,
+                    deliveryQuantity:deliveryQuantity,
                     discountedPrice: productPrice,
                     imageUrl: productImgUrl,
                     userId: userId,
@@ -312,6 +313,7 @@ exports.addToCart = async (req, res, next) => {
                 subscription = new Subscription({
                     productId: productId,
                     //quantity:quantity,
+                    deliveryQuantity:deliveryQuantity,
                     discountedPrice: productPrice,
                     imageUrl: productImgUrl,
                     userId: userId,
@@ -334,6 +336,7 @@ exports.addToCart = async (req, res, next) => {
                 subscription = new Subscription({
                     productId: productId,
                     //quantity:quantity,
+                    deliveryQuantity:deliveryQuantity,
                     discountedPrice: productPrice,
                     imageUrl: productImgUrl,
                     userId: userId,

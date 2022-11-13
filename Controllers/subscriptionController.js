@@ -1,4 +1,4 @@
-const Subscription = require('./../Models/subscriptionModel');
+const Subscription = require('../Models/subscriptionModel');
 const User = require('../Models/userModel');
 const Bill = require('../Models/billingModel');
 const { customAlphabet } = require('nanoid/async')
@@ -250,13 +250,6 @@ exports.customDate2 = async (req, res, next) => {
     try {
         const id = req.params.id;
 
-        //const user = await User.findById(id);
-
-        //let { startDate, endDate } = user;
-
-        //let dateArray=[];
-        //dateArray=req.body.dateArray;
-        //const totalDays= $sum(req.body);
         let sunday = req.body.sunday;
         let monday = req.body.monday;
         let tuesday = req.body.tuesday;
@@ -291,22 +284,6 @@ exports.pause = async (req, res, next) => {
     try {
         const id = req.params.id;
         const isActive = req.body.isActive;
-        /* let pauseDate, resumeDate;
-        pauseDate = new Date(Date.now()).toISOString().split("T")[0]
-        resumeDate = new Date('2022-10-30').toISOString().split("T")[0]; */
-        /* let pauseDate, resumeDate;
-        pauseDate = moment()
-        resumeDate = moment().add(2, 'd')
-        console.log(resumeDate + "h")
-        const df = pauseDate.diff(resumeDate, 'days')
-        console.log(df + "hello")
-        var date1 = moment('2016-10-08 10:29:23');
-        var date2 = moment('2016-10-08 11:06:55');
-        var diff = date2.diff(date1); */
-        /* const diffTime = Math.abs(resumeDate - pauseDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        console.log(diffDays + " days");
-        console.log(diffTime + " milliseconds"); */
         var now = moment(new Date()); //todays date
         var end = moment("2022-12-1"); // another date
         var duration = moment.duration(now.diff(end));
@@ -385,11 +362,21 @@ exports.altToDaily = async (req, res, next) => {
         const endDate = req.body.endDate;
         let carts = [];
         let normaldays = [];
+        let subscriptionOld = await Subscription.findById(id);
+        console.log("subscriptionOld" + "hello")
+        let oldDays = []
+        oldDays = subscriptionOld.days;
+        let price = subscriptionOld.discountedPrice;
         const subscription = await Subscription.findByIdAndUpdate(id, { deliveryFrequency, startDate, endDate });
         //console.log(subscription)
         if (subscription) {
             let currentDate = moment().add(1, 'd').format('YYYY-MM-DD')
             console.log(currentDate)
+            let index = oldDays.indexOf(currentDate);
+            const deletedItem = oldDays.splice(index);
+            console.log(deletedItem + deletedItem.length);
+            let transferBalance = deletedItem.length * price;
+            let user = await User.findByIdAndUpdate(id, { inc: { walletCashbackAvailable: transferBalance } })
             //Delete old orders and create new orders of remaining days
             const order = await Cart.deleteMany({ mainOrderId: mainOrderId, orderDate: { "$gte": currentDate, "$lte": endDate } })
             console.log(mainOrderId)
@@ -410,9 +397,10 @@ exports.altToDaily = async (req, res, next) => {
                 {
                     for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
                         normaldays.push(m.format('YYYY-MM-DD'));
+                        console.log(normaldays)
                     }
                     for (j = 0; j < normaldays.length; j++) {
-                        console.log(normaldays)
+                        console.log(normaldays + "in order loop")
 
                         //for (i = 0; i < noofdays.length; i++){
                         //Order Created
@@ -439,7 +427,7 @@ exports.altToDaily = async (req, res, next) => {
 
 
             if (carts) {
-                res.status(201).json({ status: 'success', cart, message: 'Subscription upgraded to daily successfully!' });
+                res.status(201).json({ status: 'success', carts, message: 'Subscription upgraded to daily successfully!' });
             }
         }
 
@@ -540,7 +528,7 @@ exports.dailyToAlt = async (req, res, next) => {
         //let normaldays = [];
         let subscriptionOld = await Subscription.findById(id);
         console.log(subscriptionOld + "hello")
-        let oldDays=[]
+        let oldDays = []
         oldDays = subscriptionOld.days;
         //let endDate = subscriptionOld.endDate;
 
@@ -560,10 +548,10 @@ exports.dailyToAlt = async (req, res, next) => {
         for (var i = 0; i < oldDays.length; i++)
             if (i % 2 == 1)
                 x.push(oldDays[i]);
-        console.log(x  + "removed days " + x.length);
+        console.log(x + "removed days " + x.length);
         console.log(oldDays + "remaining")
         let difference = oldDays.filter(y => !x.includes(y));
-        console.log(difference+"diff")
+        console.log(difference + "diff")
 
         //need to push difference days into subscription days after deleteing dates from index of current date + 1 
         const subscription = await Subscription.findByIdAndUpdate(id, { deliveryFrequency });
@@ -628,7 +616,7 @@ exports.dailyToAlt = async (req, res, next) => {
 }
 
 
-exports.increaseDate = async (req, res, next) => {
+exports.increaseQuantity = async (req, res, next) => {
     try {
         const id = req.params.id;
         const endDate = req.body.endDate;
@@ -677,20 +665,24 @@ exports.increaseDate = async (req, res, next) => {
     }
 }
 
-exports.decreaseDate = async (req, res, next) => {
+exports.decreaseQuantity = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const endDate = req.body.endDate;
-        const quantity = req.body.quantity;
+        const userId = req.params.userId;
+        const discountedPrice = req.body.discountedPrice;
+        const deliveryQuantity = req.body.deliveryQuantity;
+        const daysRemaining = req.body.daysRemaining;
         let subscriptionOld = await Subscription.findById(id);
-        let oldEndDate = subscriptionOld.endDate;
-
-        let subscription = await Subscription.findByIdAndUpdate(id, { endDate, inc: { quantity: quantity } });
+        let oldQuantity = subscriptionOld.deliveryQuantity;
+        let Quantitydiff = oldQuantity - deliveryQuantity
+        let newTotal = discountedPrice * Quantitydiff * daysRemaining;
+        let subscription = await Subscription.findByIdAndUpdate(id, { deliveryQuantity, daysRemaining, $inc: { subscriptionWallet: -newTotal } });
+        const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: newTotal } });
 
         if (subscription) {
             io.getIO().emit('subscription:put', { action: 'updated', subscription })
 
-            res.status(200).json({ success: true, message: 'Subscription updated successfully', subscription })
+            res.status(200).json({ success: true, message: 'Subscription updated successfully', subscription, user })
         }
     } catch (error) {
         res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
