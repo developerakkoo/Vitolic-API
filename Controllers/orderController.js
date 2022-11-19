@@ -248,6 +248,7 @@ exports.addToCart = async (req, res, next) => {
             let cart = new Cart({
                 orderId: await nanoid(),
                 products: products,
+                productId:productId,
                 userId: userId,
                 orderDate: moment().format('YYYY-MM-DD'),
                 //quantity: quantity,
