@@ -128,7 +128,7 @@ exports.getCart = async (req, res, next) => {
 
 exports.addToCart = async (req, res, next) => {
     try {
-        let { userId, products, productId, total, status, address, emailAddress, mobileNumber, isCustom, isNormal, isAlternate, startDate, days, daysRemaining, isOneTime, deliveryQuantity } = req.body;
+        let { userId, products, productId, total, status, address, emailAddress, mobileNumber, isCustom, isNormal, isAlternate, startDate, days, daysRemaining, isOneTime, deliveryQuantity,discountedPrice } = req.body;
         /*   let noofdays = [];
           if (days != null) noofdays = days.split(",") */
         const product = await Product.findById(productId);
@@ -292,7 +292,7 @@ exports.addToCart = async (req, res, next) => {
                     productId: productId,
                     //quantity: quantity,
                     deliveryQuantity:deliveryQuantity,
-                    discountedPrice: productPrice,
+                    discountedPrice: discountedPrice,
                     imageUrl: productImgUrl,
                     userId: userId,
                     cartId: cartId,
@@ -316,7 +316,7 @@ exports.addToCart = async (req, res, next) => {
                     productId: productId,
                     //quantity:quantity,
                     deliveryQuantity:deliveryQuantity,
-                    discountedPrice: productPrice,
+                    discountedPrice: discountedPrice,
                     imageUrl: productImgUrl,
                     userId: userId,
                     cartId: cartId,
@@ -339,7 +339,7 @@ exports.addToCart = async (req, res, next) => {
                     productId: productId,
                     //quantity:quantity,
                     deliveryQuantity:deliveryQuantity,
-                    discountedPrice: productPrice,
+                    discountedPrice: discountedPrice,
                     imageUrl: productImgUrl,
                     userId: userId,
                     cartId: cartId,
