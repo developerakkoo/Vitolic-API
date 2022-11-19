@@ -53,6 +53,7 @@ const cartSchema = new Schema({
         type: Boolean,
         default: false
     },
+    upgrade: { type: String },
     mainOrderId: { type: String },
 }, {
     timestamps: true

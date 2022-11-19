@@ -1,6 +1,8 @@
 const Subscription = require('../Models/subscriptionModel');
 const User = require('../Models/userModel');
 const Bill = require('../Models/billingModel');
+const Product = require('../Models/productModel');
+
 const { customAlphabet } = require('nanoid/async')
 const nanoid = customAlphabet('1234567890', 6);
 const io = require('../socket');
@@ -353,83 +355,200 @@ exports.terminate = async (req, res, next) => {
 
 exports.altToDaily = async (req, res, next) => {
     try {
+        console.log("hi")
         const id = req.params.id;
-        const userId = req.body.userId;
-        const mainOrderId = req.body.mainOrderId;
-        const deliveryFrequency = "DAILY";
-        const startDate = req.body.startDate;
-        console.log(startDate + "hello")
-        const endDate = req.body.endDate;
-        let carts = [];
-        let normaldays = [];
+        console.log(id)
         let subscriptionOld = await Subscription.findById(id);
-        console.log("subscriptionOld" + "hello")
-        let oldDays = []
-        oldDays = subscriptionOld.days;
-        let price = subscriptionOld.discountedPrice;
-        const subscription = await Subscription.findByIdAndUpdate(id, { deliveryFrequency, startDate, endDate });
-        //console.log(subscription)
-        if (subscription) {
-            let currentDate = moment().add(1, 'd').format('YYYY-MM-DD')
-            console.log(currentDate)
-            let index = oldDays.indexOf(currentDate);
-            const deletedItem = oldDays.splice(index);
-            console.log(deletedItem + deletedItem.length);
-            let transferBalance = deletedItem.length * price;
-            let user = await User.findByIdAndUpdate(id, { inc: { walletCashbackAvailable: transferBalance } })
-            //Delete old orders and create new orders of remaining days
-            const order = await Cart.deleteMany({ mainOrderId: mainOrderId, orderDate: { "$gte": currentDate, "$lte": endDate } })
-            console.log(mainOrderId)
-            console.log("orders deleted")
-
-            const mainOrder = await Cart.findOne({ _id: mainOrderId });
-            console.log(mainOrder)
-            //let days = cart.orderDays;
-            //let userId = cart.userId;
-            let products = mainOrder.products;
-            let total = mainOrder.total;
-            let address = mainOrder.address;
-            let status = mainOrder.status;
-
-            let terminate = mainOrder.terminate;
-            let pause = mainOrder.isPause;
-            if (terminate == false && pause == false) {
-                {
-                    for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
-                        normaldays.push(m.format('YYYY-MM-DD'));
-                        console.log(normaldays)
-                    }
-                    for (j = 0; j < normaldays.length; j++) {
-                        console.log(normaldays + "in order loop")
-
-                        //for (i = 0; i < noofdays.length; i++){
-                        //Order Created
-                        let cart = new Cart({
-                            orderId: await nanoid(),
-                            products: products,
-                            userId: userId,
-                            orderDate: normaldays[j],
-                            total: total,
-                            mainOrderId,
-                            status: status,
-                            address: address,
-                        });
-                        await cart.save();
-
-                        let cartId = cart._id
-                        carts.push(cartId);
-                        console.log(cartId)
-
-                        // }
-                    }
-                }
+        let productId = subscriptionOld.productId;
+        console.log(productId);
+        const product = await Product.findById(productId);
+        let productPrice = product.discountedPrice;
+        console.log(productPrice)
+        let productImgUrl = product.imageUrl;
+        console.log(productImgUrl)
+        let oldbillId = subscriptionOld.billId;
+        console.log(oldbillId);
+        let cartId = subscriptionOld.cartId;
+        console.log(cartId);
+        let userId = subscriptionOld.userId;
+        console.log(userId);
+        let subwallet = subscriptionOld.subscriptionWallet;
+        let user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: subwallet } });
+        subscriptionOld = await Subscription.findByIdAndDelete(id);
+        let bill = await Bill.findByIdAndDelete(oldbillId);
+        let upgrade = "ALTERNATE TO DAILY";
+        let cart = await Cart.findByIdAndUpdate(cartId, { upgrade });
+        let deliveryFrequency = "DAILY";
+        let startDate = req.body.startDate;
+        startDate = moment(startDate).format('YYYY-MM-DD')
+        let endDate = req.body.endDate;
+        endDate = moment(endDate).format('YYYY-MM-DD')
+        let total = req.body.total;
+        let status = req.body.status;
+        let address = req.body.address;
+        let emailAddress = req.body.emailAddress;
+        let mobileNumber = req.body.mobileNumber;
+        //let days = req.body.days;
+        let daysRemaining = req.body.daysRemaining;
+        let deliveryQuantity = req.body.deliveryQuantity;
+        let products = req.body.products;
+        let newCartId;
+        let normaldays = [];
+        if (total != 0) {
+            for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
+                normaldays.push(m.format('YYYY-MM-DD'));
             }
+            console.log(normaldays + "days")
+            //for (j = 0; j < normaldays.length; j++) {
+            console.log(normaldays.length)
 
+            //for (i = 0; i < noofdays.length; i++){
+            //Order Created
+            let cart = new Cart({
+                orderId: await nanoid(),
+                products: products,
+                userId: userId,
+                //orderDate: normaldays[j],
+                orderDays: normaldays,
+                //quantity: quantity,
+                total: total,
+                status: status,
+                address: address,
+            });
+            await cart.save();
 
-            if (carts) {
-                res.status(201).json({ status: 'success', carts, message: 'Subscription upgraded to daily successfully!' });
+            newCartId = cart._id
+            /* carts.push(cartId);
+            console.log(cartId) */
+
+        }
+        if (newCartId) {
+            //Bill Created
+            let bill = new Bill({
+                invoiceNumber: await nanoid(),
+                products: products,
+                userId: userId,
+                cartId: newCartId,
+                amount: total,
+                paymentStatus: status,
+
+            });
+            await bill.save()
+            let billId = bill._id;
+
+            let subscription;
+            let deliveryFrequency;
+            //2.  Create Sub here
+            if (newCartId) {
+                deliveryFrequency = 'DAILY';
+                subscription = new Subscription({
+                    productId: productId,
+                    //quantity: quantity,
+                    deliveryQuantity: deliveryQuantity,
+                    discountedPrice: productPrice,
+                    imageUrl: productImgUrl,
+                    userId: userId,
+                    cartId: newCartId,
+                    billId: billId,
+                    addressId: address,
+                    mobileNumber: mobileNumber,
+                    emailAddress: emailAddress,
+                    startDate: startDate,
+                    daysRemaining: daysRemaining,
+                    endDate: endDate,
+                    days: normaldays,
+                    deliveryFrequency: deliveryFrequency,
+                });
+                await subscription.save();
+            }
+            let subscriptionId = subscription._id;
+            const user = await Subscription.findByIdAndUpdate(subscriptionId, { $inc: { subscriptionWallet: total } });
+            if (subscription) {
+                res.status(200).json({
+                    message: 'Subscription upgraded to DAILY successfully',
+                    newCartId,
+                    bill,
+                    subscription,
+                })
             }
         }
+        /* 
+                const userId = req.body.userId;
+                const mainOrderId = req.body.mainOrderId;
+                const deliveryFrequency = "DAILY";
+                const startDate = req.body.startDate;
+                console.log(startDate + "hello")
+                const endDate = req.body.endDate;
+                let carts = [];
+                let normaldays = [];
+                //let subscriptionOld = await Subscription.findById(id);
+                console.log("subscriptionOld" + "hello")
+                let oldDays = []
+                oldDays = subscriptionOld.days;
+                let price = subscriptionOld.discountedPrice;
+                const subscription = await Subscription.findByIdAndUpdate(id, { deliveryFrequency, startDate, endDate });
+                //console.log(subscription)
+                if (subscription) {
+                    let currentDate = moment().add(1, 'd').format('YYYY-MM-DD')
+                    console.log(currentDate)
+                    let index = oldDays.indexOf(currentDate);
+                    const deletedItem = oldDays.splice(index);
+                    console.log(deletedItem + deletedItem.length);
+                    let transferBalance = deletedItem.length * price;
+                    let user = await User.findByIdAndUpdate(id, { inc: { walletCashbackAvailable: transferBalance } })
+                    //Delete old orders and create new orders of remaining days
+                    const order = await Cart.deleteMany({ mainOrderId: mainOrderId, orderDate: { "$gte": currentDate, "$lte": endDate } })
+                    console.log(mainOrderId)
+                    console.log("orders deleted")
+        
+                    const mainOrder = await Cart.findOne({ _id: mainOrderId });
+                    console.log(mainOrder)
+                    //let days = cart.orderDays;
+                    //let userId = cart.userId;
+                    let products = mainOrder.products;
+                    let total = mainOrder.total;
+                    let address = mainOrder.address;
+                    let status = mainOrder.status;
+        
+                    let terminate = mainOrder.terminate;
+                    let pause = mainOrder.isPause;
+                    if (terminate == false && pause == false) {
+                        {
+                            for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
+                                normaldays.push(m.format('YYYY-MM-DD'));
+                                console.log(normaldays)
+                            }
+                            for (j = 0; j < normaldays.length; j++) {
+                                console.log(normaldays + "in order loop")
+        
+                                //for (i = 0; i < noofdays.length; i++){
+                                //Order Created
+                                let cart = new Cart({
+                                    orderId: await nanoid(),
+                                    products: products,
+                                    userId: userId,
+                                    orderDate: normaldays[j],
+                                    total: total,
+                                    mainOrderId,
+                                    status: status,
+                                    address: address,
+                                });
+                                await cart.save();
+        
+                                let cartId = cart._id
+                                carts.push(cartId);
+                                console.log(cartId)
+        
+                                // }
+                            }
+                        }
+                    }
+        
+        
+                    if (carts) {
+                        res.status(201).json({ status: 'success', carts, message: 'Subscription upgraded to daily successfully!' });
+                    }
+                } */
 
 
 
@@ -438,8 +557,132 @@ exports.altToDaily = async (req, res, next) => {
     }
 }
 
-
 exports.customToDaily = async (req, res, next) => {
+    try {
+        console.log("hi")
+        const id = req.params.id;
+        console.log(id)
+        let subscriptionOld = await Subscription.findById(id);
+        let productId = subscriptionOld.productId;
+        console.log(productId);
+        const product = await Product.findById(productId);
+        let productPrice = product.discountedPrice;
+        console.log(productPrice)
+        let productImgUrl = product.imageUrl;
+        console.log(productImgUrl)
+        let oldbillId = subscriptionOld.billId;
+        console.log(oldbillId);
+        let cartId = subscriptionOld.cartId;
+        console.log(cartId);
+        let userId = subscriptionOld.userId;
+        console.log(userId);
+        let subwallet = subscriptionOld.subscriptionWallet;
+        let user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: subwallet } });
+        subscriptionOld = await Subscription.findByIdAndDelete(id);
+        let bill = await Bill.findByIdAndDelete(oldbillId);
+        let upgrade = "CUSTOM TO DAILY";
+        let cart = await Cart.findByIdAndUpdate(cartId, { upgrade });
+        let deliveryFrequency = "DAILY";
+        let startDate = req.body.startDate;
+        startDate = moment(startDate).format('YYYY-MM-DD')
+        let endDate = req.body.endDate;
+        endDate = moment(endDate).format('YYYY-MM-DD')
+        let total = req.body.total;
+        let status = req.body.status;
+        let address = req.body.address;
+        let emailAddress = req.body.emailAddress;
+        let mobileNumber = req.body.mobileNumber;
+        //let days = req.body.days;
+        let daysRemaining = req.body.daysRemaining;
+        let deliveryQuantity = req.body.deliveryQuantity;
+        let products = req.body.products;
+        let newCartId;
+        let normaldays = [];
+        if (total != 0) {
+            for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
+                normaldays.push(m.format('YYYY-MM-DD'));
+            }
+            console.log(normaldays + "days")
+            //for (j = 0; j < normaldays.length; j++) {
+            console.log(normaldays.length)
+
+            //for (i = 0; i < noofdays.length; i++){
+            //Order Created
+            let cart = new Cart({
+                orderId: await nanoid(),
+                products: products,
+                userId: userId,
+                //orderDate: normaldays[j],
+                orderDays: normaldays,
+                //quantity: quantity,
+                total: total,
+                status: status,
+                address: address,
+            });
+            await cart.save();
+
+            newCartId = cart._id
+            /* carts.push(cartId);
+            console.log(cartId) */
+
+        }
+        if (newCartId) {
+            //Bill Created
+            let bill = new Bill({
+                invoiceNumber: await nanoid(),
+                products: products,
+                userId: userId,
+                cartId: newCartId,
+                amount: total,
+                paymentStatus: status,
+
+            });
+            await bill.save()
+            let billId = bill._id;
+
+            let subscription;
+            let deliveryFrequency;
+            //2.  Create Sub here
+            if (newCartId) {
+                deliveryFrequency = 'DAILY';
+                subscription = new Subscription({
+                    productId: productId,
+                    //quantity: quantity,
+                    deliveryQuantity: deliveryQuantity,
+                    discountedPrice: productPrice,
+                    imageUrl: productImgUrl,
+                    userId: userId,
+                    cartId: newCartId,
+                    billId: billId,
+                    addressId: address,
+                    mobileNumber: mobileNumber,
+                    emailAddress: emailAddress,
+                    startDate: startDate,
+                    daysRemaining: daysRemaining,
+                    endDate: endDate,
+                    days: normaldays,
+                    deliveryFrequency: deliveryFrequency,
+                });
+                await subscription.save();
+            }
+            let subscriptionId = subscription._id;
+            const user = await Subscription.findByIdAndUpdate(subscriptionId, { $inc: { subscriptionWallet: total } });
+            if (subscription) {
+                res.status(200).json({
+                    message: 'Subscription upgraded to DAILY successfully',
+                    newCartId,
+                    bill,
+                    subscription,
+                })
+            }
+        }
+    
+
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+    }
+}
+/* exports.customToDaily = async (req, res, next) => {
     try {
         const id = req.params.id;
         const userId = req.body.userId;
@@ -510,7 +753,7 @@ exports.customToDaily = async (req, res, next) => {
         res.status(500).json({ error, message: 'Something went wrong!' });
     }
 }
-
+ */
 exports.dailyToAlt = async (req, res, next) => {
     try {
         console.log("hello")

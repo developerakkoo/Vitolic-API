@@ -259,10 +259,11 @@ exports.addToCart = async (req, res, next) => {
             const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: total } });
 
             res.status(200).json({
+                message: 'Cart added successfully',
                 cart,
-                message: 'Cart added successfully'
+                user,
             })
-            cartId = cart._id
+           cartId = cart._id
             /* carts.push(cartId);
             console.log(cartId) */
 
