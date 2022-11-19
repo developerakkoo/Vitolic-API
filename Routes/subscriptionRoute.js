@@ -135,9 +135,14 @@ router.put('/subscription/:id',  subscriptionController.updateSubscription);
 router.put('/subscription/pause/:id',  subscriptionController.pause);
 router.put('/subscription/vacation/:id',  subscriptionController.vacation);
 router.put('/subscription/terminate/:id',  subscriptionController.terminate);
-router.put('/subscription/daily/:id',  subscriptionController.altToDaily);
-router.put('/subscription/custom/:id',  subscriptionController.customToDaily);
-router.put('/subscription/alt/:id',  subscriptionController.dailyToAlt);
+
+router.put('/subscription/alttodaily/:id',  subscriptionController.altToDaily);
+router.put('/subscription/alttocustom/:id',  subscriptionController.altToCustom);
+router.put('/subscription/customtodaily/:id',  subscriptionController.customToDaily);
+router.put('/subscription/customtoalt/:id',  subscriptionController.customToAlt);
+router.put('/subscription/dailytoalt/:id',  subscriptionController.dailyToAlt);
+router.put('/subscription/dailytocustom/:id',  subscriptionController.dailyToCustom);
+
 router.put('/subscription/increase/:id',  subscriptionController.increaseQuantity);
 
 router.put('/subscription/decrease/:id',  subscriptionController.decreaseQuantity);
