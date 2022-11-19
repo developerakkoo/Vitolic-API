@@ -139,8 +139,8 @@ exports.addToCart = async (req, res, next) => {
         let normaldays = [];
         let altDays;
 
-        let productPrice = product.discountedPrice;
-        console.log(productPrice)
+        //let productPrice = product.discountedPrice;
+        //console.log(productPrice)
         let productImgUrl = product.imageUrl;
         console.log(productImgUrl)
         let cartId;
