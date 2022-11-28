@@ -373,7 +373,7 @@ exports.altToDaily = async (req, res, next) => {  //done
         let userId = subscriptionOld.userId;
         console.log(userId);
         let subwallet = subscriptionOld.subscriptionWallet;
-        let user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: subwallet } });
+        // let user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: subwallet } });
         subscriptionOld = await Subscription.findByIdAndDelete(id);
         let bill = await Bill.findByIdAndDelete(oldbillId);
         let upgrade = "ALTERNATE TO DAILY";
@@ -576,7 +576,7 @@ exports.altToCustom = async (req, res, next) => { //done
         let userId = subscriptionOld.userId;
         console.log(userId);
         let subwallet = subscriptionOld.subscriptionWallet;
-        let user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: subwallet } });
+        // let user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: subwallet } });
         subscriptionOld = await Subscription.findByIdAndDelete(id);
         let bill = await Bill.findByIdAndDelete(oldbillId);
         let upgrade = "ALTERNATE TO CUSTOM";
@@ -690,7 +690,7 @@ exports.customToDaily = async (req, res, next) => { //done
         let userId = subscriptionOld.userId;
         console.log(userId);
         let subwallet = subscriptionOld.subscriptionWallet;
-        let user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: subwallet } });
+        // let user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: subwallet } });
         subscriptionOld = await Subscription.findByIdAndDelete(id);
         let bill = await Bill.findByIdAndDelete(oldbillId);
         let upgrade = "CUSTOM TO DAILY";
@@ -813,7 +813,7 @@ exports.customToAlt = async (req, res, next) => {
         let userId = subscriptionOld.userId;
         console.log(userId);
         let subwallet = subscriptionOld.subscriptionWallet;
-        let user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: subwallet } });
+        // let user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: subwallet } });
         subscriptionOld = await Subscription.findByIdAndDelete(id);
         let bill = await Bill.findByIdAndDelete(oldbillId);
         let upgrade = "CUSTOM TO ALTERNATE";
@@ -944,8 +944,8 @@ exports.dailyToAlt = async (req, res, next) => {
         console.log(cartId);
         let userId = subscriptionOld.userId;
         console.log(userId);
-        let subwallet = subscriptionOld.subscriptionWallet;
-        let user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: subwallet } });
+        // let subwallet = subscriptionOld.subscriptionWallet;
+        // let user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: subwallet } });
         subscriptionOld = await Subscription.findByIdAndDelete(id);
         let bill = await Bill.findByIdAndDelete(oldbillId);
         let upgrade = "DAILY TO ALTERNATE";
@@ -1077,7 +1077,7 @@ exports.dailyToCustom = async (req, res, next) => { //done
         let userId = subscriptionOld.userId;
         console.log(userId);
         let subwallet = subscriptionOld.subscriptionWallet;
-        let user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: subwallet } });
+        // let user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: subwallet } });
         subscriptionOld = await Subscription.findByIdAndDelete(id);
         let bill = await Bill.findByIdAndDelete(oldbillId);
         let upgrade = "DAILY TO CUSTOM";

@@ -286,13 +286,23 @@ exports.updateUserWallet = async (req, res, next) => {
         const id = req.params.id;
 
         let rechargeAmount = req.body.rechargeAmount;
-
-        const user = await User.findByIdAndUpdate(id, { $inc: { walletCashbackAvailable: rechargeAmount } });
-
-        if (user) {
-            res.status(201).json({ status: 'success', user: user, message: 'Profile updated successfully!' });
+        const isInc = req.body.isInc;
+        if(isInc == true){
+            const user = await User.findByIdAndUpdate(id, { $inc: { walletCashbackAvailable: rechargeAmount } });
+            if (user) {
+                res.status(201).json({ status: 'success', user: user, message: 'Profile updated successfully!' });
+            }
+    
+        }
+        if(isInc == false){
+            const user = await User.findByIdAndUpdate(id, { $inc: { walletCashbackAvailable: -rechargeAmount } });
+            if (user) {
+                res.status(201).json({ status: 'success', user: user, message: 'Profile updated successfully!' });
+            }
+    
         }
 
+       
     } catch (error) {
         res.status(500).json({ error, message: 'Something went wrong!' });
     }

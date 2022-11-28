@@ -55,9 +55,6 @@ const router = express.Router();
  *      responses:
  *         200:
  *              description: Success
- *  
- *  
- * 
  */
 router.post('/subscription',  subscriptionController.postSubscription);
  
@@ -72,9 +69,6 @@ router.post('/subscription',  subscriptionController.postSubscription);
  *      responses:
  *         200:
  *              description: Success
- *  
- *  
- * 
  */
 router.get('/subscription',  subscriptionController.getSubscription);
 
@@ -89,9 +83,6 @@ router.get('/subscription',  subscriptionController.getSubscription);
  *      responses:
  *         200:
  *              description: Success
- *  
- *  
- * 
  */
  router.get('/subscription/:id',  subscriptionController.getSubscriptionById);
 
@@ -103,13 +94,9 @@ router.get('/subscription',  subscriptionController.getSubscription);
  *      description: get  subscription by userId
  *      tags:
  *          - subscription
- * 
  *      responses:
  *         200:
  *              description: Success
- *  
- *  
- * 
  */
  router.get('/subscription/user/:id',  subscriptionController.getSubscriptionByUserId);
  router.get('/subscription/cart/:id',  subscriptionController.getSubscriptionByCartId);
@@ -126,25 +113,24 @@ router.get('/subscription',  subscriptionController.getSubscription);
  *      responses:
  *         200:
  *              description: Success
- *  
- *  
- * 
  */
 router.put('/subscription/:id',  subscriptionController.updateSubscription);
+
 
 router.put('/subscription/pause/:id',  subscriptionController.pause);
 router.put('/subscription/vacation/:id',  subscriptionController.vacation);
 router.put('/subscription/terminate/:id',  subscriptionController.terminate);
 
+
 router.put('/subscription/alttodaily/:id',  subscriptionController.altToDaily);
 router.put('/subscription/alttocustom/:id',  subscriptionController.altToCustom);
 router.put('/subscription/customtodaily/:id',  subscriptionController.customToDaily);
-router.put('/subscription/customtoalt/:id',  subscriptionController.customToAlt);
-router.put('/subscription/dailytoalt/:id',  subscriptionController.dailyToAlt);
-router.put('/subscription/dailytocustom/:id',  subscriptionController.dailyToCustom);
+router.put('/subscription/customtoalt/:id',    subscriptionController.customToAlt);
+router.put('/subscription/dailytoalt/:id',   subscriptionController.dailyToAlt);
+router.put('/subscription/dailytocustom/:id',subscriptionController.dailyToCustom);
+
 
 router.put('/subscription/increase/:id',  subscriptionController.increaseQuantity);
-
 router.put('/subscription/decrease/:id',  subscriptionController.decreaseQuantity);
 
 
@@ -157,13 +143,9 @@ router.put('/subscription/decrease/:id',  subscriptionController.decreaseQuantit
  *      description: delete subscription using invoice number
  *      tags:
  *          - subscription
- * 
  *      responses:
  *         200:
  *              description: Success
- *  
- *  
- * 
  */
 router.delete('/subscription/:id',  subscriptionController.deleteSubscription);
 
