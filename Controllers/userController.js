@@ -256,7 +256,7 @@ exports.getUserProfileByMobileNumber = async (req, res,next) =>{
             res.status(200).json({  noUser: false, user, message: 'User Profile Found!' })
         }
         else{
-            res.status(404).json({ noUser: true,user, message: 'User not Found!' })
+            res.status(200).json({ noUser: true,user, message: 'User not Found!' })
 
         }
     } catch (error) {
