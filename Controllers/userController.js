@@ -247,6 +247,20 @@ exports.getUserProfile = async (req, res, next) => {
 }
 
 
+exports.getUserProfileByMobileNumber = async (req, res,next) =>{
+    try {
+        const mobile = req.params.mobile;
+
+        const user = await User.findOne({contactNumber: mobile }).populate('cart.items.productId addressId');
+        if (user) {
+            res.status(200).json({ user, message: 'User Profile Found!' })
+        }
+    } catch (error) {
+        res.status(500).json({ error, message: 'Something went wrong!' });
+
+    }
+}
+
 exports.updateUser = async (req, res, next) => {
     try {
         const id = req.params.id;

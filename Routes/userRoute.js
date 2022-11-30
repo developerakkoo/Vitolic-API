@@ -94,6 +94,7 @@ router.get('/user/profiles', UserController.getAllUsers);
  * 
  */
 router.get('/user/profile/:userId', UserController.getUserProfile);
+router.get('/user/profile/getByMobileNumber/:mobile', UserController.getUserProfileByMobileNumber);
 
 /**
  * @swagger
