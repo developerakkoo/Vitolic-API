@@ -69,6 +69,7 @@ const subscriptionSchema = new Schema({
     },
     terminate: {
         type: Boolean,
+        default: false
     },
     daysRemaining: {
         type: Number
