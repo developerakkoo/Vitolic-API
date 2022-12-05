@@ -1351,15 +1351,21 @@ res.status(500).json({ error, message: 'Something went wrong!' });
 exports.increaseQuantity = async (req, res, next) => {
     try {
         const id = req.params.id;
+        const cartId = req.body.cartId;
+        const billId = req.body.billId;
         const deliveryQuantity = req.body.deliveryQuantity;
         const total = req.body.total;
+        const products = req.body.products;
 
-        let subscription = await Subscription.findByIdAndUpdate(id, { deliveryQuantity: deliveryQuantity, inc: { subscriptionWallet: total } });
+        let subscription = await Subscription.findByIdAndUpdate(id, { deliveryQuantity: deliveryQuantity, subscriptionWallet: total });
+        let cart = await Cart.findByIdAndUpdate(cartId, { products: products, total: total });
+        let bill = await Bill.findByIdAndUpdate(billId, { products: products, amount: total });
+
         if (subscription) {
 
             io.getIO().emit('subscription:put', { action: 'updated', subscription })
 
-            res.status(200).json({ success: true, message: 'Subscription delivery quantity increased successfully', subscription })
+            res.status(200).json({ success: true, message: 'Subscription delivery quantity increased successfully', subscription, cart, bill })
         }
     } catch (error) {
         res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
@@ -1372,14 +1378,19 @@ exports.decreaseQuantity = async (req, res, next) => {
         const userId = req.body.userId;
         const deliveryQuantity = req.body.deliveryQuantity;
         const total = req.body.total;
+        const products = req.body.products;
+        const cartId = req.body.cartId;
+        const billId = req.body.billId;
 
-        let subscription = await Subscription.findByIdAndUpdate(id, { deliveryQuantity: deliveryQuantity, $inc: { subscriptionWallet: -total } });
-        const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: total } });
+        let subscription = await Subscription.findByIdAndUpdate(id, { deliveryQuantity: deliveryQuantity, subscriptionWallet: total });
+        let cart = await Cart.findByIdAndUpdate(cartId, { products: products, total: total });
+        let bill = await Bill.findByIdAndUpdate(billId, { products: products, amount: total });
+        //const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: total } });
 
         if (subscription) {
             io.getIO().emit('subscription:put', { action: 'updated', subscription })
 
-            res.status(200).json({ success: true, message: 'Subscription delivery quantity decreased successfully', subscription, user })
+            res.status(200).json({ success: true, message: 'Subscription delivery quantity decreased successfully', subscription,bill,cart })
         }
     } catch (error) {
         res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
