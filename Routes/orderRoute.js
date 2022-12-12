@@ -46,6 +46,7 @@ router.put('/cart/order/:id', cartController.addOrder);
 router.post('/cart', cartController.addToCart);
 
 router.get('/cart/date', cartController.getCartByDate);
+router.get('/cart/type', cartController.getCartByType);
 
 /**
  * @swagger

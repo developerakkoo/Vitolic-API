@@ -12,15 +12,51 @@ const { endDate } = require('./subscriptionController');
 
 exports.getCartByDate = async (req, res, next) => {
     try {
+        let { startDate, endDate, } = req.body;
+
         let nextDay = moment().add(1, 'd').format('DD-MM-YYYY');
         console.log(nextDay)
-        const cart = await Cart.find({ date: nextDay }).sort({ createdAt: -1 }).populate("userId address subscription");
+        const cart = await Cart.find({
+            $and:[
+               { createdAt: {
+                    $gte:  new Date(startDate).toISOString(),
+                    // $lte:  new Date(endDate).toISOString()
+                }},
+                {createdAt: {$lte:  new Date(endDate).toISOString()
+                }}
+            ]
+        }).populate("userId address subscription");
 
         if (cart) {
             res.status(200).json({
                 status: true,
                 count: cart.length,
 
+                cart
+            })
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+
+}
+
+exports.getCartByType = async (req, res, next) => {
+    try {
+        let { type } = req.body;
+
+        const cart = await Cart.find({
+            type: type
+        }).populate("userId address subscription");
+
+        if (cart) {
+            res.status(200).json({
+                status: true,
+                count: cart.length,
                 cart
             })
         }
@@ -213,12 +249,12 @@ exports.getCart = async (req, res, next) => {
 //             console.log(normaldays + " days")
 //             console.log(normaldays.length)
 //             //console.log
-  
+
 //              altDays = normaldays.filter(function(v, i) {
 //                 // check the index is odd
 //                 return i % 2 == 0;
 //               });
-              
+
 //               console.log(altDays);
 //             //for (j = 0; j < normaldays.length; j++) {
 
@@ -381,8 +417,9 @@ exports.getCart = async (req, res, next) => {
 
 exports.addToCart = async (req, res, next) => {
     try {
-        let { userId, products, productId, total, status, address, emailAddress, mobileNumber, isCustom, isNormal, isAlternate, startDate,endDate,
-             days, daysRemaining, isOneTime, deliveryQuantity,discountedPrice } = req.body;
+        let { userId, products, productId, total, status, deliveryFrequency, address, emailAddress, mobileNumber, isCustom,
+            isNormal, isAlternate, startDate, endDate,
+            days, daysRemaining, isOneTime, deliveryQuantity, discountedPrice } = req.body;
         /*   let noofdays = [];
           if (days != null) noofdays = days.split(",") */
         const product = await Product.findById(productId);
@@ -414,6 +451,7 @@ exports.addToCart = async (req, res, next) => {
                 total: total,
                 status: status,
                 address: address,
+                type: "Custom"
             });
             await cart.save();
 
@@ -446,6 +484,8 @@ exports.addToCart = async (req, res, next) => {
                 total: total,
                 status: status,
                 address: address,
+                type: "Daily"
+
             });
             await cart.save();
 
@@ -466,16 +506,16 @@ exports.addToCart = async (req, res, next) => {
             console.log(normaldays + " days")
             console.log(normaldays.length)
             //console.log
-  
-             altDays = normaldays.filter(function(v, i) {
+
+            altDays = normaldays.filter(function (v, i) {
                 // check the index is odd
                 return i % 2 == 0;
-              });
-              
-              console.log(altDays);
+            });
+
+            console.log(altDays);
             //for (j = 0; j < normaldays.length; j++) {
 
-            console.log(altDays.length+"alternatedays")
+            console.log(altDays.length + "alternatedays")
             //for (i = 0; i < noofdays.length; i++){
             //Order Created
             let cart = new Cart({
@@ -488,6 +528,8 @@ exports.addToCart = async (req, res, next) => {
                 total: total,
                 status: status,
                 address: address,
+                type: "Alternate"
+
             });
             await cart.save();
 
@@ -502,13 +544,14 @@ exports.addToCart = async (req, res, next) => {
             let cart = new Cart({
                 orderId: await nanoid(),
                 products: products,
-                productId:productId,
+                productId: productId,
                 userId: userId,
                 orderDate: moment().format('YYYY-MM-DD'),
                 //quantity: quantity,
                 total: total,
                 status: status,
                 address: address,
+                type: "One Time"
             });
             await cart.save();
             const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: total } });
@@ -518,7 +561,7 @@ exports.addToCart = async (req, res, next) => {
                 cart,
                 user,
             })
-           cartId = cart._id
+            cartId = cart._id
             /* carts.push(cartId);
             console.log(cartId) */
 
@@ -545,7 +588,7 @@ exports.addToCart = async (req, res, next) => {
                 subscription = new Subscription({
                     productId: productId,
                     //quantity: quantity,
-                    deliveryQuantity:deliveryQuantity,
+                    deliveryQuantity: deliveryQuantity,
                     discountedPrice: discountedPrice,
                     imageUrl: productImgUrl,
                     userId: userId,
@@ -569,7 +612,7 @@ exports.addToCart = async (req, res, next) => {
                 subscription = new Subscription({
                     productId: productId,
                     //quantity:quantity,
-                    deliveryQuantity:deliveryQuantity,
+                    deliveryQuantity: deliveryQuantity,
                     discountedPrice: discountedPrice,
                     imageUrl: productImgUrl,
                     userId: userId,
@@ -592,7 +635,7 @@ exports.addToCart = async (req, res, next) => {
                 subscription = new Subscription({
                     productId: productId,
                     //quantity:quantity,
-                    deliveryQuantity:deliveryQuantity,
+                    deliveryQuantity: deliveryQuantity,
                     discountedPrice: discountedPrice,
                     imageUrl: productImgUrl,
                     userId: userId,

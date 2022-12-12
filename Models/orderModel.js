@@ -45,6 +45,10 @@ const cartSchema = new Schema({
     },
     orderDate: { type: String },
     orderDays: { type: Array, "default": [] },
+    type:{
+        type: String,
+        
+    },
     terminate: {
         type: Boolean,
         default: false
