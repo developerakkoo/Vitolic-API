@@ -419,14 +419,15 @@ exports.getCart = async (req, res, next) => {
 
 exports.addToCart = async (req, res, next) => {
     try {
-        let { userId, products, productId, total, status, deliveryFrequency, address, emailAddress, mobileNumber, isCustom,
+        let { userId, products, productId, total, status, deliveryFrequency, address, 
+            emailAddress, mobileNumber, isCustom,
             isNormal, isAlternate, startDate, endDate,
             days, daysRemaining, isOneTime, deliveryQuantity, discountedPrice } = req.body;
         /*   let noofdays = [];
           if (days != null) noofdays = days.split(",") */
         const product = await Product.findById(productId);
-        startDate = moment(startDate).format('YYYY-MM-DD')
-        endDate = moment(endDate).format('YYYY-MM-DD')
+        startDate = moment(startDate).format('YYYY-MM-DD');
+        endDate = moment(endDate).format('YYYY-MM-DD');
         console.log(endDate)
         //console.log(noofdays.length)
         let normaldays = [];
@@ -548,7 +549,7 @@ exports.addToCart = async (req, res, next) => {
                 products: products,
                 productId: productId,
                 userId: userId,
-                startDate:startDate,
+                startDate: startDate,
                 //quantity: quantity,
                 total: total,
                 status: status,
