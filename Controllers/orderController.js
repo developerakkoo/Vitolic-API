@@ -28,6 +28,7 @@ exports.getCartByDate = async (req, res, next) => {
         }).populate("userId address subscription");
 
         if (cart) {
+            io.getIO().emit('cart:get', cart);
             res.status(200).json({
                 status: true,
                 count: cart.length,
@@ -54,6 +55,7 @@ exports.getCartByType = async (req, res, next) => {
         }).populate("userId address subscription");
 
         if (cart) {
+            io.getIO().emit('cart:get', cart);
             res.status(200).json({
                 status: true,
                 count: cart.length,
@@ -546,7 +548,7 @@ exports.addToCart = async (req, res, next) => {
                 products: products,
                 productId: productId,
                 userId: userId,
-                orderDate: moment().format('YYYY-MM-DD'),
+                startDate: moment().format('YYYY-MM-DD'),
                 //quantity: quantity,
                 total: total,
                 status: status,
