@@ -548,7 +548,7 @@ exports.addToCart = async (req, res, next) => {
                 products: products,
                 productId: productId,
                 userId: userId,
-                startDate: moment().format('YYYY-MM-DD'),
+                startDate:startDate,
                 //quantity: quantity,
                 total: total,
                 status: status,
