@@ -16,6 +16,8 @@ exports.createBanner = async (req, res, next) => {
     })
 
     banner.save().then((result) => {
+        io.getIO().emit('banner:get', result);
+
         res.status(200).send(result);
     }).catch((err) => {
         res.status(500).send(err.message);
@@ -76,6 +78,14 @@ exports.updateBanner = async (req, res, next) => {
         let banner = await Banner.findByIdAndUpdate(req.params.id, {
             imageUrl: req.protocol + '://' + req.hostname + '/' + imageUrl
         })
+        if(banner){
+        io.getIO().emit('banner:get', result);
+
+            res.status(201).json({
+                message:"Banner updated Successfully",
+                banner
+            })
+        }
     } catch (error) {
         res.status(500).send(error.message);
 
@@ -86,6 +96,8 @@ exports.deleteBanner = async (req, res, next) => {
     try {
         let banner = await Banner.findByIdAndDelete(req.params.id);
         if (banner) {
+        io.getIO().emit('banner:get', result);
+
             res.status(200).send("Banner Delete Successfully");
         }
     } catch (error) {

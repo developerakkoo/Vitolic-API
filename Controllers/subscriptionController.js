@@ -77,6 +77,8 @@ exports.getSubscription = async (req, res, next) => {
 
         let subscription = await Subscription.find({}).sort({ createdAt: -1 });
         if (subscription) {
+            io.getIO().emit('subscription:get', { action: 'get', subscription })
+
 
             res.status(200).json({ success: true, subscription })
         }
@@ -91,6 +93,7 @@ exports.getSubscriptionByCartId = async (req, res, next) => {
 
         let subscription = await Subscription.find({ cartId: id }).populate('userId billId cartId ');
         if (subscription) {
+            io.getIO().emit('subscription:get', { action: 'get', subscription })
 
             res.status(200).json({ success: true, subscription })
         }
@@ -106,6 +109,8 @@ exports.getSubscriptionById = async (req, res, next) => {
         const subscription = await Subscription.findById(id).populate('productId userId billId cartId');
 
         if (subscription) {
+            io.getIO().emit('subscription:get', { action: 'get', subscription })
+
             res.status(200).json({ success: true, subscription })
         }
     } catch (error) {
@@ -120,6 +125,8 @@ exports.getSubscriptionByUserId = async (req, res, next) => {
         const subscription = await Subscription.find({ userId: id, terminate: false }).sort({ createdAt: -1 }).populate('productId userId cartId billId');
 
         if (subscription) {
+            io.getIO().emit('subscription:get', { action: 'get', subscription })
+
             res.status(200).json({ success: true, subscription })
         }
     } catch (error) {
@@ -134,7 +141,7 @@ exports.updateSubscription = async (req, res, next) => {
         let subscription = await Subscription.findByIdAndUpdate(id, req.body);
 
         if (subscription) {
-            io.getIO().emit('subscription:put', { action: 'updated', subscription })
+            io.getIO().emit('subscription:get', { action: 'updated', subscription })
 
             res.status(200).json({ success: true, message: 'Subscription updated successfully', subscription })
         }
@@ -151,6 +158,8 @@ exports.deleteSubscription = async (req, res, next) => {
         const subscription = await Subscription.findOneAndDelete(id);
 
         if (subscription) {
+            io.getIO().emit('subscription:get', { action: 'deleted', subscription })
+
             res.status(200).json({ status: true, message: 'Subscription deleted successfully', subscription: subscription })
         }
     } catch (error) {

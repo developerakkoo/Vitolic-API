@@ -102,6 +102,8 @@ exports.getCartByCartId = async (req, res, next) => {
         const cart = await Cart.findById(req.params.id).populate("userId address subscription product");
 
         if (cart) {
+            io.getIO().emit('cart:get', cart);
+
             res.status(200).json({
                 status: true,
                 count: cart.length,
@@ -125,6 +127,7 @@ exports.getCartByUserId = async (req, res, next) => {
         const cart = await Cart.find({ userId: req.params.id }).sort({ createdAt: -1 }).populate("userId address subscription");
 
         if (cart) {
+            io.getIO().emit('cart:get', cart);
 
             res.status(200).json({
                 status: true,
@@ -141,11 +144,54 @@ exports.getCartByUserId = async (req, res, next) => {
         })
     }
 }
+exports.getCartTerminated = async (req, res, next) => {
+    try {
 
+        const cart = await Cart.find({ terminate: true }).sort({ createdAt: -1 }).populate("userId address subscription");
+
+        io.getIO().emit('cart:get', cart);
+
+        res.status(200).json({
+            status: true,
+            count: cart.length,
+
+            cart
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+
+}
+exports.getCartPaused = async (req, res, next) => {
+    try {
+
+        const cart = await Cart.find({ isPause: true }).sort({ createdAt: -1 }).populate("userId address subscription");
+        io.getIO().emit('cart:get', cart);
+
+        res.status(200).json({
+            status: true,
+            count: cart.length,
+
+            cart
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+
+}
 exports.getCart = async (req, res, next) => {
     try {
 
         const cart = await Cart.find({ isDelivered: false }).sort({ createdAt: -1 }).populate("userId address subscription");
+        io.getIO().emit('cart:get', cart);
 
         res.status(200).json({
             status: true,
@@ -729,6 +775,8 @@ exports.updateCart = async (req, res, next) => {
         const cart = await Cart.findByIdAndUpdate(id, req.body);
 
         if (cart) {
+            io.getIO().emit('cart:get', cart);
+
             res.status(200).json({ cart, message: 'cart updated' })
         }
     } catch (error) {
@@ -745,6 +793,8 @@ exports.deleteCart = async (req, res, next) => {
         const id = req.params.id;
         let cart = await Cart.findByIdAndDelete(id);
         if (cart) {
+            io.getIO().emit('cart:get', cart);
+
             res.status(200).send("Cart Delete Successfully");
         }
     } catch (error) {
