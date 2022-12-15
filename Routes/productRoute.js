@@ -173,8 +173,7 @@ router.delete('/product/:productId',  productController.postDeleteProduct);
  *  
  * 
  */
-router.put('/products/image/:productId',  productController.postEditProduct);
-router.put('/products/:productId',  productController.postEditProductWithoutImage);
+router.put('/products/:productId',  productController.postEditProduct);
 
 /**
  * @swagger
