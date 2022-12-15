@@ -95,7 +95,6 @@ exports.getSingleProduct = async (req, res, next) => {
         message: "Product not found"
       });
 
-      io.getIO().emit('product:notfound', { action: 'notfound' })
 
     }
     res.status(200).json({
@@ -103,7 +102,7 @@ exports.getSingleProduct = async (req, res, next) => {
       products: product
     })
 
-    io.getIO().emit('product:single', { product: product })
+    io.getIO().emit('product:get', { product: product })
 
   } catch (error) {
     res.status(401).json({
@@ -160,7 +159,7 @@ exports.postAddProduct = (req, res, next) => {
       result,
       message: "Product Created",
     });
-    io.getIO().emit('product:create', { action: 'created', product })
+    io.getIO().emit('product:get', { action: 'created', product })
 
   }).catch((err) => {
     res.status(500).json({
@@ -213,7 +212,7 @@ exports.postEditProduct = (req, res, next) => {
   const updatedTitle = req.body.title;
   const updatedPrice = req.body.price;
   const updatedDiscountedPrice = req.body.discountedPrice;
-  let updatedImageUrl = req.protocol + '://' + req.hostname + '/' + req.file.path.replace(/\\/g, "/");
+  let updatedImageUrl = req.body.imageUrl;
   const updatedInStock = req.body.inStock;
   const units = req.body.units;
 
@@ -260,7 +259,7 @@ exports.postEditProduct = (req, res, next) => {
     }).then(result => {
       console.log(result);
       res.status(201).json({ status: 'success', data: result });
-      io.getIO().emit('product:update', { action: 'update' })
+      io.getIO().emit('product:get', { action: 'update' })
 
     }).catch(err => {
       console.log(err);
@@ -291,7 +290,7 @@ exports.postDeleteProduct = async (req, res, next) => {
       message: "Product deleted successfully"
     })
 
-    io.getIO().emit('product:delete', { action: 'delete', product })
+    io.getIO().emit('product:get', { action: 'delete', product })
 
 
 
