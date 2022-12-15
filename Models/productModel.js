@@ -31,7 +31,7 @@ const productSchema = new Schema({
     
     inStock:{
         type: String,
-        required: [true, 'inStock is required']
+        default:"true"
     },
     category:{
         type: String,
