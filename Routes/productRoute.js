@@ -176,7 +176,7 @@ router.delete('/product/:productId',  productController.postDeleteProduct);
 router.put('/products/image/:productId',  productController.postEditProduct);
 router.put('/products/:productId',  productController.postEditProductWithoutImage);
 
-/**
+/** 
  * @swagger
  * /products/price/{productId}:
  *  put:

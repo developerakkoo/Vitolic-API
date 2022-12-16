@@ -75,7 +75,7 @@ exports.getProducts = async (req, res, next) => {
       products: products,
     });
 
-    io.getIO().emit('product:all', { products: products });
+    io.getIO().emit('product:get', { products: products });
 
 
   } catch (err) {
@@ -159,7 +159,8 @@ exports.postAddProduct = (req, res, next) => {
       result,
       message: "Product Created",
     });
-    io.getIO().emit('product:get', { action: 'created', product })
+    io.getIO().emit('product:get', { product: product })
+
 
   }).catch((err) => {
     res.status(500).json({
@@ -259,7 +260,8 @@ exports.postEditProduct = (req, res, next) => {
     }).then(result => {
       console.log(result);
       res.status(201).json({ status: 'success', data: result });
-      io.getIO().emit('product:get', { action: 'update' })
+      io.getIO().emit('product:get', { product: product })
+
 
     }).catch(err => {
       console.log(err);
@@ -320,7 +322,8 @@ exports.postEditProductWithoutImage = (req, res, next) => {
     }).then(result => {
       console.log(result);
       res.status(201).json({ status: 'success', data: result });
-      io.getIO().emit('product:get', { action: 'update' })
+      io.getIO().emit('product:get', { product: product })
+
 
     }).catch(err => {
       console.log(err);
@@ -351,7 +354,8 @@ exports.postDeleteProduct = async (req, res, next) => {
       message: "Product deleted successfully"
     })
 
-    io.getIO().emit('product:get', { action: 'delete', product })
+    io.getIO().emit('product:get', { product: product })
+
 
 
 
