@@ -224,7 +224,7 @@ exports.postEditProduct = (req, res, next) => {
   console.log("updated Image ", updatedImageUrl);
 
   if (req.file) {
-    updatedImageUrl = req.protocol + '://' + req.hostname + '/' + req.file.path.replace(/\\/g, "/");
+    updatedImageUrl = "https" + '://' + req.hostname + '/' + req.file.path.replace(/\\/g, "/");
     console.log("ImageUrl set to ", updatedImageUrl);
   }
 
