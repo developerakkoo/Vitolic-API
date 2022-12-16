@@ -124,7 +124,7 @@ exports.getCartByCartId = async (req, res, next) => {
 exports.getCartByUserId = async (req, res, next) => {
     try {
 
-        const cart = await Cart.find({ userId: req.params.id }).sort({ createdAt: -1 }).populate("userId address subscription");
+        const cart = await Cart.find({ userId: req.params.id, terminate: false }).sort({ createdAt: -1 }).populate("userId address subscription");
 
         if (cart) {
             io.getIO().emit('cart:get', cart);
