@@ -12,7 +12,7 @@ exports.createBanner = async (req, res, next) => {
     console.log(imageUrl);
 
     let banner = new Banner({
-        imageUrl: req.protocol + '://' + req.hostname + '/' + imageUrl
+        imageUrl: "https" + '://' + req.hostname + '/' + imageUrl
     })
 
     banner.save().then((result) => {
@@ -43,7 +43,7 @@ exports.getBanners = async (req, res, next) => {
 
          if(banner){
              res.status(200).json({ status: true, message:'banner fetched successfully', banner: banner })
-             io.getIO().emit('get:banner', banner);
+             io.getIO().emit('banner:get', banner);
  
          }  
      } catch (error) {
@@ -76,7 +76,7 @@ exports.updateBanner = async (req, res, next) => {
         console.log(imageUrl);
 
         let banner = await Banner.findByIdAndUpdate(req.params.id, {
-            imageUrl: req.protocol + '://' + req.hostname + '/' + imageUrl
+            imageUrl: "https" + '://' + req.hostname + '/' + imageUrl
         })
         if(banner){
         io.getIO().emit('banner:get', result);
