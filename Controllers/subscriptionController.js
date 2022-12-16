@@ -343,6 +343,7 @@ exports.terminate = async (req, res, next) => {
         const id = req.params.id;
         const terminate = req.body.terminate;
         const userId = req.body.userId;
+        const cartId = req.body.cartId;
         console.log("hello")
         let subscription = await Subscription.findByIdAndUpdate(id, req.body);
         let balance = subscription.subscriptionWallet;
@@ -358,6 +359,7 @@ exports.terminate = async (req, res, next) => {
         if (terminate) {
             const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: balance } });
             let subscription = await Subscription.findByIdAndUpdate(id, { subscriptionWallet: 0 });
+            let cart = await Cart.findByIdAndUpdate(cartId, {terminate: true});
             io.getIO().emit('subscription:get',subscription );
 
             res.status(200).json({ status: true, message: 'Subscription terminated successfully', subscription: subscription, user })
