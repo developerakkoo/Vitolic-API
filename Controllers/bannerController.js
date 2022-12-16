@@ -4,7 +4,7 @@ const io = require('../socket');
 exports.createBanner = async (req, res, next) => {
 
     if (!req.file) {
-        res.status(400).send("Please attach a file");
+        res.status(400).json({msg: "Please attach a file"});
     }
 
     console.log(req.file);
@@ -18,9 +18,9 @@ exports.createBanner = async (req, res, next) => {
     banner.save().then((result) => {
         io.getIO().emit('banner:get', result);
 
-        res.status(200).send(result);
+        res.status(200).json({msg: "Please attach a file"});
     }).catch((err) => {
-        res.status(500).send(err.message);
+        res.status(500).json({msg: "Please attach a file"});
 
     })
 
@@ -59,7 +59,7 @@ exports.getBannerById = async (req, res, next) => {
         }
 
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({msg: "Please attach a file"});
 
     }
 }
@@ -68,7 +68,7 @@ exports.getBannerById = async (req, res, next) => {
 exports.updateBanner = async (req, res, next) => {
     try {
         if (!req.file) {
-            res.status(400).send("Please attach a file");
+            res.status(400).json({msg: "Please attach a file"});
         }
 
         console.log(req.file);
@@ -79,7 +79,7 @@ exports.updateBanner = async (req, res, next) => {
             imageUrl: "https" + '://' + req.hostname + '/' + imageUrl
         })
         if(banner){
-        io.getIO().emit('banner:get', result);
+        io.getIO().emit('banner:get', banner);
 
             res.status(201).json({
                 message:"Banner updated Successfully",
@@ -87,7 +87,7 @@ exports.updateBanner = async (req, res, next) => {
             })
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({msg: "Please attach a file"});
 
     }
 }
@@ -96,12 +96,12 @@ exports.deleteBanner = async (req, res, next) => {
     try {
         let banner = await Banner.findByIdAndDelete(req.params.id);
         if (banner) {
-        io.getIO().emit('banner:get', result);
+        io.getIO().emit('banner:get', banner);
 
-            res.status(200).send("Banner Delete Successfully");
+            res.status(200).json({msg: "Please attach a file"});
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({msg: "Please attach a file"});
 
     }
 }
