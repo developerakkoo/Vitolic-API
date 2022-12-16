@@ -343,7 +343,7 @@ exports.terminate = async (req, res, next) => {
         const id = req.params.id;
         const terminate = req.body.terminate;
         const userId = req.body.userId;
-        const cartId = req.body.cartId;
+        const cartId = req.params.cartId;
         console.log("hello")
         let subscription = await Subscription.findByIdAndUpdate(id, req.body);
         let balance = subscription.subscriptionWallet;
