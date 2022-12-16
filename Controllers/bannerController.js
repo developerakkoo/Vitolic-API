@@ -16,11 +16,11 @@ exports.createBanner = async (req, res, next) => {
     })
 
     banner.save().then((result) => {
-        io.getIO().emit('banner:get', result);
+        // io.getIO().emit('banner:get', result);
 
-        res.status(200).json({msg: "Please attach a file"});
+        res.status(200).json({msg: "Banner created"});
     }).catch((err) => {
-        res.status(500).json({msg: "Please attach a file"});
+        res.status(500).json({msg: err.message});
 
     })
 

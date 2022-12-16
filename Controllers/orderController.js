@@ -706,6 +706,7 @@ exports.addToCart = async (req, res, next) => {
             const user = await Subscription.findByIdAndUpdate(subscriptionId, { $inc: { subscriptionWallet: total } });
 
             if (subscription) {
+                
                 res.status(200).json({
                     cartId,
                     bill,

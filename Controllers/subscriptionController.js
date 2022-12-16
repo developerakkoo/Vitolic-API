@@ -80,7 +80,7 @@ exports.getSubscription = async (req, res, next) => {
             io.getIO().emit('subscription:get', { action: 'get', subscription })
 
 
-            res.status(200).json({ success: true, subscription })
+            res.status(200).json(subscription )
         }
     } catch (error) {
         res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
@@ -95,7 +95,7 @@ exports.getSubscriptionByCartId = async (req, res, next) => {
         if (subscription) {
             io.getIO().emit('subscription:get', { action: 'get', subscription })
 
-            res.status(200).json({ success: true, subscription })
+            res.status(200).json(subscription )
         }
     } catch (error) {
         res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
@@ -109,7 +109,7 @@ exports.getSubscriptionById = async (req, res, next) => {
         const subscription = await Subscription.findById(id).populate('productId userId billId cartId');
 
         if (subscription) {
-            io.getIO().emit('subscription:get', { action: 'get', subscription })
+            io.getIO().emit('subscription:get',subscription )
 
             res.status(200).json({ success: true, subscription })
         }
@@ -125,7 +125,7 @@ exports.getSubscriptionByUserId = async (req, res, next) => {
         const subscription = await Subscription.find({ userId: id, terminate: false }).sort({ createdAt: -1 }).populate('productId userId cartId billId');
 
         if (subscription) {
-            io.getIO().emit('subscription:get', { action: 'get', subscription })
+            io.getIO().emit('subscription:get', subscription )
 
             res.status(200).json({ success: true, subscription })
         }
