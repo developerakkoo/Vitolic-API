@@ -125,7 +125,7 @@ exports.getSubscriptionByUserId = async (req, res, next) => {
         const subscription = await Subscription.find({ userId: id, terminate: false }).sort({ createdAt: -1 }).populate('productId userId cartId billId');
 
         if (subscription) {
-            io.getIO().emit('subscription:get', [subscription] )
+            io.getIO().emit('subscription:get', subscription )
 
             res.status(200).json({ success: true, subscription })
         }
