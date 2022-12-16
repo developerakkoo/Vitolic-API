@@ -148,7 +148,7 @@ exports.postAddProduct = (req, res, next) => {
     category: category,
     type: type,
     imageFilePath: imageFilePath,
-    imageUrl: req.protocol + '://' + req.hostname + '/' + imageUrl
+    imageUrl: "https" + '://' + req.hostname + '/' + imageUrl
   });
   product.quantity.push(quantity);
 
