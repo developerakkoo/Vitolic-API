@@ -144,6 +144,8 @@ router.get('/cart/user/:id', cartController.getCartByUserId);
  *  
  * 
  */
+router.get('/cart/filter', cartController.getCartFilter);
+
 router.get('/cart', cartController.getCart);
 /**
  * @swagger
