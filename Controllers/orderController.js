@@ -250,9 +250,9 @@ exports.addToCart = async (req, res, next) => {
         /*   let noofdays = [];
           if (days != null) noofdays = days.split(",") */
         const product = await Product.findById(productId);
-        startDate = moment(startDate).format('YYYY-MM-DD');
-        endDate = moment(endDate).format('YYYY-MM-DD');
-        console.log(endDate)
+        // startDate = moment(startDate).format('YYYY-MM-DD');
+        // endDate = moment(endDate).format('YYYY-MM-DD');
+        // console.log(endDate)
         //console.log(noofdays.length)
         let normaldays = [];
         let altDays;
