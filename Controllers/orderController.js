@@ -275,6 +275,8 @@ exports.addToCart = async (req, res, next) => {
                 //orderDate: days,
                 orderDays: days,
                 //quantity: quantity,
+                startDate: startDate,
+                endDate: endDate,
                 total: total,
                 status: status,
                 address: address,
@@ -308,6 +310,8 @@ exports.addToCart = async (req, res, next) => {
                 //orderDate: normaldays[j],
                 orderDays: normaldays,
                 //quantity: quantity,
+                startDate: startDate,
+                endDate: endDate,
                 total: total,
                 status: status,
                 address: address,
@@ -352,6 +356,8 @@ exports.addToCart = async (req, res, next) => {
                 //orderDate: normaldays[j],
                 orderDays: altDays,
                 //quantity: quantity,
+                startDate: startDate,
+                endDate: endDate,
                 total: total,
                 status: status,
                 address: address,
@@ -374,6 +380,7 @@ exports.addToCart = async (req, res, next) => {
                 productId: productId,
                 userId: userId,
                 startDate: startDate,
+                endDate: endDate,
                 //quantity: quantity,
                 total: total,
                 status: status,
@@ -593,10 +600,10 @@ exports.orderDelivered = async (req, res, next) => {
         let isDelivered = true;
 
         //change walletcashbackavailable to subscriptionwallet
-        const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: -price } });
+        //  const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: -price } });
         console.log(cart.products[0])
-        const cart1 = await Cart.findByIdAndUpdate({ _id: cartId }, { isDelivered });
-        const subscription = await Subscription.findOneAndUpdate({ cartId: cartId }, { $inc: { daysRemaining: -1 } })
+        const cart1 = await Cart.findByIdAndUpdate(cartId, { isDelivered });
+        const subscription = await Subscription.findOneAndUpdate({ cartId: cartId }, { $inc: { daysRemaining: -1 } });
 
         if (cart1) {
             res.status(200).json({

@@ -55,13 +55,12 @@ const MONGODB_URI = "mongodb+srv://farmsell:farmsell@cluster0.mh36s.mongodb.net/
 //const cache = apicache.middleware;
 
 
-//excel
-
 
 const app = express();
 const port = 8080;
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '50mb' }));
+
 app.use(express.json());
 app.use(cors());
 /* app.use((req, res, next) => {
@@ -153,35 +152,35 @@ app.use(
 app.use("/image", express.static(path.join(__dirname, "image")));
 
 
-app.get('/getgst/:gst', async(req, res, next) =>{
+app.get('/getgst/:gst', async (req, res, next) => {
   let gst = req.params.gst;
   let mail = req.params.mail;
 
   var config = {
     method: 'get',
     url: `https://api.mastergst.com/public/search?email=mvk20@rediffmail.com&gstin=${gst}`,
-    headers: { 
-      'client_id': 'GSP4ea49af0-17d3-4df7-8aed-c620e4806b9c', 
+    headers: {
+      'client_id': 'GSP4ea49af0-17d3-4df7-8aed-c620e4806b9c',
       'client_secret': 'GSP286e85df-4313-43dd-9b54-fc79b81f5ffb'
     }
   };
-  
+
   axios(config)
-  .then(function (response) {
-    console.log(JSON.stringify(response.data));
-    res.status(200).json({
-      message: 'Gst API',
-      gst,
-      data: response.data
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+      res.status(200).json({
+        message: 'Gst API',
+        gst,
+        data: response.data
+      })
     })
-  })
-  .catch(function (error) {
-    console.log(error);
-    res.status(500).json({
-      message: error,
-      data: "Something went wrong!"
-    })
-  });
+    .catch(function (error) {
+      console.log(error);
+      res.status(500).json({
+        message: error,
+        data: "Something went wrong!"
+      })
+    });
 
 })
 app.use(adminRoute);
