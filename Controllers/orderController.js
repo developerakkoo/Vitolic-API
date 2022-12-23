@@ -458,6 +458,8 @@ exports.addToCart = async (req, res, next) => {
                     startDate: startDate,
                     endDate: endDate,
                     days: altDays,
+                    daysRemaining: daysRemaining,
+
                     deliveryFrequency: deliveryFrequency,
                 });
                 await subscription.save();
@@ -475,6 +477,8 @@ exports.addToCart = async (req, res, next) => {
                     userId: userId,
                     cartId: cartId,
                     billId: billId,
+                    daysRemaining: daysRemaining,
+
                     addressId: address,
                     mobileNumber: mobileNumber,
                     emailAddress: emailAddress,
