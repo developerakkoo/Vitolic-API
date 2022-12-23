@@ -601,11 +601,10 @@ exports.orderDelivered = async (req, res, next) => {
         // const cart1 = await Cart.findByIdAndUpdate(cartId, { isDelivered });
         const subscription = await Subscription.findOneAndUpdate({ cartId: cartId }, { $inc: { daysRemaining: -1, subscriptionWallet: -price } });
 
-        if (cart1) {
+        if (subscription) {
             res.status(200).json({
                 message: 'Order Delivered',
-                cart1,
-                subscription, user
+                subscription
             })
             io.getIO().emit('order:get', cartId);
 
