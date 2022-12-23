@@ -1,4 +1,5 @@
 const Promo = require('./../Models/promoModel');
+const io = require('../socket');
 
 
 exports.createPromo = async (req, res, next) => {
@@ -6,7 +7,8 @@ exports.createPromo = async (req, res, next) => {
         let promo = await Promo.create(req.body);
 
         if (promo) {
-            res.status(200).json({ success: true, promo })
+            res.status(200).json({ success: true, promo });
+            io.getIO().emit('promo:get', promo);
         }
     } catch (error) {
         res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
@@ -19,6 +21,7 @@ exports.getPromo = async (req, res, next) => {
         let promo = await Promo.find({});
         if (promo) {
             res.status(200).json({ success: true, promo })
+            io.getIO().emit('promo:get', promo);
 
         }
 
@@ -49,6 +52,7 @@ exports.updatePromo = async (req, res, next) => {
 
         if (promo) {
             res.status(200).json({ success: true, message: "Updated promo" })
+            io.getIO().emit('promo:get', promo);
 
         }
 
@@ -64,6 +68,7 @@ exports.deletePromo = async (req, res, next) => {
 
         if (promo) {
             res.status(200).json({ success: true, message: "Deleted promo" })
+            io.getIO().emit('promo:get', promo);
 
         }
 
