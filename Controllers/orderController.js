@@ -599,16 +599,16 @@ exports.orderDelivered = async (req, res, next) => {
     try {
         const cartId = req.params.id;
         const price = req.body.price;
-
+        const today = req.body.today;
         //change walletcashbackavailable to subscriptionwallet
         //  const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: -price } });
-        // const cart1 = await Cart.findByIdAndUpdate(cartId, { isDelivered });
-        const subscription = await Subscription.findOneAndUpdate({ cartId: cartId }, { $inc: { daysRemaining: -1, subscriptionWallet: -price } });
+        const cart1 = await Cart.findByIdAndUpdate(cartId, { $pull: { orderDays: today }}, {new : true});
+        // const subscription = await Subscription.findOneAndUpdate({ cartId: cartId }, { $inc: { daysRemaining: -1, subscriptionWallet: -price } });
 
-        if (subscription) {
+        if (cart1) {
             res.status(200).json({
                 message: 'Order Delivered',
-                subscription
+                cart1
             })
             io.getIO().emit('order:get', cartId);
 
