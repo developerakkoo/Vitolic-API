@@ -602,17 +602,33 @@ exports.orderDelivered = async (req, res, next) => {
         const today = req.body.today;
         //change walletcashbackavailable to subscriptionwallet
         //  const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: -price } });
-        const cart1 = await Cart.findByIdAndUpdate(cartId, { $pull: { orderDays: today }}, {new : true});
-        // const subscription = await Subscription.findOneAndUpdate({ cartId: cartId }, { $inc: { daysRemaining: -1, subscriptionWallet: -price } });
+        Subscription.findOne({ cartId: cartId}, (err, doc) => {
+            if(err){
+                res.status(500).json({
+                    message: err
+                })
+            }else if(doc){
 
-        if (cart1) {
-            res.status(200).json({
-                message: 'Order Delivered',
-                cart1
-            })
-            io.getIO().emit('order:get', cartId);
-
-        }
+                var records = {'days': doc};
+                let idx = doc.days.indexOf(today);
+                if(idx !== -1){
+                    doc.days.splice(idx, 1);
+                    doc.subscriptionWallet -= price;
+                // save the doc
+                doc.save(function(error) {
+                    if (error) {
+                        console.log(error);
+                        res.status(500).json(error);
+                    } else {
+                        // send the records
+                        res.status(200).json(records);
+                    }
+                });
+            }
+                }
+          
+        });
+     
     } catch (error) {
         res.status(500).json({ error, message: 'Something went wrong!' })
 
