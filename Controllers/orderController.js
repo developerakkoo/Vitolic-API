@@ -658,6 +658,10 @@ exports.orderDelivered = async (req, res, next) => {
                         res.status(200).json(records);
                     }
                 });
+            }else{
+                res.status(200).json({
+                    message:"No date found"
+                })
             }
                 }
           
