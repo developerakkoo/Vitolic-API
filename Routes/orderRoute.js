@@ -124,6 +124,7 @@ router.post('/cart', cartController.addToCart);
  * 
  */
 router.get('/cart/:id', cartController.getCartByCartId);
+router.get('/cart/delivery/:today', cartController.getCartForDeliveryToday);
 
 router.get('/cart/user/:id', cartController.getCartByUserId);
 

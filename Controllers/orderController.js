@@ -10,6 +10,40 @@ const nanoid = customAlphabet('1234567890', 6);
 const moment = require('moment/moment');
 const { endDate } = require('./subscriptionController');
 
+
+exports.getCartForDeliveryToday = async (req, res, next) => {
+    try {
+        let today  = req.params.today;
+        const cart = await Cart.find({ createdAt: {
+                    $gte:  new Date(today).toISOString(),
+                    $lte: moment().add(24,'h').toISOString()
+        }
+            
+        }).populate("userId address subscription");
+
+        if (cart) {
+            io.getIO().emit('cart:get', cart);
+            res.status(200).json({
+                status: true,
+                count: cart.length,
+                date: new Date(today).toISOString(),
+                cart
+            })
+        }else{
+            res.status(400).json({
+                status: false,
+                message:"No Order found for today"
+            })
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+
+}
 exports.getCartByDate = async (req, res, next) => {
     try {
         let { startDate, endDate, } = req.body;
