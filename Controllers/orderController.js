@@ -652,15 +652,16 @@ exports.orderDelivered = async (req, res, next) => {
                 doc.save(function(error) {
                     if (error) {
                         console.log(error);
-                        res.status(500).json(error);
+                        res.status(500).json({error});
                     } else {
                         // send the records
-                        res.status(200).json(records);
+                        res.status(200).json({records});
                     }
                 });
             }else{
-                res.status(200).json({
-                    message:"No date found"
+                res.status(500).json({
+                    message:"No date found",
+                    status: false
                 })
             }
                 }
