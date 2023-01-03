@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const cors = require("cors");
 const axios = require("axios");
+const fs = require('fs');
 const { v4: uuidv4 } = require("uuid");
 
 const multer = require("multer");
@@ -183,9 +184,17 @@ app.get('/getgst/:gst', async (req, res, next) => {
     });
 
 })
+
+app.get('/update', (req, res) => {
+
+  fs.readFile('./appUpdate.json', (err, json) => {
+      let obj = JSON.parse(json);
+      res.json(obj);
+  });
+
+});
 app.use(adminRoute);
 app.use(billRoute);
-//app.use(customDateRoute)
 app.use(dashboardRoute);
 app.use(productRoute);
 app.use(userRoute);
