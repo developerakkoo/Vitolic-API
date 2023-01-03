@@ -14,7 +14,7 @@ const { endDate } = require('./subscriptionController');
 exports.getCartForDeliveryToday = async (req, res, next) => {
     try {
         let today  = req.params.today;
-        const cart = await Cart.find({ createdAt: {
+        const cart = await Cart.find({terminate: false, isPause: false, createdAt: {
                     $gte:  new Date(today).toISOString(),
                     $lte: moment().add(24,'h').toISOString()
         }
