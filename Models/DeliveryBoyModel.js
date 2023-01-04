@@ -41,7 +41,7 @@ const boySchema = new Schema({
 
     boyPincode: { type: Number },
 
-}, {
+}, {    
     timestamps: true
 })
 
