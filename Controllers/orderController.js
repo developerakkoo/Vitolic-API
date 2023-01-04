@@ -10,6 +10,40 @@ const nanoid = customAlphabet('1234567890', 6);
 const moment = require('moment/moment');
 const { endDate } = require('./subscriptionController');
 
+
+exports.getCartForDeliveryToday = async (req, res, next) => {
+    try {
+        let today  = req.params.today;
+        const cart = await Cart.find({terminate: false, 
+            isPause: false, 
+            orderDays: {$in: today}
+            
+            
+        }).populate("userId address subscription");
+
+        if (cart) {
+            io.getIO().emit('cart:get', cart);
+            res.status(200).json({
+                status: true,
+                count: cart.length,
+                date: new Date(today).toISOString(),
+                cart
+            })
+        }else{
+            res.status(400).json({
+                status: false,
+                message:"No Order found for today"
+            })
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+
+}
 exports.getCartByDate = async (req, res, next) => {
     try {
         let { startDate, endDate, } = req.body;
@@ -71,30 +105,6 @@ exports.getCartByType = async (req, res, next) => {
     }
 
 }
-
-/* exports.getCartByDate = async (req, res, next) => {
-    try {
-        let nextDay=moment().add(1,'d').format('DD-MM-YYYY');
-        console.log(nextDay)
-        const cart = await Cart.find({date:nextDay}).sort({ createdAt: -1 }).populate("userId address subscription");
-
-        if (cart) {
-            res.status(200).json({
-                status: true,
-                count: cart.length,
-
-                cart
-            })
-        }
-
-    } catch (error) {
-        res.status(500).json({
-            status: false,
-            message: error
-        })
-    }
-
-} */
 
 exports.getCartByCartId = async (req, res, next) => {
     try {
@@ -236,10 +246,6 @@ exports.getCart = async (req, res, next) => {
     }
 
 }
-
-
-
-
 
 exports.addToCart = async (req, res, next) => {
     try {
@@ -618,12 +624,17 @@ exports.orderDelivered = async (req, res, next) => {
                 doc.save(function(error) {
                     if (error) {
                         console.log(error);
-                        res.status(500).json(error);
+                        res.status(500).json({error});
                     } else {
                         // send the records
-                        res.status(200).json(records);
+                        res.status(200).json({records});
                     }
                 });
+            }else if(idx == -1){
+                res.status(500).json({
+                    message:"No date found",
+                    status: false
+                })
             }
                 }
           
