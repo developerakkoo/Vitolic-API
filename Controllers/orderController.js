@@ -10,7 +10,20 @@ const nanoid = customAlphabet('1234567890', 6);
 const moment = require('moment/moment');
 const { endDate } = require('./subscriptionController');
 
+exports.getCartForDeliveryAgrregate = async (req, res, next) => {
+    try {
+        let today  = req.params.today;
+        const result=await Cart.find({address})
 
+        res.status(200).json({result})
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+
+}
 exports.getCartForDeliveryToday = async (req, res, next) => {
     try {
         let today  = req.params.today;
@@ -249,7 +262,7 @@ exports.getCart = async (req, res, next) => {
 
 exports.addToCart = async (req, res, next) => {
     try {
-        let { userId, products, productId, total, status, deliveryFrequency, address, 
+        let { userId, products, productId, total, status, deliveryFrequency, address, pincode,
             emailAddress, mobileNumber, isCustom,
             isNormal, isAlternate, startDate, endDate,
             days, daysRemaining, isOneTime, deliveryQuantity, discountedPrice } = req.body;
@@ -286,6 +299,7 @@ exports.addToCart = async (req, res, next) => {
                 total: total,
                 status: status,
                 address: address,
+                pincode: pincode,
                 type: "Custom"
             });
             await cart.save();
@@ -321,6 +335,8 @@ exports.addToCart = async (req, res, next) => {
                 total: total,
                 status: status,
                 address: address,
+                pincode: pincode,
+
                 type: "Daily"
 
             });
@@ -366,6 +382,7 @@ exports.addToCart = async (req, res, next) => {
                 endDate: endDate,
                 total: total,
                 status: status,
+                pincode: pincode,
                 address: address,
                 type: "Alternate"
 
@@ -389,6 +406,7 @@ exports.addToCart = async (req, res, next) => {
                 endDate: endDate,
                 //quantity: quantity,
                 total: total,
+                pincode: pincode,
                 status: status,
                 address: address,
                 type: "One Time"
