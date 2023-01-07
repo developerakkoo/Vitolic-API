@@ -12,10 +12,10 @@ const { endDate } = require('./subscriptionController');
 
 exports.getCartForDeliveryAgrregate = async (req, res, next) => {
     try {
-        let today  = req.params.today;
-        const result=await Cart.find({address})
+        let today = req.params.today;
+        const result = await Cart.find({ address })
 
-        res.status(200).json({result})
+        res.status(200).json({ result })
     } catch (error) {
         res.status(500).json({
             status: false,
@@ -26,12 +26,13 @@ exports.getCartForDeliveryAgrregate = async (req, res, next) => {
 }
 exports.getCartForDeliveryToday = async (req, res, next) => {
     try {
-        let today  = req.params.today;
-        const cart = await Cart.find({terminate: false, 
-            isPause: false, 
-            orderDays: {$in: today}
-            
-            
+        let today = req.params.today;
+        const cart = await Cart.find({
+            terminate: false,
+            isPause: false,
+            orderDays: { $in: today }
+
+
         }).populate("userId address subscription");
 
         if (cart) {
@@ -42,10 +43,10 @@ exports.getCartForDeliveryToday = async (req, res, next) => {
                 date: new Date(today).toISOString(),
                 cart
             })
-        }else{
+        } else {
             res.status(400).json({
                 status: false,
-                message:"No Order found for today"
+                message: "No Order found for today"
             })
         }
 
@@ -64,13 +65,18 @@ exports.getCartByDate = async (req, res, next) => {
         let nextDay = moment().add(1, 'd').format('DD-MM-YYYY');
         console.log(nextDay)
         const cart = await Cart.find({
-            $and:[
-               { createdAt: {
-                    $gte:  new Date(startDate).toISOString(),
-                    // $lte:  new Date(endDate).toISOString()
-                }},
-                {createdAt: {$lte:  new Date(endDate).toISOString()
-                }}
+            $and: [
+                {
+                    createdAt: {
+                        $gte: new Date(startDate).toISOString(),
+                        // $lte:  new Date(endDate).toISOString()
+                    }
+                },
+                {
+                    createdAt: {
+                        $lte: new Date(endDate).toISOString()
+                    }
+                }
             ]
         }).populate("userId address subscription");
 
@@ -122,7 +128,8 @@ exports.getCartByType = async (req, res, next) => {
 exports.getCartByCartId = async (req, res, next) => {
     try {
 
-        const cart = await Cart.findById(req.params.id).populate("userId address subscription product");
+        const cart = await Cart.findById(req.params.id).populate("userId address subscription billId product");
+        console.log(cart.userId)
 
         if (cart) {
             io.getIO().emit('cart:get', cart);
@@ -147,7 +154,7 @@ exports.getCartByCartId = async (req, res, next) => {
 exports.getCartByUserId = async (req, res, next) => {
     try {
 
-        const cart = await Cart.find({ userId: req.params.id, terminate: false }).sort({ createdAt: -1 }).populate("userId address subscription");
+        const cart = await Cart.find({ userId: req.params.id, terminate: false, mainOrderId: null }).sort({ createdAt: -1 }).populate("userId address subscription");
 
         if (cart) {
             io.getIO().emit('cart:get', cart);
@@ -213,31 +220,31 @@ exports.getCartPaused = async (req, res, next) => {
 exports.getCartFilter = async (req, res, next) => {
 
     try {
-      const query = req.query.query;
-      const term = req.query.term;
-  
-      console.log(query + term);
-      const features = await new APIFeatures(Cart.find().populate('quantity'), req.query)
-        .filter()
-        .sort()
-  
-      const carts = await features.query;
-  
-      res.status(200).json({
-        status: "success",
-        statusCode: 200,
-        results: products.length,
-        carts,
-      });
-  
-      io.getIO().emit('cart:get', {carts });
-  
-  
+        const query = req.query.query;
+        const term = req.query.term;
+
+        console.log(query + term);
+        const features = await new APIFeatures(Cart.find().populate('quantity'), req.query)
+            .filter()
+            .sort()
+
+        const carts = await features.query;
+
+        res.status(200).json({
+            status: "success",
+            statusCode: 200,
+            results: products.length,
+            carts,
+        });
+
+        io.getIO().emit('cart:get', { carts });
+
+
     } catch (err) {
-      next(new AppError(err.message, 401));
+        next(new AppError(err.message, 401));
     }
-  };
-  
+};
+
 exports.getCart = async (req, res, next) => {
     try {
 
@@ -519,7 +526,7 @@ exports.addToCart = async (req, res, next) => {
             const user = await Subscription.findByIdAndUpdate(subscriptionId, { $inc: { subscriptionWallet: total } });
 
             if (subscription) {
-                
+
                 res.status(200).json({
                     cartId,
                     bill,
@@ -538,14 +545,18 @@ exports.addToCart = async (req, res, next) => {
 }
 exports.addOrder = async (req, res, next) => {
     try {
-        console.log("hello")
         const id = req.params.id
         const cart = await Cart.findById(id);
+        let subscription = await Subscription.find({ cartId: id }); // To get bill Id and subscription Id for Sub orders.
+        let pincode = cart.pincode;
+        let orderId = cart.orderId
         let days = cart.orderDays;
         let userId = cart.userId;
         let products = cart.products;
         let total = cart.total;
         let address = cart.address;
+        let billId = subscription.billId;
+        let subscriptionId = subscription._id;
         let currentDate = moment().format('YYYY-MM-DD')
         console.log(currentDate)
         let terminate = cart.terminate;
@@ -555,14 +566,17 @@ exports.addOrder = async (req, res, next) => {
                 //if (days[i] == currentDate) {
                 //Order Created
                 let cart = new Cart({
-                    orderId: await nanoid(),
+                    orderId: orderId,
                     products: products,
                     userId: userId,
+                    pincode: pincode,
                     orderDate: days[i],
                     total: total,
                     address: address,
-                    mainOrderId: id
-                });    
+                    mainOrderId: id,
+                    billId: billId,
+                    subscription: subscriptionId,
+                });
                 await cart.save();
                 //use cron job to create next order automatically
                 // }
@@ -626,38 +640,38 @@ exports.orderDelivered = async (req, res, next) => {
         const today = req.body.today;
         //change walletcashbackavailable to subscriptionwallet
         //  const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: -price } });
-        Subscription.findOne({ cartId: cartId}, (err, doc) => {
-            if(err){
+        Subscription.findOne({ cartId: cartId }, (err, doc) => {
+            if (err) {
                 res.status(500).json({
                     message: err
                 })
-            }else if(doc){
+            } else if (doc) {
 
-                var records = {'days': doc};
+                var records = { 'days': doc };
                 let idx = doc.days.indexOf(today);
-                if(idx !== -1){
+                if (idx !== -1) {
                     doc.days.splice(idx, 1);
                     doc.subscriptionWallet -= price;
-                // save the doc
-                doc.save(function(error) {
-                    if (error) {
-                        console.log(error);
-                        res.status(500).json({error});
-                    } else {
-                        // send the records
-                        res.status(200).json({records});
-                    }
-                });
-            }else if(idx == -1){
-                res.status(500).json({
-                    message:"No date found",
-                    status: false
-                })
-            }
+                    // save the doc
+                    doc.save(function (error) {
+                        if (error) {
+                            console.log(error);
+                            res.status(500).json({ error });
+                        } else {
+                            // send the records
+                            res.status(200).json({ records });
+                        }
+                    });
+                } else if (idx == -1) {
+                    res.status(500).json({
+                        message: "No date found",
+                        status: false
+                    })
                 }
-          
+            }
+
         });
-     
+
     } catch (error) {
         res.status(500).json({ error, message: 'Something went wrong!' })
 

@@ -28,7 +28,7 @@ const cartSchema = new Schema({
     }],
     userId: { type: Schema.Types.ObjectId, ref: 'User' },
     address: { type: Schema.Types.ObjectId, ref: 'Address' },
-    pincode: {type: String},
+    pincode: { type: String },
     subscription: { type: Schema.Types.ObjectId, ref: 'Subscription' },
     orderId: { type: Number },
     status: { type: String },
@@ -46,9 +46,9 @@ const cartSchema = new Schema({
     },
     orderDate: { type: String },
     orderDays: { type: Array, "default": [] },
-    type:{
+    type: {
         type: String,
-        
+
     },
     terminate: {
         type: Boolean,
@@ -59,7 +59,7 @@ const cartSchema = new Schema({
         default: false
     },
     upgrade: { type: String, default: "NA" },
-    mainOrderId: { type: String },
+    mainOrderId: { type: String, default: null },
 }, {
     timestamps: true
 });

@@ -121,7 +121,8 @@ exports.getBoyById = async (req, res, next) => {
 exports.getBoys = async (req, res, next) => {
     try {
 
-        const boy = await Boy.find({});
+        let pincode = req.body.pincode;
+        const boy = await Boy.find({ boyPincode: pincode });
 
         if (boy) {
             res.status(200).json({
@@ -232,16 +233,16 @@ exports.getOrders = async (req, res, next) => {
         //console.log(deliveryLandmark, orderLandmark)
         const result = orderLandmark.map(order => {
             const addressItem = deliveryLandmark.find(boy => boy === order)
-            
-            order.boy = addressItem 
-            ? addressItem.boy
-            : null
-            
+
+            order.boy = addressItem
+                ? addressItem.boy
+                : null
+
             return order
-          })
-          
-          console.log(result)
-   
+        })
+
+        console.log(result)
+
         /* for (var i = 0; i < deliveryLandmark.length; i++)
             if (deliveryLandmark[i] == orderLandmark[i])
                 console.log(orderLandmark) */
@@ -309,4 +310,36 @@ exports.getOrders = async (req, res, next) => {
         res.status(500).json({ error: err.message, message: 'Something went wrong!' })
 
     }
+}
+
+exports.getOrderForDeliveryToday = async (req, res, next) => {
+    try {
+        let date = req.body.date;    //order date to show to delivery boy
+        let pincode = req.body.pincode;   //delivery boy pincode
+
+        const cart = await Cart.find({
+            pincode: pincode, orderDate: date
+        })
+
+        if (cart) {
+            io.getIO().emit('cart:get', cart);
+            res.status(200).json({
+                status: true,
+                count: cart.length,
+                cart
+            })
+        } else {
+            res.status(400).json({
+                status: false,
+                message: "No Order found for today"
+            })
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+
 }

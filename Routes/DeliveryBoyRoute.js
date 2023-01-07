@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const boyController = require('../Controllers/DeliveryBoyController');
 
+router.get('/bocart',  boyController.getOrderForDeliveryToday);
+
 router.get('/boy/orders',  boyController.getOrders);
 
 /**
@@ -116,6 +118,7 @@ router.put('/boy/:id',  boyController.updateBoyById);
  * 
  */
 router.get('/boy/:id',  boyController.getBoyById);
+
 /**
  * @swagger
  * /boy:
