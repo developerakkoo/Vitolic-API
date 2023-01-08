@@ -2,6 +2,8 @@ const Boy = require('../Models/DeliveryBoyModel');
 const Slot = require('../Models/slotModel');
 const User = require('../Models/userModel');
 const Cart = require('../Models/orderModel');
+const SubCart = require('../Models/subOrderModel');
+
 const Address = require('../Models/addressModel');
 
 const PlacedOrder = require('../Models/placeOrderModel');
@@ -317,11 +319,11 @@ exports.getOrderForDeliveryToday = async (req, res, next) => {
         let date = req.body.date;    //order date to show to delivery boy
         let pincode = req.body.pincode;   //delivery boy pincode
 
-        const cart = await Cart.find({
+        const subcart = await SubCart.find({
             pincode: pincode, orderDate: date
         })
 
-        if (cart) {
+        if (subcart) {
             io.getIO().emit('cart:get', cart);
             res.status(200).json({
                 status: true,

@@ -1,4 +1,5 @@
 const Cart = require('../Models/orderModel');
+const SubCart = require('../Models/subOrderModel');
 const io = require('../socket');
 const User = require('../Models/userModel');
 const Subscription = require('../Models/subscriptionModel');
@@ -129,8 +130,6 @@ exports.getCartByCartId = async (req, res, next) => {
     try {
 
         const cart = await Cart.findById(req.params.id).populate("userId address subscription billId product");
-        console.log(cart.userId)
-
         if (cart) {
             io.getIO().emit('cart:get', cart);
 
@@ -549,14 +548,14 @@ exports.addOrder = async (req, res, next) => {
         const cart = await Cart.findById(id);
         let subscription = await Subscription.find({ cartId: id }); // To get bill Id and subscription Id for Sub orders.
         let pincode = cart.pincode;
-        let orderId = cart.orderId
+        let orderId = cart.orderId;
         let days = cart.orderDays;
         let userId = cart.userId;
         let products = cart.products;
         let total = cart.total;
         let address = cart.address;
-        let billId = subscription.billId;
-        let subscriptionId = subscription._id;
+        let billId = subscription[0].billId;
+        let subscriptionId = subscription[0]._id;
         let currentDate = moment().format('YYYY-MM-DD')
         console.log(currentDate)
         let terminate = cart.terminate;
@@ -565,8 +564,8 @@ exports.addOrder = async (req, res, next) => {
             for (i = 0; i < days.length; i++) {
                 //if (days[i] == currentDate) {
                 //Order Created
-                let cart = new Cart({
-                    orderId: orderId,
+                let cart = new SubCart({
+                    orderId,
                     products: products,
                     userId: userId,
                     pincode: pincode,
@@ -620,6 +619,7 @@ exports.deleteCart = async (req, res, next) => {
     try {
         const id = req.params.id;
         let cart = await Cart.findByIdAndDelete(id);
+        let subcart = await SubCart.deleteMany({ mainOrderId: id });
         if (cart) {
             io.getIO().emit('cart:get', cart);
 
@@ -680,21 +680,13 @@ exports.orderDelivered = async (req, res, next) => {
 
 exports.orderStatus = async (req, res, next) => {
     try {
-        const cartId = req.params.id
-        const cart = await Cart.findById({ _id: cartId });
-        //let delivered= await
-        cart = await cart.updateOne(isDelivered, { isDelivered: true });
-        console.log(cart);
+        const cartId = req.params.id;
 
-        /* let user = await User.findById(id);
+        const cart = await SubCart.findByIdAndUpdate(cartId, { isDelivered: true });
 
-        let subEndDate = await user.isMonth ? moment().add(30, 'd').toDate() : moment().add(60, 'd').toDate();
-    
-        user = await user.updateOne({ endDate: subEndDate }); */
         if (cart) {
 
             res.status(200).json({
-
                 cart
             })
             io.getIO().emit('status:Order delivered', cartId);
