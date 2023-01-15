@@ -108,7 +108,7 @@ router.get('/cart/terminated', cartController.getCartTerminated);
  *  
  * 
  */
-router.post('/cart', cartController.addToCart);
+// router.post('/cart', cartController.addToCart);
 
 /**
  * @swagger
