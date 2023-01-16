@@ -8,6 +8,8 @@ const nanoid = customAlphabet('1234567890', 6);
 const io = require('../socket');
 var moment = require('moment');
 const Cart = require('../Models/orderModel');
+const SubCart = require('../Models/subOrderModel');
+
 
 exports.postSubscription = async (req, res, next) => {
 
@@ -80,7 +82,7 @@ exports.getSubscription = async (req, res, next) => {
             io.getIO().emit('subscription:get', { action: 'get', subscription })
 
 
-            res.status(200).json(subscription )
+            res.status(200).json(subscription)
         }
     } catch (error) {
         res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
@@ -95,7 +97,7 @@ exports.getSubscriptionByCartId = async (req, res, next) => {
         if (subscription) {
             io.getIO().emit('subscription:get', { action: 'get', subscription })
 
-            res.status(200).json(subscription )
+            res.status(200).json(subscription)
         }
     } catch (error) {
         res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
@@ -109,7 +111,7 @@ exports.getSubscriptionById = async (req, res, next) => {
         const subscription = await Subscription.findById(id).populate('productId userId billId cartId');
 
         if (subscription) {
-            io.getIO().emit('subscription:get',subscription )
+            io.getIO().emit('subscription:get', subscription)
 
             res.status(200).json({ success: true, subscription })
         }
@@ -125,7 +127,7 @@ exports.getSubscriptionByUserId = async (req, res, next) => {
         const subscription = await Subscription.find({ userId: id, terminate: false }).sort({ createdAt: -1 }).populate('productId userId cartId billId');
 
         if (subscription) {
-            io.getIO().emit('subscription:get', subscription )
+            io.getIO().emit('subscription:get', subscription)
 
             res.status(200).json({ success: true, subscription })
         }
@@ -142,7 +144,7 @@ exports.getSubscriptionByType = async (req, res, next) => {
         const subscription = await Subscription.find({ deliveryFrequency: freq, terminate: false }).sort({ createdAt: -1 }).populate('productId userId cartId billId');
 
         if (subscription) {
-            io.getIO().emit('subscription:get', subscription )
+            io.getIO().emit('subscription:get', subscription)
 
             res.status(200).json({ success: true, subscription })
         }
@@ -157,7 +159,7 @@ exports.updateSubscription = async (req, res, next) => {
         let subscription = await Subscription.findByIdAndUpdate(id, req.body);
 
         if (subscription) {
-            io.getIO().emit('subscription:get',subscription );
+            io.getIO().emit('subscription:get', subscription);
 
             res.status(200).json({ success: true, message: 'Subscription updated successfully', subscription })
         }
@@ -174,7 +176,7 @@ exports.deleteSubscription = async (req, res, next) => {
         const subscription = await Subscription.findOneAndDelete(id);
 
         if (subscription) {
-            io.getIO().emit('subscription:get',subscription );
+            io.getIO().emit('subscription:get', subscription);
 
 
             res.status(200).json({ status: true, message: 'Subscription deleted successfully', subscription: subscription })
@@ -324,7 +326,7 @@ exports.pause = async (req, res, next) => {
             console.log(pauseDate)
             const subscription = await Subscription.findByIdAndUpdate(id, { isActive, pauseDate: moment().toISOString().split("T")[0] });
             res.status(201).json({ status: 'success', subscription, message: 'Subscription paused successfully!' });
-            io.getIO().emit('subscription:get',subscription );
+            io.getIO().emit('subscription:get', subscription);
 
         }
 
@@ -343,7 +345,7 @@ exports.pause = async (req, res, next) => {
             console.log(endDate)
             const subscription1 = await Subscription.findByIdAndUpdate(id, { endDate: endDate });
 
-            io.getIO().emit('subscription:get',subscription );
+            io.getIO().emit('subscription:get', subscription);
             res.status(201).json({ status: 'success', subscription1, message: 'Subscription resumed successfully!' });
 
         }
@@ -375,8 +377,9 @@ exports.terminate = async (req, res, next) => {
         if (terminate) {
             const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: balance } });
             let subscription = await Subscription.findByIdAndUpdate(id, { subscriptionWallet: 0 });
-            let cart = await Cart.findByIdAndUpdate(cartId, {terminate: true});
-            io.getIO().emit('subscription:get',subscription );
+            let cart = await Cart.findByIdAndUpdate(cartId, { terminate: true });
+            let subcart = await SubCart.updateMany({ mainOrderId: cartId }, { terminate: true });
+            io.getIO().emit('subscription:get', subscription);
 
             res.status(200).json({ status: true, message: 'Subscription terminated successfully', subscription: subscription, user })
         }
@@ -495,7 +498,7 @@ exports.altToDaily = async (req, res, next) => {  //done
             let subscriptionId = subscription._id;
             const user = await Subscription.findByIdAndUpdate(subscriptionId, { $inc: { subscriptionWallet: total } });
             if (subscription) {
-            io.getIO().emit('subscription:get',subscription );
+                io.getIO().emit('subscription:get', subscription);
 
                 res.status(200).json({
                     message: 'Subscription upgraded to DAILY successfully',
@@ -505,86 +508,6 @@ exports.altToDaily = async (req, res, next) => {  //done
                 })
             }
         }
-        /* 
-                const userId = req.body.userId;
-                const mainOrderId = req.body.mainOrderId;
-                const deliveryFrequency = "DAILY";
-                const startDate = req.body.startDate;
-                console.log(startDate + "hello")
-                const endDate = req.body.endDate;
-                let carts = [];
-                let normaldays = [];
-                //let subscriptionOld = await Subscription.findById(id);
-                console.log("subscriptionOld" + "hello")
-                let oldDays = []
-                oldDays = subscriptionOld.days;
-                let price = subscriptionOld.discountedPrice;
-                const subscription = await Subscription.findByIdAndUpdate(id, { deliveryFrequency, startDate, endDate });
-                //console.log(subscription)
-                if (subscription) {
-                    let currentDate = moment().add(1, 'd').format('YYYY-MM-DD')
-                    console.log(currentDate)
-                    let index = oldDays.indexOf(currentDate);
-                    const deletedItem = oldDays.splice(index);
-                    console.log(deletedItem + deletedItem.length);
-                    let transferBalance = deletedItem.length * price;
-                    let user = await User.findByIdAndUpdate(id, { inc: { walletCashbackAvailable: transferBalance } })
-                    //Delete old orders and create new orders of remaining days
-                    const order = await Cart.deleteMany({ mainOrderId: mainOrderId, orderDate: { "$gte": currentDate, "$lte": endDate } })
-                    console.log(mainOrderId)
-                    console.log("orders deleted")
-        
-                    const mainOrder = await Cart.findOne({ _id: mainOrderId });
-                    console.log(mainOrder)
-                    //let days = cart.orderDays;
-                    //let userId = cart.userId;
-                    let products = mainOrder.products;
-                    let total = mainOrder.total;
-                    let address = mainOrder.address;
-                    let status = mainOrder.status;
-        
-                    let terminate = mainOrder.terminate;
-                    let pause = mainOrder.isPause;
-                    if (terminate == false && pause == false) {
-                        {
-                            for (var m = moment(startDate); m.isSameOrBefore(endDate); m.add(1, 'days')) {
-                                normaldays.push(m.format('YYYY-MM-DD'));
-                                console.log(normaldays)
-                            }
-                            for (j = 0; j < normaldays.length; j++) {
-                                console.log(normaldays + "in order loop")
-        
-                                //for (i = 0; i < noofdays.length; i++){
-                                //Order Created
-                                let cart = new Cart({
-                                    orderId: await nanoid(),
-                                    products: products,
-                                    userId: userId,
-                                    orderDate: normaldays[j],
-                                    total: total,
-                                    mainOrderId,
-                                    status: status,
-                                    address: address,
-                                });
-                                await cart.save();
-        
-                                let cartId = cart._id
-                                carts.push(cartId);
-                                console.log(cartId)
-        
-                                // }
-                            }
-                        }
-                    }
-        
-        
-                    if (carts) {
-                        res.status(201).json({ status: 'success', carts, message: 'Subscription upgraded to daily successfully!' });
-                    }
-                } */
-
-
-
     } catch (error) {
         res.status(500).json({ error, message: 'Something went wrong!' });
     }
@@ -691,7 +614,7 @@ exports.altToCustom = async (req, res, next) => { //done
             let subscriptionId = subscription._id;
             const user = await Subscription.findByIdAndUpdate(subscriptionId, { $inc: { subscriptionWallet: total } });
             if (subscription) {
-            io.getIO().emit('subscription:get',subscription );
+                io.getIO().emit('subscription:get', subscription);
 
                 res.status(200).json({
                     message: 'Subscription upgraded to CUSTOM successfully',
@@ -816,7 +739,7 @@ exports.customToDaily = async (req, res, next) => { //done
             let subscriptionId = subscription._id;
             const user = await Subscription.findByIdAndUpdate(subscriptionId, { $inc: { subscriptionWallet: total } });
             if (subscription) {
-            io.getIO().emit('subscription:get',subscription );
+                io.getIO().emit('subscription:get', subscription);
 
                 res.status(200).json({
                     message: 'Subscription upgraded to DAILY successfully',
@@ -950,7 +873,7 @@ exports.customToAlt = async (req, res, next) => {
             let subscriptionId = subscription._id;
             const user = await Subscription.findByIdAndUpdate(subscriptionId, { $inc: { subscriptionWallet: total } });
             if (subscription) {
-            io.getIO().emit('subscription:get',subscription );
+                io.getIO().emit('subscription:get', subscription);
 
                 res.status(200).json({
                     message: 'Subscription upgraded to DAILY successfully',
@@ -1084,7 +1007,7 @@ exports.dailyToAlt = async (req, res, next) => {
             let subscriptionId = subscription._id;
             const user = await Subscription.findByIdAndUpdate(subscriptionId, { $inc: { subscriptionWallet: total } });
             if (subscription) {
-            io.getIO().emit('subscription:get',subscription );
+                io.getIO().emit('subscription:get', subscription);
 
                 res.status(200).json({
                     message: 'Subscription upgraded to ALTERNATE successfully',
@@ -1200,7 +1123,7 @@ exports.dailyToCustom = async (req, res, next) => { //done
             let subscriptionId = subscription._id;
             const user = await Subscription.findByIdAndUpdate(subscriptionId, { $inc: { subscriptionWallet: total } });
             if (subscription) {
-            io.getIO().emit('subscription:get',subscription );
+                io.getIO().emit('subscription:get', subscription);
 
                 res.status(200).json({
                     message: 'Subscription upgraded to CUSTOM successfully',
@@ -1407,7 +1330,7 @@ exports.increaseQuantity = async (req, res, next) => {
 
         if (subscription) {
 
-            io.getIO().emit('subscription:get',subscription );
+            io.getIO().emit('subscription:get', subscription);
 
 
             res.status(200).json({ success: true, message: 'Subscription delivery quantity increased successfully', subscription, cart, bill })
@@ -1433,10 +1356,10 @@ exports.decreaseQuantity = async (req, res, next) => {
         //const user = await User.findByIdAndUpdate(userId, { $inc: { walletCashbackAvailable: total } });
 
         if (subscription) {
-            io.getIO().emit('subscription:get',subscription );
+            io.getIO().emit('subscription:get', subscription);
 
 
-            res.status(200).json({ success: true, message: 'Subscription delivery quantity decreased successfully', subscription,bill,cart })
+            res.status(200).json({ success: true, message: 'Subscription delivery quantity decreased successfully', subscription, bill, cart })
         }
     } catch (error) {
         res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });

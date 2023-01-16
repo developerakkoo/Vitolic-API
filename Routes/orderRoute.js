@@ -5,6 +5,8 @@ const cartController = require('../Controllers/orderController');
 const router = express.Router();
 
 router.put('/cart/order/:id', cartController.addOrder);
+router.put('/subcart/:id', cartController.orderStatus);
+
 
 /**
  * @swagger
@@ -106,7 +108,7 @@ router.get('/cart/terminated', cartController.getCartTerminated);
  *  
  * 
  */
-router.post('/cart', cartController.addToCart);
+// router.post('/cart', cartController.addToCart);
 
 /**
  * @swagger

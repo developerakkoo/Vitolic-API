@@ -111,6 +111,7 @@ exports.postSignup = (req, res, next) => {
     const fName = req.body.fName;
     const email = req.body.email;
     const contactNo = req.body.contactNumber;
+    const token = req.body.token;
 
     const couponCode = voucher_codes.generate({
         length: 8,
@@ -130,6 +131,7 @@ exports.postSignup = (req, res, next) => {
         email: email,
         contactNumber: contactNo,
         address: req.body.address,
+        firebaseToken: token,
         walletCashbackAvailable: walletCashbackAvailable,
         couponCode: couponCode[0],
     })
