@@ -168,10 +168,11 @@ app.post('/firebase/notification', (req, res)=>{
     admin.messaging().sendToDevice(registrationToken, message, options)
     .then( response => {
 
-     res.status(200).send("Notification sent successfully")
+     res.status(200).json({msg: "Notification sent successfully"})
      
     })
     .catch( error => {
+      res.status(404).json({msg: error})
         console.log(error);
     });
 
