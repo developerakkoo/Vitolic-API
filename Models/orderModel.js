@@ -28,7 +28,7 @@ const cartSchema = new Schema({
     }],
     userId: { type: Schema.Types.ObjectId, ref: 'User' },
     address: { type: Schema.Types.ObjectId, ref: 'Address' },
-    pincode: {type: String},
+    pincode: {type: String, default: "422191"},
     subscription: { type: Schema.Types.ObjectId, ref: 'Subscription' },
     orderId: { type: Number },
     status: { type: String },

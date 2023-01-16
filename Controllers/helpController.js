@@ -1,4 +1,4 @@
-const help = require('./../Models/helpModal');
+const Help = require('./../Models/helpModal');
 
 exports.createHelp = async(req, res, next) =>{
     try {

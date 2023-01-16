@@ -13,6 +13,8 @@ const { endDate } = require('./subscriptionController');
 exports.getCartForDeliveryAgrregate = async (req, res, next) => {
     try {
         let today  = req.params.today;
+        let pincode = req.params.pincode;
+        
         const result=await Cart.find({address})
 
         res.status(200).json({result})

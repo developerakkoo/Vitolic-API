@@ -5,12 +5,12 @@ const cors = require("cors");
 const axios = require("axios");
 const fs = require('fs');
 const { v4: uuidv4 } = require("uuid");
-
+const admin = require("firebase-admin");
 const multer = require("multer");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const swaggerUi = require('swagger-ui-express');
-
+let serviceAccount = require('./vitolic-422e9-firebase-adminsdk-apyzq-fb5959a6fc.json');
 //modal
 const Cart = require("./Models/orderModel");
 const Product = require("./Models/productModel");
@@ -55,6 +55,10 @@ const MONGODB_URI = "mongodb+srv://farmsell:farmsell@cluster0.mh36s.mongodb.net/
 //const apicache = require('apicache');
 //const cache = apicache.middleware;
 
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://vitolic-422e9-default-rtdb.firebaseio.com"
+})
 
 
 const app = express();
@@ -152,7 +156,26 @@ app.use(
 
 app.use("/image", express.static(path.join(__dirname, "image")));
 
+const notification_options = {
+  priority: "high",
+  timeToLive: 60 * 60 * 24
+};
+app.post('/firebase/notification', (req, res)=>{
+  const  registrationToken = req.body.registrationToken
+  const message = req.body.message
+  const options =  notification_options
+  
+    admin.messaging().sendToDevice(registrationToken, message, options)
+    .then( response => {
 
+     res.status(200).send("Notification sent successfully")
+     
+    })
+    .catch( error => {
+        console.log(error);
+    });
+
+})
 app.get('/getgst/:gst', async (req, res, next) => {
   let gst = req.params.gst;
   let mail = req.params.mail;
