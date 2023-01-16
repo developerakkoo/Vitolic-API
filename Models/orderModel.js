@@ -28,11 +28,8 @@ const cartSchema = new Schema({
     }],
     userId: { type: Schema.Types.ObjectId, ref: 'User' },
     address: { type: Schema.Types.ObjectId, ref: 'Address' },
-<<<<<<< HEAD
     pincode: {type: String, default: "422191"},
-=======
     pincode: { type: String },
->>>>>>> 8d829167bb043e09e0c3aed4c0a15bd10c1d2dc3
     subscription: { type: Schema.Types.ObjectId, ref: 'Subscription' },
     orderId: { type: Number },
     status: { type: String },
