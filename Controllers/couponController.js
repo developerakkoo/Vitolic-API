@@ -1,8 +1,8 @@
-const coupon = require('./../Models/couponModal');
+const Coupon = require('./../Models/couponModal');
 
 exports.createCoupon = async(req, res, next) =>{
     try {
-        let coupon = await coupon.create(req.body);
+        let coupon = await Coupon.create(req.body);
 
         if(coupon){
             res.status(200).json({success: true, coupon})
@@ -15,7 +15,7 @@ exports.createCoupon = async(req, res, next) =>{
 exports.getCoupons = async(req, res, next) =>{
     try {
 
-        let coupon = await coupon.find({});
+        let coupon = await Coupon.find({});
         if(coupon){
             res.status(200).json({success: true, coupon})
 
@@ -30,7 +30,7 @@ exports.getCoupons = async(req, res, next) =>{
 exports.getCouponById = async(req, res, next) =>{
     try {
         const id= req.params.id;
-        let coupon = await coupon.findById(id);
+        let coupon = await Coupon.findById(id);
         if(coupon){
             res.status(200).json({success: true, coupon})
 
@@ -43,7 +43,7 @@ exports.getCouponById = async(req, res, next) =>{
 exports.updateCoupon = async(req, res, next) =>{
     try {
         const id= req.params.id;
-        let coupon = await coupon.findByIdAndUpdate(id,req.body);
+        let coupon = await Coupon.findByIdAndUpdate(id,req.body);
 
         if(coupon){
             res.status(200).json({success: true, message:"Updated Coupon"})
@@ -58,7 +58,7 @@ exports.updateCoupon = async(req, res, next) =>{
 exports.deleteCoupon = async(req, res, next) =>{
     try {
         const id= req.params.id;
-        let coupon = await coupon.findByIdAndDelete(id);
+        let coupon = await Coupon.findByIdAndDelete(id);
 
         if(coupon){
             res.status(200).json({success: true, message:"Deleted Coupon"})
