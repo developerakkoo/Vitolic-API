@@ -10,7 +10,7 @@ const multer = require("multer");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const swaggerUi = require('swagger-ui-express');
-let serviceAccount = require('./vitolic-422e9-firebase-adminsdk-apyzq-fb5959a6fc.json');
+let serviceAccount = require('./vitolic-422e9-firebase-adminsdk-apyzq-9dded6a29c.json');
 //modal
 const Cart = require("./Models/orderModel");
 const Product = require("./Models/productModel");
@@ -43,6 +43,7 @@ const petProductRoute = require("./Routes/petProductRoute");
 const billRoute = require("./Routes/billingRoute");
 const promoRoute = require("./Routes/promoRoute");
 const cityRoute = require("./Routes/cityRoute");
+const subOrderRoute = require('./Routes/subOrderRoute');
 
 //const categoryRoute = require("./Routes/categoryRoute");
 //Error Handlers
@@ -240,9 +241,8 @@ app.use(refundRoute);
 app.use(subscriptionRoute);
 app.use(promoRoute);
 app.use(cityRoute);
+app.use(subOrderRoute);
 
-// app.use(petProductRoute);
-//app.use(categoryRoute);
 app.use(globalErrorHandler);
 
 

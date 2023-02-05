@@ -39,7 +39,7 @@ const subOrderSchema = new Schema({
         default: false
     },
     upgrade: { type: String, default: "NA" },
-    mainOrderId: { type: String, default: null },
+    mainOrderId: { type: String },
 }, {
     timestamps: true
 });

@@ -554,7 +554,7 @@ exports.addOrder = async (req, res, next) => {
         let days = cart.orderDays;
         let userId = cart.userId;
         let products = cart.products;
-        let total = cart.total;
+        let total = cart.total.discountedPrice;
         let address = cart.address;
         let billId = subscription[0].billId;
         let subscriptionId = subscription[0]._id;
