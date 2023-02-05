@@ -6,7 +6,7 @@ exports.getTodaysOrders = async(req, res,next) =>{
         let today = req.params.today;
         let pincode = req.params.pincode;
 
-        let sub = await subOrder.find({ mainOrderId: mainOrderId,orderDate: today, pincode: pincode  }).populate("subscription billId")
+        let sub = await subOrder.find({orderDate: today, pincode: pincode  }).populate("subscription billId")
 
         if(sub){
             res.status(200).json({
