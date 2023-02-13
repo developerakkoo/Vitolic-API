@@ -115,7 +115,7 @@ router.get('/subscription',  subscriptionController.getSubscription);
  *         200:
  *              description: Success
  */
-router.put('/subscription/:id',  subscriptionController.updateSubscription);
+router.put('/subscription/:id',  subscriptionController.updateSubscriptionWallet);
 
 
 router.put('/subscription/pause/:id',  subscriptionController.pause);

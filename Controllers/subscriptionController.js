@@ -153,15 +153,18 @@ exports.getSubscriptionByType = async (req, res, next) => {
     }
 }
 
-exports.updateSubscription = async (req, res, next) => {
+exports.updateSubscriptionWallet = async (req, res, next) => {
     try {
         const id = req.params.id;
-        let subscription = await Subscription.findByIdAndUpdate(id, req.body);
+        let priceDeducted = req.body.price;
+        let subscription = await Subscription.findByIdAndUpdate(id, {$inc: {
+            subscriptionWallet: -priceDeducted
+        }});
 
         if (subscription) {
             io.getIO().emit('subscription:get', subscription);
 
-            res.status(200).json({ success: true, message: 'Subscription updated successfully', subscription })
+            res.status(200).json({ success: true, message: 'Subscription wallet updated successfully', subscription })
         }
     } catch (error) {
         res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });

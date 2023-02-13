@@ -16,6 +16,17 @@ const productSchema = new Schema({
 
     },
 
+    descriptionOne: {
+        type: String,
+    },
+    descriptionTwo: {
+        type: String,
+    },
+    descriptionThree: {
+        type: String,
+    },
+
+
     discountedPrice:{
         type: Number,
         required: [true, 'discountedPrice is required'],

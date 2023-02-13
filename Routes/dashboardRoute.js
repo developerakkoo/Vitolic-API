@@ -83,6 +83,7 @@ router.get('/dashboard/orders', dashboardController.getTotalOrders);
  */
 router.get('/dashboard/earning', dashboardController.getEarning);
 
+router.get('/dashboard/getOrdersByCreatedAt', dashboardController.getOrdersByCreatedAtChart);
 router.get('/dashboard/sortorders', dashboardController.sortOrders);
 
 router.get('/dashboard/sortproducts', dashboardController.sortProducts);

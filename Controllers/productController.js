@@ -126,6 +126,9 @@ exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
   const price = req.body.price;
   const discountedPrice = req.body.discountedPrice;
+  const descriptionOne = req.body.descOne;
+  const descriptionTwo = req.body.descTwo;
+  const descriptionThree = req.body.descThree;
   const inStock = req.body.inStock;
   const type = req.body.type;
   const stock = req.body.stock;

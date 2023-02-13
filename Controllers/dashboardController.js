@@ -5,6 +5,30 @@ const Product = require('../Models/productModel');
 
 const io = require('../socket');
 
+
+exports.getOrdersByCreatedAtChart = async (req, res, next) =>{
+    try{
+        let cart = await CartModel.find({}).select("createdAt");
+
+        if(cart){
+            res.status(200)
+            .json({
+                cart
+            })
+        }else{
+            res.status(400)
+            .json({
+                message:"No Orders Found!"
+            })
+
+        }
+
+    }catch(error){
+        res.status(500).json({
+            message:"Something went wrong!"
+        })
+    }
+}
 exports.getLiveUsers = async (req, res, next) => {
     /* try {
 
