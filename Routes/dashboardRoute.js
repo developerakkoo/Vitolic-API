@@ -85,6 +85,10 @@ router.get('/dashboard/earning', dashboardController.getEarning);
 
 router.get('/dashboard/getOrdersByCreatedAt', dashboardController.getOrdersByCreatedAtChart);
 router.get('/dashboard/sortorders', dashboardController.sortOrders);
+router.get('/dashboard/subscriptionPieChartDaily', dashboardController.getSubscriptionTypePieChartDaily);
+router.get('/dashboard/subscriptionPieChartAlternate', dashboardController.getSubscriptionTypePieChartAlternate);
+router.get('/dashboard/subscriptionPieChartCustom', dashboardController.getSubscriptionTypePieChartCUSTOM);
+router.get('/dashboard/subscriptionPieChartOneTime', dashboardController.getSubscriptionTypePieChartOneTime);
 
 router.get('/dashboard/sortproducts', dashboardController.sortProducts);
 

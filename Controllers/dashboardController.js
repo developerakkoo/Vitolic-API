@@ -2,7 +2,7 @@ const CartModel = require('../Models/orderModel');
 const User = require('../Models/userModel');
 const Boy = require('../Models/DeliveryBoyModel');
 const Product = require('../Models/productModel');
-
+const subscriptionModal = require('./../Models/subscriptionModel');
 const io = require('../socket');
 
 
@@ -23,6 +23,97 @@ exports.getOrdersByCreatedAtChart = async (req, res, next) =>{
 
         }
 
+    }catch(error){
+        res.status(500).json({
+            message:"Something went wrong!"
+        })
+    }
+}
+exports.getSubscriptionTypePieChartDaily = async(req,res, next) =>{
+    try{
+let sub = await subscriptionModal.countDocuments({deliveryFrequency: "DAILY"});
+// let subALTERNATE = await subscriptionModal.count({deliveryFrequency: "ALTERNATE"});
+// let subCUSTOM = await subscriptionModal.count({deliveryFrequency: "CUSTOM"});
+        if(sub){
+            res.status(200).json({
+                count:sub,
+               
+            })
+        }
+        else{
+            res.status(400).json({
+                message:"No Count"
+            })
+        }
+    }catch(error){
+        res.status(500).json({
+            message:"Something went wrong!"
+        })
+    }
+}
+exports.getSubscriptionTypePieChartAlternate = async(req,res, next) =>{
+    try{
+let sub = await subscriptionModal.countDocuments({deliveryFrequency: "ALTERNATE"});
+// let subALTERNATE = await subscriptionModal.count({deliveryFrequency: "ALTERNATE"});
+// let subCUSTOM = await subscriptionModal.count({deliveryFrequency: "CUSTOM"});
+        if(sub){
+            res.status(200).json({
+                count:sub,
+               
+            })
+        }
+        else{
+            res.status(400).json({
+                message:"No Count"
+            })
+        }
+    }catch(error){
+        res.status(500).json({
+            message:"Something went wrong!"
+        })
+    }
+}
+exports.getSubscriptionTypePieChartCUSTOM = async(req,res, next) =>{
+    try{
+let sub = await subscriptionModal.countDocuments({deliveryFrequency: "CUSTOM"});
+// let subALTERNATE = await subscriptionModal.count({deliveryFrequency: "ALTERNATE"});
+// let subCUSTOM = await subscriptionModal.count({deliveryFrequency: "CUSTOM"});
+        if(sub){
+            res.status(200).json({
+                count:sub,
+               
+            })
+        }
+
+        else{
+            res.status(400).json({
+                message:"No Count"
+            })
+        }
+    }catch(error){
+        res.status(500).json({
+            message:"Something went wrong!"
+        })
+    }
+}
+
+
+exports.getSubscriptionTypePieChartOneTime = async(req,res, next) =>{
+    try{
+let sub = await subscriptionModal.countDocuments({deliveryFrequency: "ONE TIME"});
+// let subALTERNATE = await subscriptionModal.count({deliveryFrequency: "ALTERNATE"});
+// let subCUSTOM = await subscriptionModal.count({deliveryFrequency: "CUSTOM"});
+        if(sub){
+            res.status(200).json({
+                count:sub,
+               
+            })
+        }
+        else{
+            res.status(400).json({
+                message:"No Count"
+            })
+        }
     }catch(error){
         res.status(500).json({
             message:"Something went wrong!"

@@ -33,11 +33,14 @@ exports.getPromo = async (req, res, next) => {
 exports.getPromoByUserId = async (req, res, next) => {
     try {
         let userId = req.params.userId
-        let promo = await Promo.findById(userId);
+        let promo = await Promo.find({userId: userId});
 
         if (promo) {
             res.status(200).json({ success: true, promo })
 
+        }
+        else{
+            res.status(400).json({message:"No Promo found for user!"})
         }
 
     } catch (error) {
@@ -48,7 +51,7 @@ exports.getPromoByUserId = async (req, res, next) => {
 exports.updatePromo = async (req, res, next) => {
     try {
         const id = req.params.id;
-        let promo = await Promo.findByIdAndUpdate(id, req.body);
+        let promo = await Promo.findByIdAndUpdate(id, req.body); 
 
         if (promo) {
             res.status(200).json({ success: true, message: "Updated promo" })
