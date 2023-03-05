@@ -98,6 +98,7 @@ router.get('/subscription',  subscriptionController.getSubscription);
  *         200:
  *              description: Success
  */
+ router.get('/subscription/getcount/:type',  subscriptionController.getCountOfSubscriptionBasedOnType);
  router.get('/subscription/user/:id',  subscriptionController.getSubscriptionByUserId);
  router.get('/subscription/cart/:id',  subscriptionController.getSubscriptionByCartId);
  router.get('/subscription/type/:id',  subscriptionController.getSubscriptionByType);
