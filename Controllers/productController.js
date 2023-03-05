@@ -150,6 +150,9 @@ exports.postAddProduct = (req, res, next) => {
     units: units,
     category: category,
     type: type,
+    descriptionOne: descriptionOne,
+    descriptionTwo: descriptionTwo,
+    descriptionThree: descriptionThree,
     imageFilePath: imageFilePath,
     imageUrl: "https" + '://' + req.hostname + '/' + imageUrl
   });
@@ -224,6 +227,10 @@ exports.postEditProduct = (req, res, next) => {
   const updatedStock = req.body.stock;
   const updatedCategory = req.body.category;
 
+  const descriptionOne = req.body.descOne;
+  const descriptionTwo = req.body.descTwo;
+  const descriptionThree = req.body.descThree;
+
   console.log("updated Image ", updatedImageUrl);
 
   if (req.file) {
@@ -252,6 +259,9 @@ exports.postEditProduct = (req, res, next) => {
       product.inStock = updatedInStock;
       product.type = updatedType;
       product.stock = updatedStock;
+      product.descriptionOne = descriptionOne,
+      product.descriptionTwo = descriptionTwo,
+      product.descriptionThree = descriptionThree,
       product.category = updatedCategory;
       product.imageUrl = updatedImageUrl;
       product.units = units;
@@ -286,6 +296,9 @@ exports.postEditProductWithoutImage = (req, res, next) => {
   const updatedStock = req.body.stock;
   const updatedCategory = req.body.category;
 
+  const descriptionOne = req.body.descOne;
+  const descriptionTwo = req.body.descTwo;
+  const descriptionThree = req.body.descThree;
   console.log("updated Image ", updatedImageUrl);
 
   // if (req.file) {
@@ -316,6 +329,9 @@ exports.postEditProductWithoutImage = (req, res, next) => {
       product.stock = updatedStock;
       product.category = updatedCategory;
       product.imageUrl = updatedImageUrl;
+      product.descriptionOne = descriptionOne,
+      product.descriptionTwo = descriptionTwo,
+      product.descriptionThree = descriptionThree,
       product.units = units;
 
 

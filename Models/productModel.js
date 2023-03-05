@@ -18,15 +18,15 @@ const productSchema = new Schema({
 
     descriptionOne: {
         type: String,
-        default :""
+        
     },
     descriptionTwo: {
         type: String,
-        default:""
+      
     },
     descriptionThree: {
         type: String,
-        default: ""
+       
     },
 
 

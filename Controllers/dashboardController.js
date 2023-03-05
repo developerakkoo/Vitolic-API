@@ -162,8 +162,9 @@ exports.getEarningByMonth = async (req, res, next) => {
             CartModel.aggregate([
                 {
                     $group: {
-                        _id: { month: { $month: { $toDate: "$createdAt" } } },
-                        earnings: { $sum: '$total' }
+                        _id: { month: { $month: { $toDate: "$createdAt" } } ,
+                                year: {$year: "$createdAt"}},
+                        total: { $sum: '$total' }
                     }
                 },
                 { $sort: { month: -1 } }

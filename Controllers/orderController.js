@@ -276,7 +276,7 @@ exports.addToCart = async (req, res, next) => {
             days, daysRemaining, isOneTime, deliveryQuantity, discountedPrice } = req.body;
         /*   let noofdays = [];
           if (days != null) noofdays = days.split(",") */
-        const product = await Product.findById(productId);
+        const product = await Product.findById(productId);   
         // startDate = moment(startDate).format('YYYY-MM-DD');
         // endDate = moment(endDate).format('YYYY-MM-DD');
         // console.log(endDate)
