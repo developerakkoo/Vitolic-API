@@ -9,6 +9,7 @@ const admin = require("firebase-admin");
 const multer = require("multer");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
+const nodemailer = require('nodemailer');
 const swaggerUi = require('swagger-ui-express');
 let serviceAccount = require('./vitolic-422e9-firebase-adminsdk-apyzq-9dded6a29c.json');
 //modal

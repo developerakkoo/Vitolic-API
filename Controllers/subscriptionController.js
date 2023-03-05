@@ -10,6 +10,33 @@ var moment = require('moment');
 const Cart = require('../Models/orderModel');
 const SubCart = require('../Models/subOrderModel');
 
+exports.getCountOfSubscriptionBasedOnType = async(req, res,next) =>{
+    console.log("SUB COUNT");
+    try
+    {
+        let freq = req.params.type;
+       let subD = await Subscription.find({deliveryFrequency: "DAILY"});
+       let subA = await Subscription.find({deliveryFrequency: "ALTERNATE"});
+       let subC = await Subscription.find({deliveryFrequency: "CUSTOM"});
+       let subO = await Subscription.find({deliveryFrequency: "ONETIME"});
+        if(sub){
+            res
+            .status(200)
+            .json({
+                message:"DAILY Found",
+                countALTERNATE: subA.length,
+                countDAILY: subD.length,
+                countCUSTOM: subc.length,
+                countONETIME: subO.length
+            })
+        }
+
+    }
+    catch(error){
+        res.status(500).json({ message: "No COunt", devMessage: "Something went wrong!" });
+
+    }
+}
 
 exports.postSubscription = async (req, res, next) => {
 
@@ -152,6 +179,10 @@ exports.getSubscriptionByType = async (req, res, next) => {
         res.status(500).json({ message: error.message, devMessage: "Something went wrong!" });
     }
 }
+
+
+
+
 
 exports.updateSubscriptionWallet = async (req, res, next) => {
     try {
