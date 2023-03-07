@@ -124,7 +124,7 @@ exports.getBoys = async (req, res, next) => {
     try {
 
         let pincode = req.body.pincode;
-        const boy = await Boy.find({ boyPincode: pincode });
+        const boy = await Boy.find({});
 
         if (boy) {
             res.status(200).json({
