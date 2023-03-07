@@ -32,8 +32,8 @@ exports.getPromo = async (req, res, next) => {
 
 exports.getPromoByUserId = async (req, res, next) => {
     try {
-        let userId = req.params.userId
-        let promo = await Promo.find({userId: userId});
+        let userId = req.params.id;
+        let promo = await Promo.find({userId: userId, isUser: true});
 
         if (promo) {
             res.status(200).json({ success: true, promo })
