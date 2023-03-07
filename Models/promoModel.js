@@ -7,8 +7,9 @@ const promocodeSchema = new Schema({
     offer: { type: String, },
     promoCode: { type: String, },
     maxAmount: { type: Number, },
+    isUser:{type: Boolean, default: false},
     userId: {type: Schema.Types.ObjectId,
-            ref:"User", default:null}
+            ref:"User"}
 }, { timestamps: true });
 
 

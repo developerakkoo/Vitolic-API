@@ -18,7 +18,7 @@ exports.createPromo = async (req, res, next) => {
 exports.getPromo = async (req, res, next) => {
     try {
 
-        let promo = await Promo.find({userId:null});
+        let promo = await Promo.find({isUser: false});
         if (promo) {
             res.status(200).json({ success: true, promo })
             io.getIO().emit('promo:get', promo);
