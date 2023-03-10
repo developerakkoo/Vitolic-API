@@ -215,7 +215,7 @@ router.put('/products/price/:productId',  productController.productPriceChange);
  *  
  * 
  */
- router.put('/petproducts/stock/:id',  productController.updateStock);
+ router.put('/product/stock/:id',  productController.updateStock);
 
 
 module.exports = router;

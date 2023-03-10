@@ -11,6 +11,31 @@ const nanoid = customAlphabet('1234567890', 6);
 const moment = require('moment/moment');
 const { endDate } = require('./subscriptionController');
 
+//to get the count of date wise order
+
+// [
+//     {
+//       '$group': {
+//         '_id': {
+//           'day': {
+//             '$dayOfMonth': '$createdAt'
+//           }, 
+//           'month': {
+//             '$month': '$createdAt'
+//           }, 
+//           'year': {
+//             '$year': '$createdAt'
+//           }
+//         }, 
+//         'count': {
+//           '$sum': 1
+//         }, 
+//         'date': {
+//           '$first': '$createdAt'
+//         }
+//       }
+//     }
+//   ]
 exports.getCartForDeliveryAgrregate = async (req, res, next) => {
     try {
         let today  = req.params.today;
@@ -525,7 +550,7 @@ exports.addToCart = async (req, res, next) => {
             let subscriptionId = subscription._id;
 
             const user = await Subscription.findByIdAndUpdate(subscriptionId, { $inc: { subscriptionWallet: total } });
-
+            const product = await Product.findByIdAndUpdate(productId, {stock: {$inc: -amount}});
             if (subscription) {
 
                 res.status(200).json({

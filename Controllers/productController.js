@@ -391,24 +391,40 @@ exports.updateStock = async (req, res, next) => {
   try {
     const id = req.params.id;
     const quantity = req.body.quantity;
-    let product = await Pet.findOneAndUpdate({ _id: id }, { $inc: { stock: -quantity } });
+    
 
-    /*  //const product = await Pet.findOneAndUpdate({
-    //     _id: id
-    // }, {$inc: {stock : quantity}});
-    // console.log(product);
-         /* if(product){
+    //1. Find the Product
+    let product = await Product.findById(id);
 
-           res.status(200).json({ status: true, message:'Product updated successfully', product })
-          io.getIO().emit('put:product', product);
-        }
- } catch (error) {
-     res.status(500).json({message: error.message, error});
- }  */
 
-    if (product) {
-      res.status(200).json({ product, message: 'product found' })
+    //2. Check for its stock
+    console.log(product.stock);
+    console.log(product.inStock);
+    //3. If stock is 0 then set inStock to false
+    if(product.stock <= 0){
+      console.log("Product stock is 0 set value to false and send res");
+      product.inStock = false;
+      product.stock = 0;
+      product.save();
+      if (product) {
+        res.status(200).json({ product, stock: product.stock, message: 'product found' })
+      }
     }
+
+
+    //4. Else minus the quantity from stock
+    if(product.stock > 0){
+      console.log("Product minus quantity");
+      let product = await Product.findOneAndUpdate({ _id: id }, { $inc: { stock: -quantity } });
+      if (product) {
+        res.status(200).json({ product, stock: product.stock, message: 'product found' })
+      }
+
+    }
+
+ 
+
+   
   } catch (error) {
     res.status(500).json({ error, message: 'Something went wrong!' });
   }

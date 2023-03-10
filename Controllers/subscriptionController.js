@@ -19,6 +19,17 @@ exports.getCountOfSubscriptionBasedOnType = async(req, res,next) =>{
        let subA = await Subscription.find({deliveryFrequency: "ALTERNATE"});
        let subC = await Subscription.find({deliveryFrequency: "CUSTOM"});
        let subO = await Subscription.find({deliveryFrequency: "ONETIME"});
+
+    //    [
+    //     {
+    //       '$group': {
+    //         '_id': '$deliveryFrequency', 
+    //         'totalDocs': {
+    //           '$sum': 1
+    //         }
+    //       }
+    //     }
+    //   ]
         if(sub){
             res
             .status(200)
