@@ -1,6 +1,74 @@
 const Bill = require('./../Models/billingModel');
 const io = require('../socket');
 
+
+exports.getMonthlySales = async(req, res, next) =>{
+    try{
+        const bill = await Bill.aggregate([
+            {
+              '$project': {
+                'amount': true, 
+                'createdAt': {
+                  '$month': '$createdAt'
+                }
+              }
+            }, {
+              '$group': {
+                '_id': '$createdAt', 
+                'total': {
+                  '$sum': '$amount'
+                }
+              }
+            }
+          ])
+
+          if(bill){
+            res.status(200).json({
+                bill,
+                message:"Monthly Sales"
+            })
+          }
+    }catch(error){
+        res.status(500).json({
+            status: false,
+            message: err.message
+        })
+    }
+}
+
+exports.getYearlySales = async(req, res, next) =>{
+    try{
+        const bill = await Bill.aggregate([
+            {
+              '$project': {
+                'amount': true, 
+                'createdAt': {
+                  '$year': '$createdAt'
+                }
+              }
+            }, {
+              '$group': {
+                '_id': '$createdAt', 
+                'total': {
+                  '$sum': '$amount'
+                }
+              }
+            }
+          ])
+
+          if(bill){
+            res.status(200).json({
+                bill,
+                message:"Yearly Sales"
+            })
+          }
+    }catch(error){
+        res.status(500).json({
+            status: false,
+            message: err.message
+        })
+    }
+}
 exports.postBill = async (req, res, next) => {
 
 

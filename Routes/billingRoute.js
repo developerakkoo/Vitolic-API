@@ -18,6 +18,8 @@ const router = express.Router();
  * 
  */
 router.get('/bill',  billingController.getBill);
+router.get('/bill/sales/month',  billingController.getMonthlySales);
+router.get('/bill/sales/year',  billingController.getYearlySales);
 
 router.get('/bill/date',  billingController.getBillByDate);
 

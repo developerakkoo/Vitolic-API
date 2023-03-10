@@ -15,30 +15,22 @@ exports.getCountOfSubscriptionBasedOnType = async(req, res,next) =>{
     try
     {
         let freq = req.params.type;
-       let subD = await Subscription.find({deliveryFrequency: "DAILY"});
-       let subA = await Subscription.find({deliveryFrequency: "ALTERNATE"});
-       let subC = await Subscription.find({deliveryFrequency: "CUSTOM"});
-       let subO = await Subscription.find({deliveryFrequency: "ONETIME"});
-
-    //    [
-    //     {
-    //       '$group': {
-    //         '_id': '$deliveryFrequency', 
-    //         'totalDocs': {
-    //           '$sum': 1
-    //         }
-    //       }
-    //     }
-    //   ]
+       let sub = await Subscription.aggregate(    [
+        {
+          '$group': {
+            '_id': '$deliveryFrequency', 
+            'count': {
+              '$sum': 1
+            }
+          }
+        }
+      ])
         if(sub){
             res
             .status(200)
             .json({
-                message:"DAILY Found",
-                countALTERNATE: subA.length,
-                countDAILY: subD.length,
-                countCUSTOM: subc.length,
-                countONETIME: subO.length
+                message:"Subscription Count By Type",
+                sub
             })
         }
 

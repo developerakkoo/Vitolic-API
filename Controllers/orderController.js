@@ -12,30 +12,48 @@ const moment = require('moment/moment');
 const { endDate } = require('./subscriptionController');
 
 //to get the count of date wise order
+exports.getCountOfDateWiseOrders = async(req, res, next) =>{
+    try{
+        const cart=await Cart.aggregate([
+            {
+              '$group': {
+                '_id': {
+                  'day': {
+                    '$dayOfMonth': '$createdAt'
+                  }, 
+                  'month': {
+                    '$month': '$createdAt'
+                  }, 
+                  'year': {
+                    '$year': '$createdAt'
+                  }
+                }, 
+                'count': {
+                  '$sum': 1
+                }, 
+                'date': {
+                  '$first': '$createdAt'
+                }
+              }
+            }
+          ])
 
-// [
-//     {
-//       '$group': {
-//         '_id': {
-//           'day': {
-//             '$dayOfMonth': '$createdAt'
-//           }, 
-//           'month': {
-//             '$month': '$createdAt'
-//           }, 
-//           'year': {
-//             '$year': '$createdAt'
-//           }
-//         }, 
-//         'count': {
-//           '$sum': 1
-//         }, 
-//         'date': {
-//           '$first': '$createdAt'
-//         }
-//       }
-//     }
-//   ]
+          if(cart){
+            res.status(200)
+            .json({
+                cart,
+                message:"Daily Date wise count"
+            })
+          }
+
+    }catch(error){
+        res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+}
+
 exports.getCartForDeliveryAgrregate = async (req, res, next) => {
     try {
         let today  = req.params.today;

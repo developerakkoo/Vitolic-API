@@ -67,7 +67,9 @@ router.post('/cart/type', cartController.getCartByType);
  *  
  * 
  */
+
 router.get('/cart/featured',  cartController.featured);
+router.get('/cart/count',  cartController.getCountOfDateWiseOrders);
 router.get('/cart/date',  cartController.getCartByDate);
 router.get('/cart/paused', cartController.getCartPaused);
 router.get('/cart/terminated', cartController.getCartTerminated);
