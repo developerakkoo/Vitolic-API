@@ -107,7 +107,7 @@ exports.postSubscription = async (req, res, next) => {
 exports.getSubscription = async (req, res, next) => {
     try {
 
-        let subscription = await Subscription.find({}).sort({ createdAt: -1 });
+        let subscription = await Subscription.find({}).sort({ createdAt: -1 }).populate('userId billId cartId ');
         if (subscription) {
             io.getIO().emit('subscription:get', { action: 'get', subscription })
 
