@@ -4,6 +4,9 @@ const authController = require('./../Controllers/subAdminController');
 const router = express.Router();
 
 
+
+router.get('/subadmin', authController.getAllSubAdmin);
+router.get('/subadmin/:id', authController.getSubAdminById);
 /**
  * @swagger
  * /subadminlogin:
@@ -67,6 +70,8 @@ router.post('/subadminsignup',
     ],
     authController.postSignup);
 
+
+router.put('/subadmin/:id', authController.updateSubAdmin);
 
 
 

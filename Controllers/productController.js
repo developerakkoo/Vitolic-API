@@ -129,6 +129,7 @@ exports.postAddProduct = (req, res, next) => {
   const descriptionOne = req.body.descOne;
   const descriptionTwo = req.body.descTwo;
   const descriptionThree = req.body.descThree;
+  const hasDiscountedPrice = req.body.hasDiscountedPrice;
   const inStock = req.body.inStock;
   const type = req.body.type;
   const stock = req.body.stock;
@@ -150,6 +151,7 @@ exports.postAddProduct = (req, res, next) => {
     units: units,
     category: category,
     type: type,
+    hasDiscountedPrice: hasDiscountedPrice,
     descriptionOne: descriptionOne,
     descriptionTwo: descriptionTwo,
     descriptionThree: descriptionThree,

@@ -5,7 +5,77 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 
+exports.updateSubAdmin = async(req, res, next) =>{
+    try{
+        let id = req.params.id;
 
+        const subAdmin = await SubAdmin.findByIdAndUpdate(id, req.body);
+
+        if(subAdmin){
+            res.status(201).json({
+                message:"Sub Admin Updated!",
+                subAdmin
+            })
+        }
+        else{
+            res.status(400).json({
+                message:"Something went wrong!"
+            })
+        }
+    }
+
+    catch(error){
+        res.status(400).json({message: error.message, status:'error'});
+    }
+}
+
+exports.getSubAdminById = async(req, res, next) =>{
+    try{
+        let id = req.params.id;
+
+        const subAdmin = await SubAdmin.findById(id, req.body);
+
+        if(subAdmin){
+            res.status(201).json({
+                message:"Sub Admin Found!",
+                subAdmin
+            })
+        }
+        else{
+            res.status(400).json({
+                message:"Something went wrong!"
+            })
+        }
+    }
+
+    catch(error){
+        res.status(400).json({message: error.message, status:'error'});
+    }
+}
+
+
+exports.getAllSubAdmin = async(req, res, next) =>{
+    try{
+
+        const subAdmin = await SubAdmin.find({});
+
+        if(subAdmin){
+            res.status(201).json({
+                message:"All Sub Admin!",
+                subAdmin
+            })
+        }
+        else{
+            res.status(400).json({
+                message:"Something went wrong!"
+            })
+        }
+    }
+
+    catch(error){
+        res.status(400).json({message: error.message, status:'error'});
+    }
+}
 
 exports.postLogin = (req, res, next) => {
     const email = req.body.email;
@@ -53,12 +123,47 @@ exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
 
+
+    const isProductAdd = req.body.isProductAdd;
+    const isProductEdit = req.body.isProductEdit;
+    const isProductDelete = req.body.isProductDelete;
+
+    const isBannerAdd = req.body.isBannerAdd;
+    const isBannerDelete = req.body.isBannerDelete;
+    const isBannerEdit = req.body.isBannerEdit;
+
+    const isOrderAdd = req.body.isOrderAdd;
+    const isOrderEdit = req.body.isOrderEdit;
+    const isOrderDelete = req.body.isOrderDelete;
+
+    const isUserAdd = req.body.isUserAdd;
+    const isUserDelete = req.body.isUserDelete;
+    const isUserEdit = req.body.isUserEdit;
+
+    const isBoyAdd = req.body.isBoyAdd;
+    const isBoyDelete = req.body.isBannerDelete;
+    const isBoyEdit = req.body.isBannerEdit;
+
+    const isPromoAdd = req.body.isPromoAdd;
+    const isPromoEdit = req.body.isPromoEdit;
+    const isPromoDelete = req.body.isPromoDelete;
+
+    const isSubscriptionAdd = req.body.isSubscriptionAdd;
+    const isSubscriptionEdit = req.body.isSubscriptionEdit;
+    const isSubscriptionDelete = req.body.isSubscriptionDelete;
+
+    const isCityAdd = req.body.isCityAdd;
+    const isCityEdit = req.body.isCityEdit;
+    const isCityDelete = req.body.isCityDelete;
+
+
+
     SubAdmin.findOne({ email: email})
     .then(subAdmin => {
         if(subAdmin){
            res.status(400).json({
                status: false,
-               message: 'User with email Already Exists'
+               message: 'Sub Admin with email Already Exists'
            })
         }
 
@@ -66,7 +171,41 @@ exports.postSignup = (req, res, next) => {
         .then((hashedPasswords) => {
             const subAdmin = new SubAdmin({
                 email: email,
-                password: hashedPasswords
+                password: hashedPasswords,
+                isProductAdd: isProductAdd,
+                isProductDelete: isProductDelete,
+                isProductEdit: isProductEdit,
+
+                isOrderAdd: isOrderAdd,
+                isOrderDelete: isOrderDelete,
+                isOrderEdit: isOrderEdit,
+
+
+                isUserAdd: isUserAdd,
+                isUserDelete: isUserEdit,
+                isUserEdit: isUserEdit,
+
+                isBoyAdd: isBoyAdd,
+                isBoyDelete: isBoyDelete,
+                isBoyEdit: isBoyEdit,
+
+                isPromoAdd: isPromoAdd,
+                isPromoDelete: isPromoDelete,
+                isPromoEdit: isPromoEdit,
+
+                isBannerAdd: isBannerAdd,
+                isBannerDelete: isBannerDelete,
+                isBannerEdit: isBannerEdit,
+
+                isSubscriptionAdd: isSubscriptionAdd,
+                isSubscriptionDelete: isSubscriptionDelete,
+                isSubscriptionEdit: isSubscriptionEdit,
+
+                isCityAdd: isCityAdd,
+                isCityDelete: isCityDelete,
+                isCityEdit: isCityEdit
+
+
             })
     
             return subAdmin.save();

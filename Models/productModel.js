@@ -29,10 +29,14 @@ const productSchema = new Schema({
        
     },
 
+    hasDiscountedPrice:{
+        type: Boolean,
+        
+    },
 
     discountedPrice:{
         type: Number,
-        required: [true, 'discountedPrice is required'],
+        default: 0
 
     },
 
