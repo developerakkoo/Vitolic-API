@@ -292,7 +292,7 @@ exports.getCartFilter = async (req, res, next) => {
 exports.getCart = async (req, res, next) => {
     try {
 
-        const cart = await Cart.find({ isDelivered: false }).sort({ createdAt: -1 }).populate("userId address subscription");
+        const cart = await Cart.find({ isDelivered: false, terminate: false }).sort({ createdAt: -1 }).populate("userId address subscription");
         io.getIO().emit('cart:get', cart);
 
         res.status(200).json({
