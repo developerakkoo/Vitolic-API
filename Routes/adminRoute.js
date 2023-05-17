@@ -1,6 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const authController = require('./../Controllers/adminController');
+const verify  = require('../middleware/isAdmin')
 
 const router = express.Router();
 
@@ -71,5 +72,18 @@ router.post('/signup',
 
 
 
+    router.get('/totalUser',authController.totalUser);
+
+    router.get('/yearlyEarnings',authController.yearlyEarnings);
+
+    router.get('/monthlyEarning',authController.monthlyEarning);
+
+    router.get('/totalRefunds',authController.totalRefund);
+
+    router.get('/activeSubscriber',authController.activeSubscriber);
+
+    router.get('/notActiveSubscriber',authController.notActiveSubscriber);
+
+    router.get('/outOfStockProducts',authController.outOfStockProducts);
 
 module.exports = router;

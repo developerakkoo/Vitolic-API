@@ -16,7 +16,7 @@ exports.postAddress = async(req, res, next) => {
             const pincode = req.body.pincode; 
             const coordinates = req.body.coordinates;
             
-           
+            
             const add = await Address.create(req.body);
 
             if(!add){
@@ -37,6 +37,7 @@ exports.postAddress = async(req, res, next) => {
 }
 
 
+
 exports.getAddressById = async(req, res, next) => {
     try{
         const id = req.params.id;
@@ -46,7 +47,7 @@ exports.getAddressById = async(req, res, next) => {
         if(add){
             res.status(200).json({
                 add,
-               
+                
                 message: 'Address Found'
             })
         }
@@ -69,7 +70,7 @@ exports.getAddressByUserId = async(req, res, next) => {
         if(add){
             res.status(200).json({
                 add,
-               
+                
                 message: 'Address Found'
             })
         }

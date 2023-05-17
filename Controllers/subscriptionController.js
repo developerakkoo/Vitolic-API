@@ -67,12 +67,12 @@ exports.postSubscription = async (req, res, next) => {
 
     subscription.save().then((result) => {
         console.log("Subscription Created!");
-
+        io.getIO().emit('subscription:create', { action: 'created', subscription })
         res.status(201).json({
             result,
             message: "Subscription Created",
         });
-        io.getIO().emit('subscription:create', { action: 'created', subscription })
+        
 
         if (subscription) {
             let bill = new Bill({
@@ -87,7 +87,7 @@ exports.postSubscription = async (req, res, next) => {
             bill.save();
 
             if (bill) {
-                res.status(200).json({
+                return res.status(200).json({
                     bill,
                     message: 'bill added successfully'
                 })
@@ -95,7 +95,7 @@ exports.postSubscription = async (req, res, next) => {
         }
 
     }).catch((err) => {
-        res.status(500).json({
+        return res.status(500).json({
             status: false,
             message: err.message
         })

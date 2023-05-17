@@ -12,6 +12,7 @@ const morgan = require("morgan");
 const nodemailer = require('nodemailer');
 const swaggerUi = require('swagger-ui-express');
 let serviceAccount = require('./vitolic-422e9-firebase-adminsdk-apyzq-9dded6a29c.json');
+//require('./Controllers/cron')
 //modal
 const Cart = require("./Models/orderModel");
 const Product = require("./Models/productModel");
@@ -262,8 +263,7 @@ app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
 });
 
-mongoose
-  .connect(MONGODB_URI, {
+mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,

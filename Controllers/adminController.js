@@ -1,5 +1,10 @@
 const Admin = require('.././Models/adminModel');
-
+const User = require('../Models/userModel');
+const Subscription = require('../Models/subscriptionModel');
+const Product =  require('../Models/productModel')
+const Refund = require('../Models/refundModel')
+const subOrder =  require('../Models/subOrderModel')
+const mongoosePaginate = require('mongoose-paginate');
 const {validationResult} = require('express-validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -44,7 +49,7 @@ exports.postLogin = (req, res, next) => {
             })
         });
     }).catch(err =>{
-        res.status(400).json({message: error.message, status:'error'});
+        res.status(400).json({message: err.message, status:'error'});
     })
 }
 
@@ -75,12 +80,164 @@ exports.postSignup = (req, res, next) => {
         })
     })
     
-   .catch(err =>{
+    .catch(err =>{
     res.status(400).json({message: error.message, status:'error'});
     })
-
-   
-
 }
 
 
+
+
+exports.totalUser = async (req,res) =>{
+    const pipeline = [[
+        {
+        '$count': 'Total user'
+        }
+    ]]
+    try{
+        const userCount = await User.aggregate(pipeline)
+        res.status(200).json({label:'userCount',userCount})
+    }catch(err){
+        res.status(500).json({message:"something went wrong"})
+    }
+}
+
+exports.activeSubscriber = async (req,res) =>{
+    const pipeline = [
+        [
+            {
+            '$match': {
+                'isActive': true
+            }
+            }, {
+            '$project': {
+                'subscription ID': '$_id', 
+                'userId': '$userId'
+            }
+            }
+        ]
+    ]
+    try{
+        const activeSubscriber = await Subscription.aggregate(pipeline)
+        res.status(200).json({label:'activeSubscriber', count:activeSubscriber.length,activeSubscriber})
+    }catch(err){
+        res.status(500).json({message:"something went wrong"})
+    }
+}
+
+
+exports.notActiveSubscriber = async (req,res) =>{
+    const pipeline = [
+        [
+            {
+            '$match': {
+                'isActive': false
+            }
+            }, {
+            '$project': {
+                'subscription ID': '$_id', 
+                'userId': '$userId'
+            }
+            }
+        ]
+    ]
+    try{
+        const notActiveSubscriberCount = await Subscription.aggregate(pipeline)
+        res.status(200).json({label:'notActiveSubscriber', count:notActiveSubscriberCount.length,notActiveSubscriberCount})
+    }catch(err){
+        res.status(500).json({message:"something went wrong"})
+    }
+}
+
+
+exports.outOfStockProducts = async (req,res) =>{
+    const pipeline = [
+        [
+            {
+            '$match': {
+                'stock': 0
+            }
+            }
+        ]
+    ]
+    try{
+        const outOfStockProductsCount = await Product.aggregate(pipeline)
+        res.status(200).json({label:'outOfStockProducts', count:outOfStockProductsCount.length,outOfStockProductsCount})
+    }catch(err){
+        res.status(500).json({message:"something went wrong"})
+    }
+}
+
+exports.totalRefund = async (req,res) =>{
+    const pipeline = [[
+        {
+        '$count': 'Total Refunds'
+        }
+    ]]
+    try{
+        const RefundCount = await Refund.aggregate(pipeline)
+
+        res.status(200).json({label:'Refund', count:RefundCount.length,RefundCount})
+    }catch(err){
+        res.status(500).json({message:"something went wrong"})
+    }
+}
+
+exports.yearlyEarnings  = async (req,res) =>{
+    const pipeline = [
+        [
+            {
+            '$project': {
+                'total': true, 
+                'createdAt': {
+                '$year': '$createdAt'
+                }
+            }
+            }, {
+            '$group': {
+                '_id': '$createdAt', 
+                'totalYearlyEarning': {
+                '$sum': '$total'
+                }
+            }
+            }
+        ]
+    ]
+    try{
+        const earnings = await subOrder.aggregate(pipeline)
+        
+        res.status(200).json({label:'yearlyEarnings', count:earnings.length,earnings})
+    }catch(err){
+        res.status(500).json({message:"something went wrong"})
+    }
+}
+
+
+exports.monthlyEarning  = async (req,res) =>{
+    const pipeline = [
+        [
+            {
+            '$project': {
+                'total': true, 
+                'createdAt': {
+                '$month': '$createdAt'
+                }
+            }
+            }, {
+            '$group': {
+                '_id': '$createdAt', 
+                'totalMonthlyEarning': {
+                '$sum': '$total'
+                }
+            }
+            }
+        ]
+    ]
+    try{
+        const earnings = await subOrder.aggregate(pipeline)
+        
+        res.status(200).json({label:'monthlyEarning', count:earnings.length,earnings})
+    }catch(err){
+        res.status(500).json({message:"something went wrong"})
+    }
+}

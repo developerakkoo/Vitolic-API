@@ -14,6 +14,7 @@ const subscriptionSchema = new Schema({
     emailAddress: { type: String },
     discountedPrice: { type: Number },
     deliveryQuantity: { type: Number, min: 1 },
+    isSubscriptionEnding:{ type:Boolean, default:false},
     daysremaining: { type: String },
     isNormal: {
         type: Boolean
