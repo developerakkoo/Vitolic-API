@@ -4,7 +4,7 @@
   "description": "A API for a Online Vegetable Selling Site",
   "main": "app.js",
   "scripts": {
-    "test": "jest --testEnvironment=node --runInBand --detectOpenHandles --coverage ./Test",
+    "test": "jest ",
     "start": "nodemon app.js"
   },
   "author": "Akshay Jadhav",

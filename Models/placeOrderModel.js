@@ -48,7 +48,6 @@ const placedOrderSchema = new Schema({
             orderPrice: { type: Number },
             subTotal: { type: Number },
             units: { type: String }
-
         },
     ],
 

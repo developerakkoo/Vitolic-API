@@ -1,6 +1,7 @@
 const Admin = require('.././Models/adminModel');
 const User = require('../Models/userModel');
 const Subscription = require('../Models/subscriptionModel');
+const placedOrder = require('../Models/placeOrderModel');
 const Product =  require('../Models/productModel')
 const Refund = require('../Models/refundModel')
 const subOrder =  require('../Models/subOrderModel')
@@ -8,6 +9,7 @@ const mongoosePaginate = require('mongoose-paginate');
 const {validationResult} = require('express-validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const io = require('../socket');
 
 
 
@@ -95,7 +97,8 @@ exports.totalUser = async (req,res) =>{
         }
     ]]
     try{
-        const userCount = await User.aggregate(pipeline)
+        const userCount = await User.aggregate(pipeline);
+        io.getIO().emit('userCount:get', userCount);
         res.status(200).json({label:'userCount',userCount})
     }catch(err){
         res.status(500).json({message:"something went wrong"})
@@ -118,7 +121,8 @@ exports.activeSubscriber = async (req,res) =>{
         ]
     ]
     try{
-        const activeSubscriber = await Subscription.aggregate(pipeline)
+        const activeSubscriber = await Subscription.aggregate(pipeline);
+        io.getIO().emit('activeSubscriber:get', activeSubscriber);
         res.status(200).json({label:'activeSubscriber', count:activeSubscriber.length,activeSubscriber})
     }catch(err){
         res.status(500).json({message:"something went wrong"})
@@ -142,7 +146,8 @@ exports.notActiveSubscriber = async (req,res) =>{
         ]
     ]
     try{
-        const notActiveSubscriberCount = await Subscription.aggregate(pipeline)
+        const notActiveSubscriberCount = await Subscription.aggregate(pipeline);
+        io.getIO().emit('notActiveSubscriberCount:get', notActiveSubscriberCount);
         res.status(200).json({label:'notActiveSubscriber', count:notActiveSubscriberCount.length,notActiveSubscriberCount})
     }catch(err){
         res.status(500).json({message:"something went wrong"})
@@ -161,7 +166,8 @@ exports.outOfStockProducts = async (req,res) =>{
         ]
     ]
     try{
-        const outOfStockProductsCount = await Product.aggregate(pipeline)
+        const outOfStockProductsCount = await Product.aggregate(pipeline);
+        io.getIO().emit('outOfStockProducts:get', outOfStockProductsCount);
         res.status(200).json({label:'outOfStockProducts', count:outOfStockProductsCount.length,outOfStockProductsCount})
     }catch(err){
         res.status(500).json({message:"something went wrong"})
@@ -176,7 +182,7 @@ exports.totalRefund = async (req,res) =>{
     ]]
     try{
         const RefundCount = await Refund.aggregate(pipeline)
-
+        io.getIO().emit('Refund:get', RefundCount);
         res.status(200).json({label:'Refund', count:RefundCount.length,RefundCount})
     }catch(err){
         res.status(500).json({message:"something went wrong"})
@@ -205,7 +211,7 @@ exports.yearlyEarnings  = async (req,res) =>{
     ]
     try{
         const earnings = await subOrder.aggregate(pipeline)
-        
+        io.getIO().emit('yearlyEarnings:get', earnings);
         res.status(200).json({label:'yearlyEarnings', count:earnings.length,earnings})
     }catch(err){
         res.status(500).json({message:"something went wrong"})
@@ -235,9 +241,34 @@ exports.monthlyEarning  = async (req,res) =>{
     ]
     try{
         const earnings = await subOrder.aggregate(pipeline)
-        
+        io.getIO().emit('monthlyEarning:get', earnings);
         res.status(200).json({label:'monthlyEarning', count:earnings.length,earnings})
     }catch(err){
         res.status(500).json({message:"something went wrong"})
+    }
+}
+
+
+exports.totalOrder =  async(req,res)=>{
+    try{
+        const totalOrder =  await placedOrder.find({});
+        if(totalOrder){
+            res.status(200).json({ status: true, message:'totalOrder fetched successfully', totalOrder: totalOrder, Length:totalOrder.length})
+            io.getIO().emit('totalOrder:get', totalOrder);
+        }
+    }catch(err){
+        res.status(500).json({message: err.message});
+    }
+}
+
+exports.totalCompletedOrder =  async(req,res)=>{
+    try{
+        const totalCompletedOrder =  await placedOrder.find({isDelivered:true});
+        if(totalCompletedOrder){
+            res.status(200).json({ status: true, message:'totalCompletedOrder fetched successfully', totalCompletedOrder: totalCompletedOrder, Length:totalCompletedOrder.length})
+            io.getIO().emit('totalCompletedOrder:get', totalCompletedOrder);
+        }
+    }catch(err){
+        res.status(500).json({message: err.message});
     }
 }

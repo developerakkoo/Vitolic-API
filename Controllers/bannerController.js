@@ -41,14 +41,13 @@ exports.getBanners = async (req, res, next) => {
     try {
         const banner = await Banner.find({});
 
-         if(banner){
-             res.status(200).json({ status: true, message:'banner fetched successfully', banner: banner })
-             io.getIO().emit('banner:get', banner);
- 
-         }  
-     } catch (error) {
-         res.status(500).json({message: error.message});
-     }
+        if(banner){
+            res.status(200).json({ status: true, message:'banner fetched successfully', banner: banner })
+            io.getIO().emit('banner:get', banner);
+        }  
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
 }
 
 exports.getBannerById = async (req, res, next) => {

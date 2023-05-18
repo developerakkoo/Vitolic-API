@@ -86,4 +86,8 @@ router.post('/signup',
 
     router.get('/outOfStockProducts',authController.outOfStockProducts);
 
+    router.get('/totalOrder',authController.totalOrder);
+
+    router.get('/totalCompletedOrder',authController.totalCompletedOrder);
+
 module.exports = router;

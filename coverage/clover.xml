@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1684307182904" clover="3.2.0">
-  <project timestamp="1684307182905" name="All files">
-    <metrics statements="2932" coveredstatements="819" conditionals="503" coveredconditionals="2" methods="318" coveredmethods="4" elements="3753" coveredelements="825" complexity="0" loc="2932" ncloc="2932" packages="7" files="80" classes="80"/>
+<coverage generated="1684317011828" clover="3.2.0">
+  <project timestamp="1684317011828" name="All files">
+    <metrics statements="2932" coveredstatements="828" conditionals="503" coveredconditionals="2" methods="318" coveredmethods="8" elements="3753" coveredelements="838" complexity="0" loc="2932" ncloc="2932" packages="7" files="80" classes="80"/>
     <package name="Vitolic-API">
-      <metrics statements="143" coveredstatements="96" conditionals="11" coveredconditionals="1" methods="20" coveredmethods="0"/>
+      <metrics statements="143" coveredstatements="101" conditionals="11" coveredconditionals="1" methods="20" coveredmethods="2"/>
       <file name="app.js" path="C:\Users\sakib\OneDrive\Desktop\Vitolic-API\app.js">
-        <metrics statements="137" coveredstatements="95" conditionals="9" coveredconditionals="1" methods="18" coveredmethods="0"/>
+        <metrics statements="137" coveredstatements="98" conditionals="9" coveredconditionals="1" methods="18" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -136,26 +136,26 @@
         <line num="262" count="1" type="stmt"/>
         <line num="263" count="0" type="stmt"/>
         <line num="266" count="1" type="stmt"/>
-        <line num="272" count="0" type="stmt"/>
-        <line num="273" count="0" type="stmt"/>
-        <line num="275" count="0" type="stmt"/>
+        <line num="272" count="1" type="stmt"/>
+        <line num="273" count="1" type="stmt"/>
+        <line num="275" count="1" type="stmt"/>
         <line num="276" count="0" type="stmt"/>
         <line num="278" count="0" type="stmt"/>
         <line num="279" count="0" type="stmt"/>
         <line num="284" count="0" type="stmt"/>
       </file>
       <file name="socket.js" path="C:\Users\sakib\OneDrive\Desktop\Vitolic-API\socket.js">
-        <metrics statements="6" coveredstatements="1" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <metrics statements="6" coveredstatements="3" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="1"/>
         <line num="4" count="2" type="stmt"/>
-        <line num="6" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
         <line num="16" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="17" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
       </file>
     </package>
     <package name="Vitolic-API.Controllers">
-      <metrics statements="2280" coveredstatements="317" conditionals="454" coveredconditionals="0" methods="272" coveredmethods="1"/>
+      <metrics statements="2280" coveredstatements="320" conditionals="454" coveredconditionals="0" methods="272" coveredmethods="2"/>
       <file name="DeliveryBoyController.js" path="C:\Users\sakib\OneDrive\Desktop\Vitolic-API\Controllers\DeliveryBoyController.js">
         <metrics statements="115" coveredstatements="19" conditionals="26" coveredconditionals="0" methods="19" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
@@ -1765,8 +1765,8 @@
         <line num="56" count="0" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
         <line num="69" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
         <line num="71" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
         <line num="77" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="78" count="0" type="stmt"/>
         <line num="87" count="0" type="stmt"/>
@@ -2380,7 +2380,7 @@
         <line num="145" count="0" type="stmt"/>
       </file>
       <file name="userController.js" path="C:\Users\sakib\OneDrive\Desktop\Vitolic-API\Controllers\userController.js">
-        <metrics statements="115" coveredstatements="33" conditionals="26" coveredconditionals="0" methods="21" coveredmethods="1"/>
+        <metrics statements="115" coveredstatements="36" conditionals="26" coveredconditionals="0" methods="21" coveredmethods="2"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="4" count="2" type="stmt"/>
@@ -2407,9 +2407,9 @@
         <line num="56" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
         <line num="63" count="2" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
+        <line num="64" count="3" type="stmt"/>
+        <line num="65" count="3" type="stmt"/>
+        <line num="69" count="3" type="stmt"/>
         <line num="71" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="72" count="0" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
@@ -2666,10 +2666,10 @@
       </file>
       <file name="userAuthModel.js" path="C:\Users\sakib\OneDrive\Desktop\Vitolic-API\Models\userAuthModel.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="25" count="1" type="stmt"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
       </file>
       <file name="userModel.js" path="C:\Users\sakib\OneDrive\Desktop\Vitolic-API\Models\userModel.js">
         <metrics statements="44" coveredstatements="8" conditionals="8" coveredconditionals="0" methods="7" coveredmethods="0"/>
@@ -3070,9 +3070,9 @@
       </file>
     </package>
     <package name="Vitolic-API.Test">
-      <metrics statements="28" coveredstatements="20" conditionals="4" coveredconditionals="1" methods="5" coveredmethods="3"/>
+      <metrics statements="28" coveredstatements="21" conditionals="4" coveredconditionals="1" methods="5" coveredmethods="4"/>
       <file name="db.js" path="C:\Users\sakib\OneDrive\Desktop\Vitolic-API\Test\db.js">
-        <metrics statements="18" coveredstatements="10" conditionals="4" coveredconditionals="1" methods="3" coveredmethods="1"/>
+        <metrics statements="18" coveredstatements="11" conditionals="4" coveredconditionals="1" methods="3" coveredmethods="2"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="6" count="2" type="stmt"/>
@@ -3082,7 +3082,7 @@
         <line num="10" count="1" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
         <line num="18" count="2" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="24" count="2" type="stmt"/>
@@ -3095,15 +3095,15 @@
       <file name="interceptor.js" path="C:\Users\sakib\OneDrive\Desktop\Vitolic-API\Test\interceptor.js">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
-        <line num="3" count="2" type="stmt"/>
-        <line num="4" count="2" type="stmt"/>
-        <line num="5" count="2" type="stmt"/>
-        <line num="6" count="2" type="stmt"/>
-        <line num="9" count="2" type="stmt"/>
-        <line num="10" count="2" type="stmt"/>
-        <line num="11" count="2" type="stmt"/>
-        <line num="12" count="2" type="stmt"/>
-        <line num="13" count="2" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="6" count="4" type="stmt"/>
+        <line num="9" count="4" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="11" count="4" type="stmt"/>
+        <line num="12" count="4" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
       </file>
     </package>
     <package name="Vitolic-API.Utils">

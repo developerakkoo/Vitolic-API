@@ -13,7 +13,7 @@ exports.loginUser = async(req, res, next) =>{
     UserAuth.findOne({ email: email})
     .then(user => {
         if(!user){
-           res.status(400).json({message: 'User not found', status:'error'})
+        res.status(400).json({message: 'User not found', status:'error'})
         }
 
         loadedUser = user;
@@ -31,7 +31,7 @@ exports.loginUser = async(req, res, next) =>{
             },"!23ThisisaSecretFor@#$%^%^^&&allthebest", {expiresIn: '3h'})
 
             res.status(200).json({
-                message: 'Sign In Successfull',
+                message: 'Sign In Successful',
                 token: token,
                 userId: loadedUser._id.toString(),
                 expiresIn: '3h'

@@ -645,7 +645,7 @@ exports.totalUser = <span class="fstat-no" title="function not covered" >as</spa
     ]]
 <span class="cstat-no" title="statement not covered" >    try{</span>
         const userCount = <span class="cstat-no" title="statement not covered" >await User.aggregate(pipeline)</span>
-<span class="cstat-no" title="statement not covered" >        res.status(200).json(userCount)</span>
+<span class="cstat-no" title="statement not covered" >        res.status(200).json({label:'userCount',userCount})</span>
     }catch(err){
 <span class="cstat-no" title="statement not covered" >        res.status(500).json({message:"something went wrong"})</span>
     }
@@ -667,8 +667,8 @@ exports.activeSubscriber = <span class="fstat-no" title="function not covered" >
         ]
     ]
 <span class="cstat-no" title="statement not covered" >    try{</span>
-        const activeSubscriberCount = <span class="cstat-no" title="statement not covered" >await Subscription.aggregate(pipeline)</span>
-<span class="cstat-no" title="statement not covered" >        res.status(200).json(activeSubscriberCount)</span>
+        const activeSubscriber = <span class="cstat-no" title="statement not covered" >await Subscription.aggregate(pipeline)</span>
+<span class="cstat-no" title="statement not covered" >        res.status(200).json({label:'activeSubscriber', count:activeSubscriber.length,activeSubscriber})</span>
     }catch(err){
 <span class="cstat-no" title="statement not covered" >        res.status(500).json({message:"something went wrong"})</span>
     }
@@ -692,7 +692,7 @@ exports.notActiveSubscriber = <span class="fstat-no" title="function not covered
     ]
 <span class="cstat-no" title="statement not covered" >    try{</span>
         const notActiveSubscriberCount = <span class="cstat-no" title="statement not covered" >await Subscription.aggregate(pipeline)</span>
-<span class="cstat-no" title="statement not covered" >        res.status(200).json(notActiveSubscriberCount)</span>
+<span class="cstat-no" title="statement not covered" >        res.status(200).json({label:'notActiveSubscriber', count:notActiveSubscriberCount.length,notActiveSubscriberCount})</span>
     }catch(err){
 <span class="cstat-no" title="statement not covered" >        res.status(500).json({message:"something went wrong"})</span>
     }
@@ -711,7 +711,7 @@ exports.outOfStockProducts = <span class="fstat-no" title="function not covered"
     ]
 <span class="cstat-no" title="statement not covered" >    try{</span>
         const outOfStockProductsCount = <span class="cstat-no" title="statement not covered" >await Product.aggregate(pipeline)</span>
-<span class="cstat-no" title="statement not covered" >        res.status(200).json(outOfStockProductsCount)</span>
+<span class="cstat-no" title="statement not covered" >        res.status(200).json({label:'outOfStockProducts', count:outOfStockProductsCount.length,outOfStockProductsCount})</span>
     }catch(err){
 <span class="cstat-no" title="statement not covered" >        res.status(500).json({message:"something went wrong"})</span>
     }
@@ -726,7 +726,7 @@ exports.totalRefund = <span class="fstat-no" title="function not covered" >as</s
 <span class="cstat-no" title="statement not covered" >    try{</span>
         const RefundCount = <span class="cstat-no" title="statement not covered" >await Refund.aggregate(pipeline)</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        res.status(200).json(RefundCount)</span>
+<span class="cstat-no" title="statement not covered" >        res.status(200).json({label:'Refund', count:RefundCount.length,RefundCount})</span>
     }catch(err){
 <span class="cstat-no" title="statement not covered" >        res.status(500).json({message:"something went wrong"})</span>
     }
@@ -755,7 +755,7 @@ exports.yearlyEarnings  = <span class="fstat-no" title="function not covered" >a
 <span class="cstat-no" title="statement not covered" >    try{</span>
         const earnings = <span class="cstat-no" title="statement not covered" >await subOrder.aggregate(pipeline)</span>
         
-<span class="cstat-no" title="statement not covered" >        res.status(200).json(earnings)</span>
+<span class="cstat-no" title="statement not covered" >        res.status(200).json({label:'yearlyEarnings', count:earnings.length,earnings})</span>
     }catch(err){
 <span class="cstat-no" title="statement not covered" >        res.status(500).json({message:"something went wrong"})</span>
     }
@@ -785,7 +785,7 @@ exports.monthlyEarning  = <span class="fstat-no" title="function not covered" >a
 <span class="cstat-no" title="statement not covered" >    try{</span>
         const earnings = <span class="cstat-no" title="statement not covered" >await subOrder.aggregate(pipeline)</span>
         
-<span class="cstat-no" title="statement not covered" >        res.status(200).json(earnings)</span>
+<span class="cstat-no" title="statement not covered" >        res.status(200).json({label:'monthlyEarning', count:earnings.length,earnings})</span>
     }catch(err){
 <span class="cstat-no" title="statement not covered" >        res.status(500).json({message:"something went wrong"})</span>
     }
@@ -796,7 +796,7 @@ exports.monthlyEarning  = <span class="fstat-no" title="function not covered" >a
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-05-17T07:06:22.664Z
+                at 2023-05-17T09:50:11.535Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
