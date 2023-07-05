@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const moment =  require ('moment');
+const mongoosePaginate = require('mongoose-paginate');
 const Schema = mongoose.Schema;
 
 
@@ -62,9 +64,14 @@ const cartSchema = new Schema({
     },
     upgrade: { type: String, default: "NA" },
     mainOrderId: { type: String, default: null },
+    refDate:{
+        type:String,
+        default:moment().format("DD-MM-YYYY")
+    },
 }, {
     timestamps: true
 });
 
+cartSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Cart', cartSchema);

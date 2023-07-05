@@ -10,6 +10,8 @@ const {validationResult} = require('express-validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const io = require('../socket');
+const moment = require('moment');
+const Cart = require('../Models/orderModel');
 
 
 
@@ -271,4 +273,188 @@ exports.totalCompletedOrder =  async(req,res)=>{
     }catch(err){
         res.status(500).json({message: err.message});
     }
+}
+
+exports.getDeliveryFrequencyCount =  async(req,res)=>{
+    const pipeline = [
+        [
+            {
+            '$match': {
+                'deliveryFrequency': 'DAILY'
+            }
+            }, {
+            '$group': {
+                '_id': 'DAILY', 
+                'value': {
+                '$count': {}
+                }
+            }
+            }
+        ]
+    ]
+    const pipeline1 =[
+        [
+            {
+            '$match': {
+                'deliveryFrequency': 'ALTERNATE'
+            }
+            }, {
+            '$group': {
+                '_id': 'ALTERNATE', 
+                'value': {
+                '$count': {}
+                }
+            }
+            }
+        ]
+    ]
+    const pipeline2 = [
+        [
+            {
+            '$match': {
+                'deliveryFrequency': 'CUSTOM'
+            }
+            }, {
+            '$group': {
+                '_id': 'CUSTOM', 
+                'value': {
+                '$count': {}
+                }
+            }
+            }
+        ]
+    ]
+    try{
+        const daily = await Subscription.aggregate(pipeline);
+        const alternate = await Subscription.aggregate(pipeline1)
+        const custom = await Subscription.aggregate(pipeline2)
+        let post =[daily[0],alternate[0],custom[0]]
+        // io.getIO().emit('monthlyEarning:get', earnings);
+        res.status(200).json({label:`DeliveryFrequencyReport`,post})
+    }catch(err){
+        res.status(500).json({message:"something went wrong"})
+    }
+}
+
+
+exports.getSummary =  async(req,res)=>{
+    try{
+        const pageNumber = req.query.page || 1; // Get the current page number from the query parameters
+        const pageSize = 10; // Number of items per page
+        
+        Cart.paginate({}, { page: pageNumber, limit: pageSize }, (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error occurred while fetching Data.' });
+        }
+        
+        const { docs, total, limit, page, pages } = result;
+        res.json({ users: docs, total, limit, page, pages });
+        });
+    }catch(err){
+        console.log(err)
+        res.status(500).json({message:"something went wrong"})
+    }
+}
+
+
+
+exports.getOrderStatus =  async(req,res)=>{
+    
+    const pipeline =[
+        [
+            {
+            '$match': {
+                'terminate': true
+            }
+            }, {
+            '$group': {
+                '_id': 'terminate', 
+                'value': {
+                '$count': {}
+                }
+            }
+            }
+        ]
+    ]
+    const pipeline1 = [
+        [
+            {
+            '$match': {
+                'isPause': true
+            }
+            }, {
+            '$group': {
+                '_id': 'Pause', 
+                'value': {
+                '$count': {}
+                }
+            }
+            }
+        ]
+    ]
+    try{
+        const terminate = await Cart.aggregate(pipeline);
+        const Pause = await Cart.aggregate(pipeline1)
+
+        let post =[terminate[0],Pause[0]]
+        // io.getIO().emit('monthlyEarning:get', earnings);
+        res.status(200).json({label:`OrderStatusReport`,post})
+    }catch(err){
+        res.status(500).json({message:"something went wrong"})
+    }
+}
+
+
+exports.getSummaryByDate =  async(req,res)=>{
+    const pipeline =[
+        [
+            {
+            '$match': {
+                'refDate': req.params.date
+            }
+            },
+        ]
+    ]
+
+    try{
+        const post = await Cart.aggregate(pipeline)
+
+        // let post =[terminate[0],Pause[0]]
+        // io.getIO().emit('monthlyEarning:get', earnings);
+        res.status(200).json({label:`OrderSummeryByDate`,name:req.params.date,value:post})
+    }catch(err){
+        console.log(err);
+        res.status(500).json({message:"something went wrong"})
+    }
+}
+
+
+exports.getSummaryByTodaysDate =  async(req,res)=>{
+    
+    const pipeline =[
+        [
+            {
+            '$match': {
+                'refDate': moment().format("DD-MM-YYYY")
+            }
+            },
+        ]
+    ]
+    try{
+        const post = await Cart.aggregate(pipeline);
+        
+        // let post =[terminate[0],Pause[0]]
+        // io.getIO().emit('monthlyEarning:get', earnings);
+        res.status(200).json({label:`orderSummaryByTodaysDate`,name:moment().format("DD-MM-YYYY"),value:post})
+    }catch(err){
+        res.status(500).json({message:"something went wrong"})
+    }
+}
+
+
+exports.get = async(req,res) =>{
+
+
+    const sub =  await Cart.updateMany({refDate:"22-05-2023"})
+    res.status(200).json("ok")
 }

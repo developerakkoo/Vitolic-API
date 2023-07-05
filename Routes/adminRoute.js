@@ -90,4 +90,16 @@ router.post('/signup',
 
     router.get('/totalCompletedOrder',authController.totalCompletedOrder);
 
+    router.get('/getDeliveryFrequency',authController.getDeliveryFrequencyCount);
+
+    router.get('/getOrderStatus',authController.getOrderStatus);
+    
+    router.get('/getSummary',authController.getSummary);
+
+    router.get('/getSummaryByDate/:date',authController.getSummaryByDate);
+
+    router.get('/getSummaryByTodaysDate/',authController.getSummaryByTodaysDate);
+
+    router.get('/get',authController.get);
+
 module.exports = router;

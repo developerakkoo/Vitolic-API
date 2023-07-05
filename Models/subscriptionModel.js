@@ -1,3 +1,4 @@
+const moment = require('moment');
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
@@ -19,6 +20,9 @@ const subscriptionSchema = new Schema({
     isNormal: {
         type: Boolean
 
+    },
+    isPaymentDue:{type:Boolean,
+        default:false
     },
 
     isAlternate: {
@@ -88,6 +92,7 @@ const subscriptionSchema = new Schema({
         default: 'https://image.shutterstock.com/image-illustration/default-white-background-template-without-600w-1971913538.jpg'
     },
 },
+
     {
         timestamps: true
     })

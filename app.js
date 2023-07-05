@@ -8,6 +8,7 @@ const { v4: uuidv4 } = require("uuid");
 const admin = require("firebase-admin");
 const multer = require("multer");
 const mongoose = require("mongoose");
+const moment = require('moment')
 const morgan = require("morgan");
 const nodemailer = require('nodemailer');
 const swaggerUi = require('swagger-ui-express');
@@ -45,6 +46,7 @@ const billRoute = require("./Routes/billingRoute");
 const promoRoute = require("./Routes/promoRoute");
 const cityRoute = require("./Routes/cityRoute");
 const subOrderRoute = require('./Routes/subOrderRoute');
+require('./Controllers/cron1')
 
 //const categoryRoute = require("./Routes/categoryRoute");
 //Error Handlers
@@ -266,7 +268,7 @@ app.all("*", (req, res, next) => {
 mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false,
+    // useFindAndModify: false,
   })
   .then((result) => {
     const server = app.listen(8080);
@@ -283,6 +285,9 @@ mongoose.connect(MONGODB_URI, {
   .catch((err) => {
     console.log(err);
   });
+
+
+
 
 //Route is in placeOrderRoute.js
 
