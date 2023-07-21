@@ -36,9 +36,9 @@ exports.postLogin = (req, res, next) => {
         bcrypt.compare(password, admin.password)
         .then(doMatch => {
             if(!doMatch){
-               const error = new Error('Password do not match');
-               error.status = 401;
-               next(error);
+                const error = new Error('Password do not match');
+                error.status = 401;
+                next(error);
             }
 
             const token = jwt.sign({
