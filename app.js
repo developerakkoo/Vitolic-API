@@ -68,7 +68,7 @@ admin.initializeApp({
 const app = express();
 const port = 8080;
 const bodyParser = require('body-parser');
-app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.json({ limit: '500mb' }));
 
 app.use(express.json());
 app.use(cors());
