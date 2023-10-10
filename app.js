@@ -289,6 +289,6 @@ mongoose.connect(MONGODB_URI, {
 
 
 
-//Route is in placeOrderRoute.js
+//Route is in placeOrderRoute.j
 
 
