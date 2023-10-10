@@ -88,7 +88,7 @@ router.get('/user/profiles', UserController.getAllUsers);
  * 
  *      responses:
  *         200:
- *              description: Success
+ *              description: Success.
  *  
  *  
  * 
