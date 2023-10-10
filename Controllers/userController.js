@@ -205,7 +205,7 @@ exports.getAllUsers = async (req, res, next) => {
 
         //const users= await User.deleteMany({})
 
-        const users = await User.find({}).populate('products');
+        const users = await User.find({}).populate('cart.items.productId');
 
         if (users) {
             res.status(200).json({
