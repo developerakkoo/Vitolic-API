@@ -15,6 +15,8 @@ const swaggerUi = require('swagger-ui-express');
 let serviceAccount = require('./vitolic-422e9-firebase-adminsdk-apyzq-9dded6a29c.json');
 //require('./Controllers/cron')
 //modal
+const bodyParser = require('body-parser');
+
 const Cart = require("./Models/orderModel");
 const Product = require("./Models/productModel");
 const User = require("./Models/userModel");
@@ -67,29 +69,10 @@ admin.initializeApp({
 
 const app = express();
 const port = 8080;
-const bodyParser = require('body-parser');
-app.use(bodyParser.json({ limit: '500mb' }));
+app.use(bodyParser.json());
 
 app.use(express.json());
 app.use(cors());
-/* app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "OPTIONS, GET, POST, PUT, PATCH, DELETE"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "*");
-  next();
-}); */
-/* app.use((req, res, next) => {
-  //allow access to current url. work for https as well
-  res.setHeader('Access-Control-Allow-Origin', req.header('Origin'));
-  res.removeHeader('x-powered-by');
-  //allow access to current method
-  res.setHeader('Access-Control-Allow-Methods', req.method);
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-}) */
 
 
 app.use(function (req, res, next) {
@@ -271,7 +254,7 @@ mongoose.connect(MONGODB_URI, {
     // useFindAndModify: false,
   })
   .then((result) => {
-    const server = app.listen(8080);
+    const server = app.listen(8080,console.log('App started'));
     const io = require("./socket").init(server);
 
     io.on("connection", (socket) => {
